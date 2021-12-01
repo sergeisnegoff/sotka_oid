@@ -96,7 +96,6 @@ class ProductController extends Controller
         }
         return view('products.index', compact('seeds'));
     }
-
     public function getProduct($id)
     {
         $seed = Product::multiplicity()->with(['category', 'subSpecification'])->where('id', $id)->first();
