@@ -22,7 +22,8 @@
                     $result[$object->id]['id'] = $object->id;
                     $result[$object->id]['title'] = $object->title;
                     $result[$object->id]['parent_id'] = $object->parent_id;
-                    $result[$object->id]['productsCount'] = $object->product_count;
+                    $result[$object->id]['productsCount'] = (new \App\Product())->countProductsByCategoryID($object->id);
+//                    $result[$object->id]['productsCount'] = $object->product_count;
                     $result[$object->id]['children'] = categoryTreeSort($objects, $object->id);
                 }
             }

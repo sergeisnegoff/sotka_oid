@@ -21,7 +21,7 @@
                                                                    min="1"
                                                                    name="quantity[]"
                                                                    class="quantityUpdate{{ $id }}"
-                                                                   value="{{ $product->multiplicity }}"
+                                                                   value="{{ $details['quantity'] }}"
                                                                    readonly="">
                             </div>
 {{--                            @if ($product->multiplicity <= $product->total)--}}
