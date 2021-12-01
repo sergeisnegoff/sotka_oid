@@ -1,0 +1,63 @@
+<div class="box__product-header">
+    <div class="row">
+        <div class="col-6 col-md-2 col-lg-2 d-xl-none">
+            <div class="box__catalog-category"><button data-btn-popup="navigation">Категории</button></div>
+        </div>
+        <div class="col-6 col-md-2 col-lg-1 col-xl-1">
+            <div class="box__catalog-filter"><button data-btn-popup="filter">Фильтр</button></div>
+        </div>
+        <div class="col-12 col-md-2 col-lg-2 col-xl-2">
+            <div class="box__catalog-checkproduction">
+                <div class="box__checkbox">
+                    <div class="wrapper-checkbox">
+                        <label>
+                            <input type="checkbox">
+                            <span>
+                                <span class="box__checkbox-icon"></span>
+                                <span class="box__checkbox-text">Продукция Золотой Сотки Алтая</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-7 col-md-3 col-lg-4 col-xl-5">
+            <div class="box__catalog-sorting">
+                <div class="wrapper-sorting-title d-none d-xl-block">Сортировать</div>
+                <div class="box__select">
+                    <select>
+                        <option value="9" selected>По умолчанию</option>
+                        <option value="8">Название (А - Я)</option>
+                        <option value="7">Название (Я - А)</option>
+                        <option value="6">Цена (низкая &gt; высокая)</option>
+                        <option value="5">Цена (высокая &gt; низкая)</option>
+                        <option value="4">Рейтинг (начиная с высокого)</option>
+                        <option value="3">Рейтинг (начиная с низкого)</option>
+                        <option value="2">Модель (А - Я)</option>
+                        <option value="1">Модель (Я - А)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-2 col-md-2 col-lg-2 col-xl-3">
+            <div class="box__catalog-limit">
+                <div class="wrapper__cataloglimit-active d-lg-none">20</div>
+                <ul>
+                    <li class="active"><a href="#">20</a></li>
+                    <li><a href="#">40</a></li>
+                    <li><a href="#">60</a></li>
+                    <li><a href="#"><span class="d-none d-xl-inline">показать</span> все</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-3 col-md-1 col-lg-1 col-xl-1">
+            <div class="box__catalog-view">
+                <ul>
+                    <li data-catalog-grid><button><span style="background-image: url(${require('../../img/icon/sorting-card.svg')});"></span></button></li>
+                    <li data-catalog-list><button><span style="background-image: url(${require('../../img/icon/sorting-list.svg')});"></span></button></li>
+                    <li data-catalog-card class="active"><button><span style="background-image: url(${require('../../img/icon/sorting-grid.svg')});"></span></button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
