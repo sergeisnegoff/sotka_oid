@@ -1,2 +1,0 @@
-@extends('voyager::master')
-<?php
