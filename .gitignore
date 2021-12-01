@@ -11,3 +11,14 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+_*.css.map
+_*.css
+*.log
+!/.idea/scopes/
+!/.idea/watcherTasks.xml
+!/.idea/misc.xml
+/.vscode
+/.vagrant
+composer.lock
+package-lock.json
+/public/mix-manifest.json
