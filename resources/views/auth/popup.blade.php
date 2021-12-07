@@ -163,6 +163,8 @@
 </div>
 
 
+
+
 <link rel="stylesheet" href="{{ asset('js/libs/noty/lib/noty.css') }}">
 <link rel="stylesheet" href="{{ asset('js/libs/noty/lib/themes/mint.css') }}">
 <script src="{{ asset('js/libs/noty/lib/noty.min.js') }}"></script>

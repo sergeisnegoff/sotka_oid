@@ -323,7 +323,7 @@
 </div>
 @auth
     @if (auth()->user()->active == 'off')
-        <div class="box__popup" data-popup='stat_acc' aria-hidden="false" role="dialog">
+        <div class="box__popup" data-popup='manager' aria-hidden="false" role="dialog">
             <div class="wrapper-popup">
                 <div class="btn__close">
                     <button aria-label="Закрыть попап" data-btn-closepopup=""><span></span></button>

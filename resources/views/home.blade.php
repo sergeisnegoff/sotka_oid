@@ -116,9 +116,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if (!\Illuminate\Support\Facades\Auth::check() || auth()->user()->active == 'off')
+                                        @if (!\Illuminate\Support\Facades\Auth::check())
                                             <div class="wrapper-button">
-                                                <div class="btn"><a href="{{route('login')}}"> Купить</a></div>
+                                                <div class="btn"><a href="javascript:;" data-btn-popup="authorization"> Купить</a></div>
+                                            </div>
+                                        @elseif (auth()->user()->active == 'off')
+                                            <div class="wrapper-button">
+                                                <div class="btn"><a href="javascript:;" data-btn-popup="manager"> Купить</a></div>
                                             </div>
                                         @else
                                             <div class="wrapper-button wrapper-button-auth">

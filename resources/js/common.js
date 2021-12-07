@@ -96,12 +96,11 @@ global.seed = {
 
         });
 
-        if ($('[data-popup="typical"], [data-popup="authorization"], [data-popup="registration"], [data-popup="resetpass"], [data-popup="repeatorder"], [data-popup="сancellations"]').length)
-            $('[data-popup="typical"], [data-popup="authorization"], [data-popup="registration"], [data-popup="resetpass"], [data-popup="repeatorder"], [data-popup="сancellations"]').iziModal({
+        if ($('[data-popup="typical"], [data-popup="authorization"], [data-popup="registration"], [data-popup="resetpass"], [data-popup="repeatorder"], [data-popup="manager"], [data-popup="сancellations"]').length)
+            $('[data-popup="typical"], [data-popup="authorization"], [data-popup="registration"], [data-popup="resetpass"], [data-popup="repeatorder"], [data-popup="manager"], [data-popup="сancellations"]').iziModal({
                 width: 370,
                 focusInput: false
             });
-
 
         $('body').on('click', '[data-btn-popup]', function () {
             global.seed.closeAllPopup();
