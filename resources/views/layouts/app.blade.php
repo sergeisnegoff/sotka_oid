@@ -195,7 +195,7 @@
                 @foreach(session('cart') as $id => $details)
                     @if (!isset($details['price'])) @continue @endif
                     <?php
-                        $product = \App\Product::multiplicity()->find($id);
+                    $product = \App\Product::multiplicity()->find($id);
                     $details['multiplicity'] = \App\Product::multiplicity()->find($id)->multiplicity;
                     $percent = \App\Product::getMaxSaleToProduct($id, $details['price'], $details['quantity']);
                     ?>
@@ -331,7 +331,10 @@
                 <div class="row">
                     <div class="col-12">
                         <h2 class="text-center">{{setting('site.stat_acc')}}</h2>
-                        <div class="box__description">{{setting('site.stat_acc_text')}}
+                        {{--                        <div class="box__description">{{setting('site.stat_acc_text')}}--}}
+                        {{--                        </div>--}}
+                        <div class="box__description">Вы успешно прошли регистрацию на сайте, но ваш аккаунт пока не
+                            активирован администратором. Вы можете дождаться активации, либо позвонить вашему менеджеру.
                         </div>
                     </div>
                 </div>

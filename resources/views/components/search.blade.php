@@ -14,7 +14,9 @@
                         </td>
                         <td style="text-align: left">
                             {{ $s->title }}<br />
+                            @if (!\Illuminate\Support\Facades\Auth::check())
                             <strong>{{ $s->price }} ₽</strong>
+                            @endif
                         </td>
                     </tr>
                 </table>
