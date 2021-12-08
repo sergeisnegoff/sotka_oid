@@ -85,7 +85,7 @@
                                 <div class="box__product-status">в наличии</div>
                                 <div class="box__product-quality">
                                     <div class="box__quality">
-                                        <div class="box__quality-value"><input type="number" name="quantity" class="quantity{{ $seed->id }}" data-number="{{ $seed->multiplicity }}" step="{{ $seed->multiplicity }}" min="{{ $seed->multiplicity }}" max="{{ $seed->total }}" value="{{ $seed->multiplicity }}" readonly=""></div>
+                                        <div class="box__quality-value"><input type="number" name="quantity" class="quantity{{ $seed->id }}" data-number="{{ $seed->multiplicity }}" step="{{ $seed->multiplicity }}" min="{{ $seed->multiplicity }}" max="{{ $seed->total }}" value="{{ $seed->multiplicity }}"></div>
 {{--                                        @if($seed->multiplicity <= $seed->total)--}}
                                             <span class="btn__quality-nav">
                                                 <span class="btn__quality-minus update-cart" data-id="{{$seed->id}}" data-prev-quality>-</span>

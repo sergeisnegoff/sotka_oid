@@ -54,7 +54,7 @@
                                             <div class="basketpage__item-quality">
                                                 <div class="box__quality">
                                                     <div class="box__quality-value">
-                                                        <input type="number" data-number="0" step="{{ $seed->multiplicity }}" min="1" max="{{ $details['total'] }}" value="{{$details['quantity']}}" readonly="">
+                                                        <input type="number" data-number="0" step="{{ $seed->multiplicity }}" min="1" max="{{ $details['total'] }}" value="{{$details['quantity']}}">
                                                     </div>
                                                     <span class="btn__quality-nav">
                                                         <span class="btn__quality-minus" data-prev-quality>-</span>

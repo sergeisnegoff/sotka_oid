@@ -198,8 +198,7 @@
                                                                                        max="{{ $details['total'] }}"
                                                                                        name="quantity[]"
                                                                                        class="quantityUpdate{{ $id }}"
-                                                                                       value="{{$details['quantity']}}"
-                                                                                       readonly="">
+                                                                                       value="{{$details['quantity']}}">
                                                 </div>
                                                 <span class="btn__quality-nav">
                                             <span class="btn__quality-minus update-cart" data-id="{{ $id }}" data-prev-quality>-</span>

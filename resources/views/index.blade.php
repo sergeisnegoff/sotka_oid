@@ -171,7 +171,7 @@
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="box__quality">
-                                                                <div class="box__quality-value"><input type="number" readonly="" class="quantity{{$seed->id}}" name="quantity[]" data-number="0" step="1" min="1" max="100" value="1"></div>
+                                                                <div class="box__quality-value"><input type="number" class="quantity{{$seed->id}}" name="quantity[]" data-number="0" step="1" min="1" max="100" value="1"></div>
                                                                 <span class="btn__quality-nav">
                                                                 <span class="btn__quality-minus" data-prev-quality>-</span>
                                                                 <span class="btn__quality-plus" data-next-quality>+</span>
@@ -246,7 +246,7 @@
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="box__quality">
-                                                                <div class="box__quality-value"><input type="number" name="quantity[]" readonly="" class="quantity{{$seed->id}}" data-number="0" step="1" min="1" max="100" value="1"></div>
+                                                                <div class="box__quality-value"><input type="number" name="quantity[]" class="quantity{{$seed->id}}" data-number="0" step="1" min="1" max="100" value="1"></div>
                                                                 <span class="btn__quality-nav">
                                                                 <span class="btn__quality-minus" data-prev-quality>-</span>
                                                                 <span class="btn__quality-plus" data-next-quality>+</span>

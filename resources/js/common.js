@@ -271,8 +271,7 @@ global.seed = {
             el.val(calc);
         }).on('change', '.box__quality input', function () {
             let amount = ($(this).val());
-
-            $(this).val(amount - (amount % parseInt($(this).attr('step'))));
+            $(this).val(Math.ceil(amount/parseInt($(this).attr('step')))*parseInt($(this).attr('step')));
         });
     },
     /* init function by button active/deactive password input[type="password"]  */

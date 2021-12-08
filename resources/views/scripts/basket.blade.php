@@ -2,7 +2,7 @@
     $(function () {
         $('body').on('change', 'input[name*=quantity]', function () {
             let _self = $(this);
-            let id = $(this).closest('.box__basket-item').find('.remove-from-cart').data('id');
+            let id = $(this).data('id');
 
             $.post("{{ route('cart.updateQty') }}", {id: id, qty: $(this).val()}, function (result) {
                 _self.closest('.col-9').find('.box__price').text(result.itemAmount + ' ₽');
@@ -19,6 +19,8 @@
                     })
 
                     $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Math.round(total * 100) / 100 + ' ₽')
+                    _self.closest('.wrapper__baskets-item').find('.wrapper__baskets-cost').text(result.itemAmount + ' ₽');
+                    $('.wrapper__bascket-bottom .box__bascket-total').find('h4').find('b').text(result.totalAmount + ' ₽')
                 });
             }, 'json')
 

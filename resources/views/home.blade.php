@@ -148,8 +148,7 @@
                                                                                                    step="{{ $seed->multiplicity }}"
                                                                                                    min="{{ $seed->multiplicity }}"
                                                                                                    max="{{ $seed->total }}"
-                                                                                                   value="{{ $seed->multiplicity }}"
-                                                                                                    readonly="">
+                                                                                                   value="{{ $seed->multiplicity }}">
                                                             </div>
                                                             @if ($seed->multiplicity <= $seed->total)
                                                             <span class="btn__quality-nav">

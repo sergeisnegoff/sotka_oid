@@ -46,7 +46,7 @@
                                                             <input type="number" data-number="{{ $product['multiplicity'] }}"
                                                                    step="{{ $product['multiplicity'] }}" min="{{ $product['multiplicity'] }}"
                                                                    name="quantity[]" class="quantityUpdate{{$id}}"
-                                                                   value="{{ $product['quantity'] }}" data-id="{{ $id }}" readonly="">
+                                                                   value="{{ $product['quantity'] }}" data-id="{{ $id }}">
                                                         </div>
 {{--                                                        @if ($productInfo->multiplicity <= $productInfo->total)--}}
                                                             <span class="btn__quality-nav">

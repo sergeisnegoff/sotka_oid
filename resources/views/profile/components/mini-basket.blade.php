@@ -21,8 +21,8 @@
                                                                    min="1"
                                                                    name="quantity[]"
                                                                    class="quantityUpdate{{ $id }}"
-                                                                   value="{{ $details['quantity'] }}"
-                                                                   readonly="">
+                                                                   data-id="{{ $id }}"
+                                                                   value="{{ $details['quantity'] }}">
                             </div>
 {{--                            @if ($product->multiplicity <= $product->total)--}}
                                 <span class="btn__quality-nav">
