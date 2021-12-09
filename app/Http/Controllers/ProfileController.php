@@ -238,6 +238,8 @@ class ProfileController extends Controller
             ->where('order_products.qty', '>', 0)
             ->get();
 
+//        dd($expr);
+
         $cart=[];
         foreach ($expr as $exp ) {
             $cart[$exp->id] = [
@@ -250,8 +252,15 @@ class ProfileController extends Controller
         }
         session()->put(compact('cart'));
 
+        if (DB::table('cart')->where('user_id', Auth::id())->first())
+            DB::table('cart')->where('user_id', Auth::id())->update(['json' =>  json_encode(session()->get('cart'))]);
+        else
+            DB::table('cart')->insert(['user_id' => Auth::id(), 'json' =>  json_encode(session()->get('cart'))]);
+
         $cart = session()->get('cart');
-        return redirect()->back()->with('success', 'Товар добавлен в корзину');
+
+        return Redirect::route('profile.orders.cart', ['id' => $id]);
+//        return redirect()->back()->with('success', 'Товар добавлен в корзину');
     }
 
     public function orderHistory(Request $request) {
