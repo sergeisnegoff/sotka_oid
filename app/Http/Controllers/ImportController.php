@@ -21,6 +21,7 @@ class ImportController extends Controller
 {
     public function products()
     {
+        set_time_limit(0);
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/1c/Price/obshii.xls'));
 
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
