@@ -33,13 +33,13 @@
 						<div class="col-12 col-xl-2">
 							<div class="box__price-item">
 								<div class="wrapper-img">
-									<div class="box__image"><a href="{{ \Illuminate\Support\Facades\Storage::url($fileURL->download_link) }}" download="{{ $fileURL->original_name }}"><span style="background-image: url( {{ thumbImg($priceList->img, 260, 370) }} );"></span></a></div>
+									<div class="box__image"><a href="{{ \Illuminate\Support\Facades\Storage::full($fileURL->download_link) }}" download="{{ $fileURL->original_name }}"><span style="background-image: url( {{ thumbImg($priceList->img, 260, 370) }} );"></span></a></div>
 								</div>
 								<div class="wrapper-info">
-									<div class="box__title"><a href="{{ \Illuminate\Support\Facades\Storage::url($fileURL->download_link) }}" download="{{ $fileURL->original_name }}"><h3>{{ $priceList->title }}</h3></a></div>
+									<div class="box__title"><a href="{{ \Illuminate\Support\Facades\Storage::full($fileURL->download_link) }}" download="{{ $fileURL->original_name }}"><h3>{{ $priceList->title }}</h3></a></div>
 								</div>
 								<div class="wrapper-button">
-									<div class="btn"><a href="{{ \Illuminate\Support\Facades\Storage::url($fileURL->download_link) }}" download="{{ $fileURL->original_name }}">Скачать</a></div>
+									<div class="btn"><a href="{{ \Illuminate\Support\Facades\Storage::full($fileURL->download_link) }}" download="{{ $fileURL->original_name }}">Скачать</a></div>
 								</div>
 							</div>
 						</div>
