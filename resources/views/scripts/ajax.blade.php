@@ -75,6 +75,9 @@
 
 
             $(this).parent().append(container);
+            $(this).parent().parent().parent().find('.ifcart').text('Товар есть в корзине');
+            $(this).parent().parent().parent().find('.add-to-cart').addClass('ifcart').text('Докупить');
+            // $(this).parent().parent().parent().find('.add-to-cart').addClass('ifcart');
             $.ajax({
                 url: '{{ url('add-to-cart/') }}/'+but,
                 method: "post",

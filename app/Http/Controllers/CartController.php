@@ -68,6 +68,7 @@ class CartController extends Controller
         return view('profile.components.mini-basket', compact('cart'));
     }
 
+
     public function create(Request $request) {
         $user = Auth::user();
         $data = $request->validate([

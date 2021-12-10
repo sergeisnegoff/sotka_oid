@@ -32,6 +32,7 @@ class ProductController extends Controller
         if ($request->expectsJson()) {
             return response()->json($seeds);
         }
+
         return view('products.index', compact('seeds'));
     }
 
@@ -94,7 +95,10 @@ class ProductController extends Controller
         if ($request->expectsJson()) {
             return response()->json($seeds);
         }
-        return view('products.index', compact('seeds'));
+
+        $cartKeys = collect(session()->get('cart'))->keys();
+
+        return view('products.index', compact('seeds', 'cartKeys'));
     }
     public function getProduct($id)
     {
@@ -107,7 +111,9 @@ class ProductController extends Controller
         $seedsSession = session()->get('products.product');
         $seedsViewed = Product::multiplicity()->with(['category'])->where('id', '!=', $id)->find($seedsSession);
 
-        return view('products.product', compact('seed', 'seeds', 'seedsViewed'));
+        $cartKeys = collect(session()->get('cart'))->keys();
+
+        return view('products.product', compact('seed', 'seeds', 'seedsViewed', 'cartKeys'));
     }
 
     public function searchProducts(Request $request, ProductFilter $filters)

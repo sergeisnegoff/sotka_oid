@@ -24,38 +24,42 @@
             <div class="box__product-information">
                 <div class="row">
                     <div class="col-12">
-                        <div class="btn btn-white"><a href="#" onclick="window.history.go(-1); return false;">{{setting('site.back_button')}}</a></div>
+                        <div class="btn btn-white"><a href="#"
+                                                      onclick="window.history.go(-1); return false;">{{setting('site.back_button')}}</a>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     @if (!empty( Voyager::image($seed->images) ))
                         <div class="col-12 col-md-5 col-lg-4 col-xl-3 col-xxl-3">
-                            <div class="box__image"><a href="{{ Voyager::image($seed->images) }}" data-fancybox="img"><img src="{{ Voyager::image( $seed->images ) }}" alt="{{$seed->title}}"></a></div>
+                            <div class="box__image"><a href="{{ Voyager::image($seed->images) }}"
+                                                       data-fancybox="img"><img
+                                        src="{{ Voyager::image( $seed->images ) }}" alt="{{$seed->title}}"></a></div>
                         </div>
                     @endif
                     <div class="col-12 col-md-7 col-lg-8 col-xl-9 offset-xxl-1 col-xxl-8">
                         <div class="box__tabs">
                             <ul>
-<!--                                <li data-tab="characteristics" class="active">{{setting('site.specifications_product')}}</li>-->
+                            <!--                                <li data-tab="characteristics" class="active">{{setting('site.specifications_product')}}</li>-->
                                 <li data-tab="description">{{setting('site.description_product')}}</li>
                                 @if (!empty($seed->video_link))
                                     <li data-tab="video">{{setting('site.video_product')}}</li>
                                 @endif
                             </ul>
                         </div>
-<!--                        <div data-tab="characteristics" class="box__tab-content active" style="min-height: 120px">
+                    <!--                        <div data-tab="characteristics" class="box__tab-content active" style="min-height: 120px">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="box__product-characteristics">
                                         <ul>
                                             @foreach($seed->subSpecification as $s)
-                                                <li><span>{{ \App\Specification::find($s->specification)->title }}:</span> {{$s->title}}</li>
+                        <li><span>{{ \App\Specification::find($s->specification)->title }}:</span> {{$s->title}}</li>
                                             @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>-->
                         <div data-tab="description" class="box__tab-content active" style="min-height: 120px">
                             <div class="box__product-description">
                                 <p>{{$seed->description }}</p>
@@ -65,39 +69,56 @@
                             <div class="row">
                                 <?php
                                 if(!empty($seed->video_link)) {
-                                $video = explode('/',$seed->video_link);?>
+                                $video = explode('/', $seed->video_link);?>
                                 <div class="col-12 col-md-6">
-                                    <iframe width="100%" height="300" src="https://www.youtube-nocookie.com/embed/{{$video[3]}}?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <iframe width="100%" height="300"
+                                            src="https://www.youtube-nocookie.com/embed/{{$video[3]}}?controls=0"
+                                            frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
                                 </div>
                                 <?php } ?>
                             </div>
                         </div>
                         @if (\Illuminate\Support\Facades\Auth::check() && auth()->user()->active != 'off')
-                        <div class="wrapper__product-bottom">
+                            <div class="wrapper__product-bottom">
                                 <div class="box__product-price">
-                                        @if(!empty($seed->new_price))
-                                            <span class="box__price-normal">{{$seed->price}} ₽</span>
-                                            <span class="box__price-sale">{{$seed->new_price}} ₽</span>
-                                        @else
-                                            <span class="box__price-normal">{{$seed->price}} ₽</span>
-                                        @endif
+                                    @if(!empty($seed->new_price))
+                                        <span class="box__price-normal">{{$seed->price}} ₽</span>
+                                        <span class="box__price-sale">{{$seed->new_price}} ₽</span>
+                                    @else
+                                        <span class="box__price-normal">{{$seed->price}} ₽</span>
+                                    @endif
                                 </div>
                                 <div class="box__product-status">в наличии</div>
                                 <div class="box__product-quality">
                                     <div class="box__quality">
-                                        <div class="box__quality-value"><input type="number" name="quantity" class="quantity{{ $seed->id }}" data-number="{{ $seed->multiplicity }}" step="{{ $seed->multiplicity }}" min="{{ $seed->multiplicity }}" max="{{ $seed->total }}" value="{{ $seed->multiplicity }}"></div>
-{{--                                        @if($seed->multiplicity <= $seed->total)--}}
-                                            <span class="btn__quality-nav">
-                                                <span class="btn__quality-minus update-cart" data-id="{{$seed->id}}" data-prev-quality>-</span>
-                                                <span class="btn__quality-plus update-cart" data-id="{{$seed->id}}" data-next-quality>+</span>
+                                        <div class="box__quality-value"><input type="number" name="quantity"
+                                                                               class="quantity{{ $seed->id }}"
+                                                                               data-number="{{ $seed->multiplicity }}"
+                                                                               step="{{ $seed->multiplicity }}"
+                                                                               min="{{ $seed->multiplicity }}"
+                                                                               max="{{ $seed->total }}"
+                                                                               value="{{ $seed->multiplicity }}"></div>
+                                        {{--                                        @if($seed->multiplicity <= $seed->total)--}}
+                                        <span class="btn__quality-nav">
+                                                <span class="btn__quality-minus update-cart" data-id="{{$seed->id}}"
+                                                      data-prev-quality>-</span>
+                                                <span class="btn__quality-plus update-cart" data-id="{{$seed->id}}"
+                                                      data-next-quality>+</span>
                                             </span>
-{{--                                        @endif--}}
+                                        {{--                                        @endif--}}
                                     </div>
                                 </div>
-{{--                                @if($seed->multiplicity > $seed->total && (!is_null(session('cart')) && !in_array($seed->id, array_keys(session('cart')))))--}}
-                                    <div class="btn"><a class="add-to-cart" value="{{ $seed->id }}">Купить</a></div>
+                                {{--                                @if($seed->multiplicity > $seed->total && (!is_null(session('cart')) && !in_array($seed->id, array_keys(session('cart')))))--}}
+                                <div class="btn"><a
+                                        class="add-to-cart {{ $cartKeys->contains($seed->id) ? 'ifcart' : '' }}"
+                                        value="{{ $seed->id }}">{{ $cartKeys->contains($seed->id) ? 'Докупить' : 'Купить' }}</a>
+                                    <div class="ifcart">@if($cartKeys->contains($seed->id))Товар есть в
+                                        корзине@endif</div>
                                 </div>
-{{--                            @endif--}}
+                            </div>
+                            {{--                            @endif--}}
                         @endif
                     </div>
                 </div>
@@ -129,11 +150,16 @@
                                     <div class="swiper-slide">
                                         <div class="box__product-item">
                                             <div class="wrapper-img">
-                                                <div class="box__image"><a href="/product/{{$sv->id}}"><span style="background-image: url({{ Voyager::image( $sv->images ) }});"></span></a></div>
+                                                <div class="box__image"><a href="/product/{{$sv->id}}"><span
+                                                            style="background-image: url({{ Voyager::image( $sv->images ) }});"></span></a>
+                                                </div>
                                             </div>
                                             <div class="wrapper-info">
-                                                <div class="box__category"><a href="/products/{{$seed->category->parent_id}}/{{$seed->category->title}}">{{$sv->category->title}}</a></div>
-                                                <div class="box__title"><a href="/product/{{$sv->id}}"><h3>{{$sv->title}}</h3></a></div>
+                                                <div class="box__category"><a
+                                                        href="/products/{{$seed->category->parent_id}}/{{$seed->category->title}}">{{$sv->category->title}}</a>
+                                                </div>
+                                                <div class="box__title"><a href="/product/{{$sv->id}}">
+                                                        <h3>{{$sv->title}}</h3></a></div>
                                                 <div class="box__description"><p>{{ $sv->text }}</p></div>
                                             </div>
                                             <div class="wrapper-button">
@@ -155,7 +181,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
+          integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw=="
+          crossorigin="anonymous"/>
     <script>
         $('.box__slider-productsviewed123').slick({
             slidesToShow: 5,
@@ -184,6 +212,7 @@
             cursor: pointer;
             outline: none;
         }
+
         .slider-productsviewed-next-slick {
             position: absolute;
             display: block;

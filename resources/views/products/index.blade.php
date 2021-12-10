@@ -286,11 +286,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="btn" style="text-align: left;">
-                                                            <button class="add-to-cart" value="{{$seed->id}}">Купить
+                                                            <button
+                                                                class="add-to-cart {{ $cartKeys->contains($seed->id) ? 'ifcart' : '' }}"
+                                                                value="{{$seed->id}}">{{ $cartKeys->contains($seed->id) ? 'Докупить' : 'Купить' }}
                                                             </button>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="ifcart">@if($cartKeys->contains($seed->id))Товар есть в корзине@endif</div>
                                                     </div>
                                                 </div>
                                             </div>

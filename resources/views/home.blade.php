@@ -17,10 +17,11 @@
                                                 <div class="wrapper-info">
                                                     <h2>{{ $slide->title }}</h2>
                                                     <div class="box__description">{!! nl2br($slide->text) !!}</div>
-                                                    <div class="btn" style="text-align: left;position:absolute;bottom:90px;left:45px;">
+                                                    <div class="btn"
+                                                         style="text-align: left;position:absolute;bottom:90px;left:45px;">
                                                         @if (!empty($slide->button_text))
                                                             <a href="{{ $slide->button_href ?? $slide->button_new_tab }}"
-                                                               {{ !empty($slide->button_new_tab) ? 'target="_blank"' : '' }}>{{ $slide->button_text }}</a>
+                                                                {{ !empty($slide->button_new_tab) ? 'target="_blank"' : '' }}>{{ $slide->button_text }}</a>
                                                         @endif
                                                         @if (!empty($slide->button2_text))
                                                             <a href="{{ $slide->button2_href ?? $slide->button2_new_tab }}"
@@ -54,7 +55,8 @@
                                                                     style="background-image: url( '{{ thumbImg( $slide->img, 332, 250) }}' );"></span>
                                                             </div>
                                                             <h3>{{ $slide->title }}</h3>
-                                                            <div class="btn"><a href="{{ $slide->button_href ?? $slide->button_new_tab }}" {{ empty($slide->button_href) ? 'target=_blank' : '' }}>{{ $slide->button_text }}</a>
+                                                            <div class="btn"><a
+                                                                    href="{{ $slide->button_href ?? $slide->button_new_tab }}" {{ empty($slide->button_href) ? 'target=_blank' : '' }}>{{ $slide->button_text }}</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -118,11 +120,13 @@
                                         </div>
                                         @if (!\Illuminate\Support\Facades\Auth::check())
                                             <div class="wrapper-button">
-                                                <div class="btn"><a href="javascript:;" data-btn-popup="authorization"> Купить</a></div>
+                                                <div class="btn"><a href="javascript:;" data-btn-popup="authorization">
+                                                        Купить</a></div>
                                             </div>
                                         @elseif (auth()->user()->active == 'off')
                                             <div class="wrapper-button">
-                                                <div class="btn"><a href="javascript:;" data-btn-popup="manager"> Купить</a></div>
+                                                <div class="btn"><a href="javascript:;" data-btn-popup="manager">
+                                                        Купить</a></div>
                                             </div>
                                         @else
                                             <div class="wrapper-button wrapper-button-auth">
@@ -151,7 +155,7 @@
                                                                                                    value="{{ $seed->multiplicity }}">
                                                             </div>
                                                             @if ($seed->multiplicity <= $seed->total)
-                                                            <span class="btn__quality-nav">
+                                                                <span class="btn__quality-nav">
                                                                             <span class="btn__quality-minus update-cart"
                                                                                   data-id="{{$seed->id}}"
                                                                                   data-prev-quality>-</span>
@@ -162,11 +166,16 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <div class="col-12">
+                                                    <div class="col-6">
                                                         <div class="btn">
-                                                            <button class="add-to-cart" value="{{$seed->id}}">Купить
+                                                            <button
+                                                                class="add-to-cart {{ $cartKeys->contains($seed->id) ? 'ifcart' : '' }}"
+                                                                value="{{$seed->id}}">{{ $cartKeys->contains($seed->id) ? 'Докупить' : 'Купить' }}
                                                             </button>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="ifcart">@if($cartKeys->contains($seed->id))Товар есть в корзине@endif</div>
                                                     </div>
                                                 </div>
                                             </div>

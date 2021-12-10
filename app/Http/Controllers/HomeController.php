@@ -40,7 +40,9 @@ class HomeController extends Controller
             return response()->json($seeds);
         }
 
-        return view('home', $data, compact('seeds'));
+        $cartKeys = collect(session()->get('cart'))->keys();
+
+        return view('home', $data, compact('seeds', 'cartKeys'));
     }
 
     public function addToCart(Request $request, $id)
