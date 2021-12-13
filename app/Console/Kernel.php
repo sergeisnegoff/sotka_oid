@@ -30,12 +30,12 @@ class Kernel extends ConsoleKernel
             '--queue' => 'import',
             '--daemon',
             '--tries' => 3,
+            '--stop-when-empty',
         ])
-            ->everyMinute()
-            ->withoutOverlapping()
+            ->everyFifteenMinutes()
             ->runInBackground()
             ->description('queue_import');
-        
+
         $schedule->command('queue:restart')->daily()->runInBackground();
 //        $crons = cronSettings::all();
 //        if (!empty($crons))
