@@ -26,13 +26,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $crons = cronSettings::all();
-        if (!empty($crons))
-            foreach ($crons as $cron) {
-                $time = $cron->minute.' '.$cron->hour.' '.$cron->day.' '.$cron->month.' '.$cron->week_day;
-
-                $schedule->command('import '.$cron->table)->cron($time);
-            }
+        $schedule->command('queue:work database --queue=import')->everyMinute()->withoutOverlapping();
+        $schedule->command('queue:restart')->daily();
+//        $crons = cronSettings::all();
+//        if (!empty($crons))
+//            foreach ($crons as $cron) {
+//                $time = $cron->minute.' '.$cron->hour.' '.$cron->day.' '.$cron->month.' '.$cron->week_day;
+//
+//                $schedule->command('import '.$cron->table)->cron($time);
+//            }
     }
 
     /**
