@@ -26,8 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('queue:work database --queue=import')->everyMinute()->withoutOverlapping();
-        $schedule->command('queue:restart')->daily();
+        $schedule->command('queue:work database --queue=import')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('queue:restart')->daily()->runInBackground();
 //        $crons = cronSettings::all();
 //        if (!empty($crons))
 //            foreach ($crons as $cron) {
