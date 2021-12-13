@@ -21,6 +21,7 @@ class ImportController extends Controller
 {
     public function products()
     {
+
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/1c/Price/obshii.xls'));
 
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
@@ -130,6 +131,10 @@ class ImportController extends Controller
         Product::query()->whereNotIn('oneC_7', $ids)->update([
             'total' => 0,
         ]);
+
+        return response()
+            ->view('Обработка завершена', $data, 200)
+            ->header('Content-Type', $type);
     }
 
     public function contragents()
