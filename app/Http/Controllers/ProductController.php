@@ -160,7 +160,9 @@ class ProductController extends Controller
                 }
             }
 
-            return view('products.index', compact('seeds'));
+            $cartKeys = collect(session()->get('cart'))->keys();
+
+            return view('products.index', compact('seeds', 'cartKeys'));
 
         }
 

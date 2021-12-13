@@ -7067,7 +7067,7 @@ input[type=number]::-webkit-outer-spin-button {
 .box__quality .box__quality-value input {
   position: relative;
   display: block;
-  width: 35px;
+  width: 45px;
   margin: auto;
   padding: 5px;
   font-size: 14px;
