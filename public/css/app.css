@@ -14477,9 +14477,6 @@ form .invalid-message {
   .box__quality {
     margin: auto;
   }
-  .box__product-item .btn {
-    text-align: center !important;
-  }
   .box__product-item .wrapper-button.wrapper-button-auth .box__product-price .box__price-sale {
     margin: 0;
   }
