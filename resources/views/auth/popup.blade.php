@@ -18,6 +18,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="box__input"><input type="email" name="email" placeholder="Электронная почта"></div>
+{{--                                <div class="box__input"><input type="phone" name="phon" placeholder="Телефон"></div>--}}
                             </div>
                         </div>
                         <div class="row">
@@ -36,6 +37,7 @@
                         <div class="row">
                             <div class="col-12"><div class="btn"><button type="submit">Войти</button></div></div>
                         </div>
+                        <input type="hidden" name="type" value="email">
                     </form>
                 </div>
             </div>

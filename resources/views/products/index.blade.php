@@ -286,7 +286,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-6 col-md-6">
                                                         <div class="btn" style="text-align: left;">
                                                             <button
                                                                 class="add-to-cart {{ $cartKeys->contains($seed->id) ? 'ifcart' : '' }}"
