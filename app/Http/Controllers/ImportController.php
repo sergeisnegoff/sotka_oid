@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Imports\ProductUpdateImport;
 use App\Jobs\ProcessImportJob;
 use App\Models\Brands;
 use App\Models\cronSettings;
@@ -25,6 +26,16 @@ class ImportController extends Controller
         ProcessImportJob::dispatch(storage_path('app/1c/Price/obshii.xls'))->onConnection('database')->onQueue('import');
 
         return 1;
+    }
+
+    public function products_test()
+    {
+        $time = microtime(true);
+        echo '<pre>';
+        ProductUpdateImport::make()->import(storage_path('app/1c/Price/obshii.xls'));
+        echo '</pre>';
+
+        dd(microtime(true) - $time);
     }
 
     public function contragents()

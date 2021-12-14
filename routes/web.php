@@ -55,7 +55,8 @@ Route::prefix('cron')->name('cron.')->group(function () {
 
 Route::get('update-order/{filename}', [\App\Http\Controllers\ImportController::class, 'orders']);
 Route::get('update-kontr/{filename}', [\App\Http\Controllers\ImportController::class, 'contragents']);
-Route::get('update-catalog/{filename}', [\App\Http\Controllers\ImportController::class, 'products']);
+Route::get('update-catalog/{filename?}', [\App\Http\Controllers\ImportController::class, 'products']);
+Route::get('update_test', [\App\Http\Controllers\ImportController::class, 'products_test']);
 
 Route::prefix('/profile')->name('profile.')->group(function () {
     Route::get('/', [\App\Http\Controllers\ProfileController::class, 'index'])->name('index');
