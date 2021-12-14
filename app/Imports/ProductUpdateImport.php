@@ -59,7 +59,7 @@ class ProductUpdateImport implements ToCollection {
             }
         );
 
-        if (count($data)) {
+        if (count($data) && count($ids)) {
             ProcessCleanTotalJob::dispatch($ids)
                 ->onConnection(Kernel::CONNECTION_DB)
                 ->onQueue(Kernel::QUEUE_IMPORT);
