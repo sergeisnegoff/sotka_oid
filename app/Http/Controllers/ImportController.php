@@ -22,7 +22,9 @@ use PhpOffice\PhpSpreadsheet\Exception;
 class ImportController extends Controller
 {
     public function products() {
+        $time = microtime(true);
         ProductUpdateImport::make()->import(storage_path('app/1c/Price/obshii.xls'));
+        dd(microtime(true) - $time);
         return \response()->noContent(200);
     }
 
