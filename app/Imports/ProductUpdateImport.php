@@ -57,9 +57,9 @@ class ProductUpdateImport implements ToCollection {
                 ->onQueue(Kernel::QUEUE_IMPORT);
         }
 
-        ProcessCleanTotalJob::dispatch($ids)
-            ->onConnection(Kernel::CONNECTION_DB)
-            ->onQueue(Kernel::QUEUE_IMPORT);
+        //ProcessCleanTotalJob::dispatch($ids)
+        //    ->onConnection(Kernel::CONNECTION_DB)
+        //    ->onQueue(Kernel::QUEUE_IMPORT);
 
     }
 
