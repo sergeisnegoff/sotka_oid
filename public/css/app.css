@@ -8156,7 +8156,7 @@ section.box__relatedproducts h2 {
   background-position: 50%;
   background-repeat: no-repeat;
   cursor: pointer;
-  z-index: 2;
+  z-index: 99;
 }
 .box__popup {
   min-width: 555px;
@@ -9500,11 +9500,22 @@ section.box__product .box__product-information .box__tab-content .box__product-c
   color: #747474;
   font-weight: 400;
 }
+section.box__product .box__product-information .btn .add-to-cart {
+  padding: 7px 27px 7px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+}
+section.box__product .box__product-information .btn .ifcart.add-to-cart {
+  font-size: 14px;
+}
+section.box__product .box__product-information .btn .ifcart {
+  font-size: 12px;
+}
 section.box__product .wrapper__product-bottom {
   position: relative;
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
+  flex-wrap: wrap;
 }
 section.box__product .wrapper__product-bottom .box__product-price {
   position: relative;
@@ -13475,10 +13486,6 @@ form .invalid-message {
     flex: 0 0 100%;
     max-width: 100%;
   }
-  section.box__product-catalog [data-catalog][data-catalog-list] .col-xl-2 .box__product-item .wrapper-button.wrapper-button-auth .col-6:first-child {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
   section.box__product-catalog [data-catalog][data-catalog-list] .col-xl-2 .box__product-item .wrapper-button.wrapper-button-auth .col-6 .box__quality {
     margin: 10px 0 3px;
   }
@@ -13671,7 +13678,6 @@ form .invalid-message {
   }
   section.box__product-catalog [data-catalog][data-catalog-list] .col-xl-2 .box__product-item {
     min-height: 235px;
-    flex-direction: column;
   }
   section.box__product-catalog [data-catalog][data-catalog-list] .col-xl-2 .box__product-item .wrapper-info {
     flex: 0 0 100%;
