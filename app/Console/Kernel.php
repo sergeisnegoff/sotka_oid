@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
+
+    const CONNECTION_DB = 'database';
+
+    const QUEUE_IMPORT = 'import';
     /**
      * The Artisan commands provided by your application.
      *

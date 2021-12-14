@@ -21,21 +21,9 @@ use PhpOffice\PhpSpreadsheet\Exception;
 
 class ImportController extends Controller
 {
-    public function products()
-    {
-        ProcessImportJob::dispatch(storage_path('app/1c/Price/obshii.xls'))->onConnection('database')->onQueue('import');
-
-        return 1;
-    }
-
-    public function products_test()
-    {
-        $time = microtime(true);
-        echo '<pre>';
+    public function products() {
         ProductUpdateImport::make()->import(storage_path('app/1c/Price/obshii.xls'));
-        echo '</pre>';
-
-        dd(microtime(true) - $time);
+        return \response()->noContent(200);
     }
 
     public function contragents()

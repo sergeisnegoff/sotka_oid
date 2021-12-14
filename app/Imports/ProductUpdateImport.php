@@ -2,57 +2,69 @@
 
 namespace App\Imports;
 
-use App\Product;
-use Carbon\Carbon;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Console\Kernel;
+use App\Jobs\ProcessCleanTotalJob;
+use App\Jobs\ProcessUpdateJob;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithUpserts;
+use Maatwebsite\Excel\Concerns\ToCollection;
 
-class ProductUpdateImport implements ToModel, WithChunkReading, /*ShouldQueue, */WithUpserts, WithBatchInserts {
+class ProductUpdateImport implements ToCollection {
     use Importable, RemembersRowNumber, SerializesModels;
 
-    public $now;
+    public function collection(Collection $collection) {
+        $data = [];
 
-    public function __construct(Carbon $now) {
-        $this->now = $now;
-    }
+        $main_category = $category = null;
+        $last_category_index = 0;
 
-    public function model(array $row) {
-        if ($this->getRowNumber() < 7) {
-            return null;
+        $ids = [];
+
+        $collection->each(function (Collection $row, int $key) use (&$last_category_index, &$main_category, &$category, &$data, &$ids){
+            if($key < 5){
+                return;
+            }
+
+            if(is_null($row[7] ?? null)){
+                if($last_category_index + 1 === $key){
+                    $main_category = $category;
+                }
+                $category = $row[0];
+                $last_category_index = $key;
+            }else{
+                if(!isset($data[$key = "$main_category => $category"])){
+                    $data[$key] = compact('main_category', 'category') + ['items' => []];
+                }
+                $ids[] = $row[7];
+                $data[$key]['items'][] = [
+                    'xml_id' => $row[7],
+                    'name' => $row[0],
+                    'cost' => $row[2],
+                    'total' => $row[5],
+                    'multiplicity' => $row[6],
+                    'manufacturer' => $row[8] ?? null,
+                    'image' => $row[9] ?? null,
+                    'filters' => $row[10] ?? null,
+                ];
+            }
+        });
+
+        foreach($data as $item){
+            ProcessUpdateJob::dispatch($item['main_category'], $item['category'], $item['items'])
+                ->onConnection(Kernel::CONNECTION_DB)
+                ->onQueue(Kernel::QUEUE_IMPORT);
         }
 
-        if (is_null($row[7] ?? null)) {
-            echo $this->getRowNumber() . ': ' . $row[0];
-            echo  "\n";
-            return null;
-        }else{
-            echo sprintf('%s: %s, %s, %s, %s, %s, %s, %s', $this->getRowNumber(), $row[0], $row[1], $row[2], $row[5], $row[6], $row[7], $row[8] ?? '');
-            echo  "\n";
-        }
+        ProcessCleanTotalJob::dispatch($ids)
+            ->onConnection(Kernel::CONNECTION_DB)
+            ->onQueue(Kernel::QUEUE_IMPORT);
 
-        return null;
-        return new Product([]);
-    }
-
-    public function chunkSize(): int {
-        return 100;
-    }
-
-    public function batchSize(): int {
-        return 100;
-    }
-
-    public function uniqueBy() {
-        return 'oneC_7';
     }
 
     public static function make() {
-        return new static(now());
+        return new static;
     }
+
 }
