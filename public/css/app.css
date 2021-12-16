@@ -7081,7 +7081,7 @@ input[type=number]::-webkit-outer-spin-button {
   border: none;
 }
 .box__quality .btn__quality-nav .btn__quality-minus {
-  left: -10px;
+  left: 0;
   position: absolute;
   display: block;
   top: 50%;
@@ -7106,7 +7106,15 @@ input[type=number]::-webkit-outer-spin-button {
   user-select: none;
   color: #000;
   font-weight: 700;
-  right: -10px;
+  right: 0;
+}
+@media (max-width: 540px) {
+  .box__quality {
+    width: 67px;
+  }
+  .box__quality .box__quality-value input {
+    width: 42px;
+  }
 }
 .box__select {
   position: relative;
