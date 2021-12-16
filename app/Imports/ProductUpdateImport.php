@@ -18,8 +18,6 @@ class ProductUpdateImport implements ToCollection {
     use Importable, RemembersRowNumber, SerializesModels;
 
     public function collection(Collection $collection) {
-        $uuid = Str::orderedUuid()->toString();
-        Log::channel('import')->info('started', compact('uuid'));
 
         $data = [];
 
@@ -66,6 +64,9 @@ class ProductUpdateImport implements ToCollection {
         );
 
         if (count($data) && count($ids)) {
+            $uuid = Str::orderedUuid()->toString();
+            Log::channel('import')->info('started', compact('uuid'));
+
             ProcessCleanTotalJob::dispatch($ids)
                 ->onConnection(Kernel::CONNECTION_DB)
                 ->onQueue(Kernel::QUEUE_IMPORT);
