@@ -7456,7 +7456,7 @@ input[type=number] {
         input {
             position: relative;
             display: block;
-            width: 45px;
+            width: 65px;
             margin: auto;
             padding: 5px;
             font-size: 14px;
@@ -7472,7 +7472,7 @@ input[type=number] {
     }
     .btn__quality-nav {
         .btn__quality-minus {
-            left: 0;
+            left: -10px;
             position: absolute;
             display: block;
             top: 50%;
@@ -7497,7 +7497,7 @@ input[type=number] {
             user-select: none;
             color: #000;
             font-weight: 700;
-            right: 0;
+            right: -10px;
         }
     }
 }
@@ -8333,6 +8333,15 @@ section.box__relatedproducts {
                         text-decoration-line: line-through;
                         color: #000;
                     }
+            }
+        }
+        @media (max-width: 540px) {
+            .ifcart {
+                line-height: 12px;
+            }
+            button.ifcart {
+                padding: 3px 7px 3px;
+                line-height: 18px;
             }
         }
         .ifcart {
