@@ -118,6 +118,7 @@ class ImportController extends Controller
 
     public function managers()
     {
+        $time = microtime(true);
         $dom = new DOMDocument("1.0", "utf-8"); // Создаём XML-документ версии 1.0 с кодировкой utf-8
         $dom->load(storage_path() . "/app/1c/Kontr/managers.xml"); // Загружаем XML-документ из файла в объект DOM
 
@@ -135,6 +136,7 @@ class ImportController extends Controller
             else
                 DB::table('contacts_regional')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
         }
+        return \response(microtime(true) - $time);
     }
 
     public function cronSettings(Request $request)
