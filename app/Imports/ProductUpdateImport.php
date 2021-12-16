@@ -4,9 +4,12 @@ namespace App\Imports;
 
 use App\Console\Kernel;
 use App\Jobs\ProcessCleanTotalJob;
+use App\Jobs\ProcessUpdateFinishedJob;
 use App\Jobs\ProcessUpdateJob;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -15,6 +18,9 @@ class ProductUpdateImport implements ToCollection {
     use Importable, RemembersRowNumber, SerializesModels;
 
     public function collection(Collection $collection) {
+        $uuid = Str::orderedUuid()->toString();
+        Log::channel('import')->info('started', compact('uuid'));
+
         $data = [];
 
         $main_category = $category = null;
@@ -69,6 +75,10 @@ class ProductUpdateImport implements ToCollection {
                     ->onConnection(Kernel::CONNECTION_DB)
                     ->onQueue(Kernel::QUEUE_IMPORT);
             }
+
+            ProcessUpdateFinishedJob::dispatch($uuid)
+                ->onConnection(Kernel::CONNECTION_DB)
+                ->onQueue(Kernel::QUEUE_IMPORT);
         }
 
     }
