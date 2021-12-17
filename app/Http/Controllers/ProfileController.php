@@ -46,8 +46,8 @@ class ProfileController extends Controller
         if ($request->isMethod('post')) {
             $data = $request->validate([
                 'name' => 'required',
-                'phon' => 'required',
-                'city' => 'required'
+                'city' => 'required',
+                'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users']
             ]);
 
             $user = Auth::user();

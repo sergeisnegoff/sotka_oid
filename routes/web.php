@@ -53,8 +53,9 @@ Route::prefix('cron')->name('cron.')->group(function () {
     Route::post('save', [\App\Http\Controllers\ImportController::class, 'cronSettings'])->name('save');
 });
 
-Route::get('update-order/{filename}', [\App\Http\Controllers\ImportController::class, 'orders']);
-Route::get('update-kontr/{filename}', [\App\Http\Controllers\ImportController::class, 'contragents']);
+Route::get('update-order/{filename?}', [\App\Http\Controllers\ImportController::class, 'orders']);
+Route::get('update-kontr/{filename?}', [\App\Http\Controllers\ImportController::class, 'contragents']);
+Route::get('update-managers/{filename?}', [\App\Http\Controllers\ImportController::class, 'managers']);
 Route::get('update-catalog/{filename?}', [\App\Http\Controllers\ImportController::class, 'products']);
 
 Route::prefix('/profile')->name('profile.')->group(function () {

@@ -34,8 +34,9 @@
                                                 <div class="col-12">
                                                     <div class="box__input">
                                                         <label class="label-title">Телефон</label>
-                                                        <input type="text" name="phon" value="{{ $user->phon }}"
-                                                               minlength="4">
+                                                        <input id="phone-mask" type="text" name="phon"
+                                                               value="{{ $user->phon }}"
+                                                               disabled minlength="4">
                                                         @error('phone')
                                                         <label class="label-error"
                                                                style="color: #ca0003; display:block;opacity:1;visibility:inherit">Поле
@@ -47,7 +48,7 @@
                                                     <div class="box__input">
                                                         <label class="label-title">Почта</label>
                                                         <input type="text" name="email" value="{{ $user->email }}"
-                                                               disabled minlength="4">
+                                                               minlength="4">
                                                         @error('email')
                                                         <label class="label-error"
                                                                style="color: #ca0003; display:block;opacity:1;visibility:inherit">Поле
@@ -132,11 +133,12 @@
 
                                                         <div class="row">
                                                             <div class="col-md-2">
-                                                                <img src="/storage/{{ $manager->img }}" style="width: 100%;" alt="">
+                                                                <img src="/storage/{{ $manager->img }}"
+                                                                     style="width: 100%;" alt="">
                                                             </div>
                                                             <div class="col-md-10">
-                                                                <a href="tel:{{ str_replace(['+', '-', '(', ')'], '', $manager->phone) }}">{{ $manager->phone }}</a><br />
-                                                                <a href="mailto:{{$manager->email}}">{{ $manager->email }}</a><br />
+                                                                <a href="tel:{{ str_replace(['+', '-', '(', ')'], '', $manager->phone) }}">{{ $manager->phone }}</a><br/>
+                                                                <a href="mailto:{{$manager->email}}">{{ $manager->email }}</a><br/>
                                                                 <b>{{ $manager->name }}</b>
                                                             </div>
                                                         </div>
@@ -189,24 +191,25 @@
                                                 </div>
                                             @endforeach
                                             <div class="col-12">
-                                                    <div class="box__radiobox">
-                                                        <div class="wrapper-radiobox">
-                                                            <label>
-                                                                <input type="radio"
-                                                                       {{ 99 == $user->address ? 'checked' : '' }} name="current_address"
-                                                                       data-id="99">
-                                                                <span>
-                                                                    <span class="box__radiobox-icon" style="margin-top: 5px"></span>
+                                                <div class="box__radiobox">
+                                                    <div class="wrapper-radiobox">
+                                                        <label>
+                                                            <input type="radio"
+                                                                   {{ 99 == $user->address ? 'checked' : '' }} name="current_address"
+                                                                   data-id="99">
+                                                            <span>
+                                                                    <span class="box__radiobox-icon"
+                                                                          style="margin-top: 5px"></span>
                                                                     <span class="box__radiobox-text">
                                                                         <span class="box__profile-itemaddress"><strong>Самовывоз</strong></span>
                                                                     </span>
                                                                 </span>
-                                                            </label>
-                                                            <div class="wrapper-address">
-                                                            </div>
+                                                        </label>
+                                                        <div class="wrapper-address">
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -362,12 +365,13 @@
 
             new autoComplete(settings);
         }
+
         function initCityAutocomplete(selector, route, _self) {
             let settings = {
                 data: {
                     src: async function () {
                         const source = await fetch(
-                            route + "?s=" + _self.val() + '&regionId='+regionID
+                            route + "?s=" + _self.val() + '&regionId=' + regionID
                         );
                         const data = await source.json();
                         return data;
@@ -394,12 +398,13 @@
 
             new autoComplete(settings);
         }
+
         function initAddressAutocomplete(selector, route, _self) {
             let settings = {
                 data: {
                     src: async function () {
                         const source = await fetch(
-                            route + "?s=" + _self.val()+"&cityId="+cityID
+                            route + "?s=" + _self.val() + "&cityId=" + cityID
                         );
                         const data = await source.json();
                         return data;
@@ -425,6 +430,13 @@
 
             new autoComplete(settings);
         }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
+    <script>
+        $(() => {
+            $('#phone-mask').inputmask('+7 999 999 99-99');
+        })
     </script>
 
     <style>

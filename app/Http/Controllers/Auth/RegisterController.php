@@ -53,8 +53,8 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required_unless:phon,null', 'string', 'email', 'max:255', 'unique:users'],
-            'phon' => ['required_unless:email,null'],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
+            'phon' => ['required', 'unique:users'],
             'city' => 'required',
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'agree' => 'required'
@@ -69,14 +69,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        Mail::to([$data['email'], 'info@sotka-sem.ru'])->send(new signUp([
-            'email' => $data['email'],
-            'name' => $data['name'],
-            'password' => $data['password']
-        ]));
+        if (isset($data['email'])) {
+            Mail::to([$data['email'], 'info@sotka-sem.ru'])->send(new signUp([
+                'email' => $data['email'],
+                'name' => $data['name'],
+                'password' => $data['password']
+            ]));
+        }
         return User::create([
             'name' => $data['name'],
-            'email' => $data['email'],
+            'email' => $data['email'] ?? null,
             'phon' => $data['phon'],
             'city' => $data['city'],
             'password' => Hash::make($data['password']),

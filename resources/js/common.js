@@ -43,6 +43,7 @@ global.seed = {
         this.initQuality();
         this.initCustomTab();
         this.initPassView();
+        this.initLoginSwitch();
         this.initAccordion();
         this.initButtonSlideTop();
     },
@@ -290,6 +291,28 @@ global.seed = {
 
             });
 
+
+        });
+
+    },
+    /* init function by button active/deactive password input[type="password"]  */
+    initLoginSwitch: function () {
+
+        $('.login-switch').each(function () {
+
+            $(this).on('click', function () {
+                let login =  $(this).text();
+                let number = "Войти с помощью номера";
+                let email = "Войти с помощью Email";
+                let text = (login === number) ? email : number;
+                let type = (login === number) ? "phon" : "email";
+                let placeholder = (login === number) ? "Номер телефона" : "Электронная почта";
+                let input = $(this).parent('label').siblings('input');
+                let typelogin = $(this).parents('.col-12').find('.type');
+                $(this).text(text);
+                input.attr("type", type).attr("name", type).attr("placeholder", placeholder).inputmask('+7 999 999 99-99');
+                typelogin.val(type);
+            });
 
         });
 

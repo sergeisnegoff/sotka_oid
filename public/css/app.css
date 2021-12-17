@@ -6579,6 +6579,9 @@ button.showMore {
   opacity: 1;
   visibility: visible;
 }
+.box__input input[name="name"]:before {
+  content: '*';
+}
 .box__input label.label-error {
   font-size: 12px;
   color: #a9a9a9;
@@ -6590,6 +6593,15 @@ button.showMore {
 .box__input label.label-title {
   font-size: 12px;
   color: #a9a9a9;
+}
+.box__input label.login {
+  position: absolute;
+  display: block;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 9;
 }
 .box__textarea {
   position: relative;
