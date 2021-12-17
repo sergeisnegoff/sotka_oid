@@ -34,7 +34,7 @@
                                                 <div class="col-12">
                                                     <div class="box__input">
                                                         <label class="label-title">Телефон</label>
-                                                        <input id="phone-mask" type="text" name="phon"
+                                                        <input class="phone-mask" type="text" name="phon"
                                                                value="{{ $user->phon }}"
                                                                disabled minlength="4">
                                                         @error('phone')
@@ -51,8 +51,7 @@
                                                                minlength="4">
                                                         @error('email')
                                                         <label class="label-error"
-                                                               style="color: #ca0003; display:block;opacity:1;visibility:inherit">Поле
-                                                            обязательно для заполнения</label>
+                                                               style="color: #ca0003; display:block;opacity:1;visibility:inherit">email уже существует</label>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -435,7 +434,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
     <script>
         $(() => {
-            $('#phone-mask').inputmask('+7 999 999 99-99');
+            $('.phone-mask').inputmask('+7 999 999 99-99');
         })
     </script>
 

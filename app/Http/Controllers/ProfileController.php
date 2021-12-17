@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -44,13 +45,13 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         if ($request->isMethod('post')) {
+            $user = Auth::user();
             $data = $request->validate([
                 'name' => 'required',
                 'city' => 'required',
-                'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users']
+                'email' => ['nullable', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)]
             ]);
 
-            $user = Auth::user();
 
             foreach ($data as $key => $item)
                 $user->$key = $item;

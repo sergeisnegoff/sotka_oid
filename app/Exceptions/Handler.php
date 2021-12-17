@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\Validator;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -46,10 +47,8 @@ class Handler extends ExceptionHandler
             $statusCode = $e->getStatusCode();
 
             switch ($statusCode) {
-                case '404':
-                    return response()->view('layouts/error/404');
                 case '500':
-                    return response()->view('layouts/error/500');
+                    return response()->view('layouts.error.500');
             }
         }
         return parent::render($request, $e);
@@ -59,8 +58,13 @@ class Handler extends ExceptionHandler
     {
         if ($e->getStatusCode() === 500) {
             // Display Laravel's default error message with appropriate error information
-            return response()->view('layouts/error/500');
+            return response()->view('layouts.error.500');
         }
         return parent::renderHttpException($e); // Continue as normal
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        return response()->json($validator->errors());
     }
 }

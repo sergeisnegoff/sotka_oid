@@ -18,8 +18,8 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="box__input">
-                                    <label class="login"><span class="login-switch">Войти с помощью номера</span></label>
-                                    <input type="email" name="email" placeholder="Электронная почта">
+                                    <label class="login"><span class="login-switch">Войти с помощью Email</span></label>
+                                    <input class="phone-mask" type="text" name="phon" placeholder="Номер телефона">
                                 </div>
                                 <input class="type" type="hidden" name="type" value="phon">
                             </div>
@@ -71,17 +71,17 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div class="box__input"><input type="text" name="name" placeholder="ФИО"></div>
+                                <div class="box__input"><input type="text" name="name" placeholder="ФИО"><label class="required"></label></div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div class="box__input"><input type="text" name="phon" id="phone-mask" placeholder="Номер телефона"></div>
+                                <div class="box__input"><input type="text" name="phon" class="phone-mask" placeholder="Номер телефона"><label class="required"></label></div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div class="box__input"><input type="text" name="city" placeholder="Населённый пункт"></div>
+                                <div class="box__input"><input type="text" name="city" placeholder="Населённый пункт"><label class="required"></label></div>
                             </div>
                         </div>
                         <div class="row">
@@ -128,7 +128,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
     <script>
         $(() => {
-            $('#phone-mask').inputmask('+7 999 999 99-99');
+            $('.phone-mask').inputmask('+7 999 999 99-99');
         })
     </script>
 </div>

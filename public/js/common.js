@@ -19879,7 +19879,8 @@ __webpack_require__.r(__webpack_exports__);
 var jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); // other packages here
 
 
-window.$ = window.jQuery = jQuery; //bootstarp-grid
+window.$ = window.jQuery = jQuery;
+jQuery.ajaxSettings.dataType = 'json'; //bootstarp-grid
 
  //fancybox
 
@@ -20138,18 +20139,26 @@ global.seed = {
 
   /* init function by button active/deactive password input[type="password"]  */
   initLoginSwitch: function initLoginSwitch() {
-    $('.login-switch').each(function () {
+    $('.login').each(function () {
       $(this).on('click', function () {
         var login = $(this).text();
         var number = "Войти с помощью номера";
         var email = "Войти с помощью Email";
         var text = login === number ? email : number;
         var type = login === number ? "phon" : "email";
+        var imageUrl = login === number ? "phone" : "email";
         var placeholder = login === number ? "Номер телефона" : "Электронная почта";
-        var input = $(this).parent('label').siblings('input');
+        var input = $(this).find('.login-switch').parent('label').siblings('input');
         var typelogin = $(this).parents('.col-12').find('.type');
-        $(this).text(text);
+        $(this).find('.login-switch').text(text);
         input.attr("type", type).attr("name", type).attr("placeholder", placeholder).inputmask('+7 999 999 99-99');
+
+        if (login === email) {
+          $(this).addClass('phone').removeClass('email');
+        } else {
+          $(this).addClass('email').removeClass('phone');
+        }
+
         typelogin.val(type);
       });
     });
@@ -20252,6 +20261,7 @@ $(function () {
       method: 'POST',
       processData: false,
       contentType: false,
+      dataType: 'json',
       data: fd,
       success: function success(result) {},
       beforeSend: function beforeSend() {
@@ -20290,6 +20300,7 @@ $(function () {
       method: 'POST',
       processData: false,
       contentType: false,
+      dataType: 'json',
       data: fd,
       success: function success(result) {},
       beforeSend: function beforeSend() {

@@ -6908,9 +6908,20 @@ button.showMore {
                 }
             }
     }
-    input[name="name"] {
-        &:before {
-            content: '*';
+    input[name="name"], input[name="phon"], input[name="city"], input[name="password"], input[name="password_confirmation"] {
+        + label.required {
+            position: absolute;
+            display: block;
+            left: -15px;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            &:after {
+                content:" *";
+                color: red;
+            }
         }
     }
     label.label-error {
@@ -6933,6 +6944,30 @@ button.showMore {
         transform: translateY(-50%);
         cursor: pointer;
         z-index: 9;
+        background-image: none;
+        @media (max-width: 540px) {
+            content: "";
+            visibility: visible;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-image: url(/img/icon/mail-open.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: 50%;
+            .login-switch {
+                display: none;
+            }
+        }
+        @media (min-width: 541px) {
+            background-image: none !important;
+        }
+        &.phone {
+            background-image: url(/img/icon/phone.svg);
+        }
+        &.email {
+            background-image: url(/img/icon/mail-open.svg);
+        }
     }
 }
 .box__textarea {
@@ -7738,13 +7773,6 @@ section.box__product-catalog {
                     max-width: 20%;
                     border-left: 1px solid #dcdcdc;
                     padding: 20px 0 20px 20px;
-                    .box__quality {
-                        .box__quality-value {
-                            input {
-                                background-color: #fff;
-                            }
-                        }
-                    }
                 }
                 .wrapper-button.wrapper-button-auth {
                     margin: 0;
@@ -7826,13 +7854,6 @@ section.box__product-catalog {
                     max-width: 40%;
                     text-align: right;
                     padding: 0;
-                    .box__quality {
-                        .box__quality-value {
-                            input {
-                                background-color: var(--color-7);
-                            }
-                        }
-                    }
                 }
                 .wrapper-button.wrapper-button-auth {
                     text-align: left;

@@ -21,7 +21,6 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        View::share('categories', categoryTreeSort(Category::withCount('product')->get()));
     }
 
     public function resetPassword(Request $request) {

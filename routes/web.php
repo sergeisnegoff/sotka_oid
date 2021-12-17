@@ -16,7 +16,7 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 
     Route::post('/salesystems', [\App\Http\Controllers\Voyager\SalesystemController::class, 'updateTable'])->name('voyager.salesystems.updateTable');
-    Route::post('/brandsale', [\App\Http\Controllers\Voyager\BrandSaleController::class, 'updateTable'])->name('voyager.brandsales.updateTable');
+//    Route::post('/brandsale', [\App\Http\Controllers\Voyager\BrandSaleController::class, 'updateTable'])->name('voyager.brandsales.updateTable');
 
     Route::post('/users/{id}/updateCategories', [\App\Http\Controllers\ProfileController::class, 'updateTableCategories'])->name('voyager.users-categories.updateTable');
     Route::post('/users/{id}/updateBrands', [\App\Http\Controllers\ProfileController::class, 'updateTableBrands'])->name('voyager.users-brands.updateTable');
@@ -87,3 +87,5 @@ Route::get('/reorder/{id}', [\App\Http\Controllers\ProfileController::class, 're
 
 Route::get('/{page_slug}', [\App\Http\Controllers\PagesController::class, 'index']);
 Route::get('/our-life/{id}', [\App\Http\Controllers\PagesController::class, 'index']);
+
+Route::fallback([\App\Http\Controllers\ErrorController::class, 'error_404']);

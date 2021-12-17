@@ -4,6 +4,8 @@ const jQuery = require('jquery');
 // other packages here
 window.$ = window.jQuery = jQuery;
 
+jQuery.ajaxSettings.dataType = 'json';
+
 //bootstarp-grid
 import "../libs/bootstrap/css/bootstrap4-grid.min.css";
 
@@ -298,19 +300,25 @@ global.seed = {
     /* init function by button active/deactive password input[type="password"]  */
     initLoginSwitch: function () {
 
-        $('.login-switch').each(function () {
+        $('.login').each(function () {
 
             $(this).on('click', function () {
-                let login =  $(this).text();
+                let login = $(this).text();
                 let number = "Войти с помощью номера";
                 let email = "Войти с помощью Email";
                 let text = (login === number) ? email : number;
                 let type = (login === number) ? "phon" : "email";
+                let imageUrl = (login === number) ? "phone" : "email";
                 let placeholder = (login === number) ? "Номер телефона" : "Электронная почта";
-                let input = $(this).parent('label').siblings('input');
+                let input = $(this).find('.login-switch').parent('label').siblings('input');
                 let typelogin = $(this).parents('.col-12').find('.type');
-                $(this).text(text);
+                $(this).find('.login-switch').text(text);
                 input.attr("type", type).attr("name", type).attr("placeholder", placeholder).inputmask('+7 999 999 99-99');
+                if (login === email) {
+                    $(this).addClass('phone').removeClass('email')
+                } else {
+                    $(this).addClass('email').removeClass('phone');
+                }
                 typelogin.val(type);
             });
 
@@ -444,6 +452,7 @@ $(function () {
             method: 'POST',
             processData: false,
             contentType: false,
+            dataType: 'json',
             data: fd,
             success: (result) => {
             },
@@ -483,6 +492,7 @@ $(function () {
             method: 'POST',
             processData: false,
             contentType: false,
+            dataType: 'json',
             data: fd,
             success: (result) => {
             },
