@@ -7447,8 +7447,8 @@ section.box__product-catalog [data-catalog][data-catalog-card] .col-xl-2 .box__p
   margin: 10px 0 0;
 }
 section.box__product-catalog [data-catalog][data-catalog-card] .col-xl-2 .box__product-item .wrapper-button.wrapper-button-auth .col-6 {
-  flex: 0 0 37%;
-  max-width: 37%;
+  flex: 0 0 45%;
+  max-width: 45%;
 }
 section.box__product-catalog [data-catalog][data-catalog-card] .col-xl-2 .box__product-item .wrapper-button.wrapper-button-auth .col-6:first-child {
   margin: 0;
@@ -7936,6 +7936,7 @@ section.box__relatedproducts h2 {
 .box__product-item .wrapper-button.wrapper-button-auth .ifcart {
   font-size: 12px;
   color: #A16C21;
+  margin-top: 10px;
 }
 .box__product-item .box__characteristics {
   position: relative;
