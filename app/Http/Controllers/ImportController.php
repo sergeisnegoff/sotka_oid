@@ -21,7 +21,8 @@ use PhpOffice\PhpSpreadsheet\Exception;
 
 class ImportController extends Controller
 {
-    public function products() {
+    public function products()
+    {
         $time = microtime(true);
         ProductUpdateImport::make()->import(storage_path('app/1c/Price/obshii.xls'));
         return \response(microtime(true) - $time);
@@ -46,26 +47,25 @@ class ImportController extends Controller
         }
 
         foreach ($sheetData as $row) {
-            if (!empty(trim($row['U']))) {
-                $contact = DB::table('contacts_altay')->where('uuid', $row['M'])->count() ? 'contacts_altay' : 'contacts_regional';
-                if (User::where('email', trim($row['U']))->first()) {
-                    User::where('email', trim($row['U']))->update([
-                        'name' => $row['B'],
-                        'email' => trim($row['U']),
-                        'manager_id' => $row['M'],
-                        'uniq_code' => $row['C'],
-                        'manager_table' => $contact
-                    ]);
-                } else
-                    User::create([
-                        'name' => $row['B'],
-                        'manager_id' => $row['M'],
-                        'password' => Hash::make(rand(0, 1000)),
-                        'uniq_code' => $row['C'],
-                        'email' => trim($row['U']),
-                        'manager_table' => $contact
-                    ]);
+            if (empty($email = trim($row['U']))) {
+                continue;
             }
+
+            $contact = DB::table('contacts_altay')->where('uuid', $row['M'])->count() ? 'contacts_altay' : 'contacts_regional';
+
+            if (is_null($user = User::query()->where('email',$email)->first())) {
+                $user = new User([
+                    'password' => Hash::make(rand(0, 1000)),
+                    'email' => $email,
+                ]);
+            }
+
+            $user->fill([
+                'name' => $row['B'],
+                'manager_id' => $row['M'],
+                'manager_table' => $contact,
+                'uniq_code' => $row['C'],
+            ])->save();
         }
     }
 
@@ -99,11 +99,11 @@ class ImportController extends Controller
 
                     if (in_array((int)$row['D'], $orderProducts)) {
                         if (isset($productID->id)) {
-                            Order::orderProducts($order->id, $productID->id, (empty($row['G']) ? 0 : (int)$row['G']), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ? : 0, !empty(trim($row['N'])) || !empty(trim($row['M'])) ? 1 : 0, $row['O'], $row['N']);
+                            Order::orderProducts($order->id, $productID->id, (empty($row['G']) ? 0 : (int)$row['G']), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ?: 0, !empty(trim($row['N'])) || !empty(trim($row['M'])) ? 1 : 0, $row['O'], $row['N']);
                             unset($missingProducts[array_search((int)$row['D'], $missingProducts)]);
                         }
                     } else
-                        Order::orderProducts($order->id, $productID->id, (empty($row['G']) ? 0 : (int)$row['G']), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ? : 0, !empty(trim($row['N'])) || !empty(trim($row['M'])) ? 1 : 0, $row['O'], $row['N']);
+                        Order::orderProducts($order->id, $productID->id, (empty($row['G']) ? 0 : (int)$row['G']), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ?: 0, !empty(trim($row['N'])) || !empty(trim($row['M'])) ? 1 : 0, $row['O'], $row['N']);
                 }
 
                 $product = [];

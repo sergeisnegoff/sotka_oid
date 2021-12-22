@@ -98,10 +98,17 @@
 
                             <div class="form-group">
                                 <label for="manager_id">Менеджер</label>
-                                <select name="manager_id" class="form-control" id="manager_id">
+                                @php
+                                    $altaymanagers = \App\Models\ContactsAltayModel::all();
+                                    $regionalmanagers = \App\Models\ContactsRegionalModel::all();
+                                    $allmanagers = $altaymanagers->merge($regionalmanagers);
+                                @endphp
+                                <input type="hidden" name="manager_id" value="{{$dataTypeContent->manager_id}}">
+                                <input type="hidden" name="manager_table" value="{{$dataTypeContent->manager_table}}">
+                                <select class="form-control" id="manager_morph" onchange="changeManager.call(this)">
                                     <option value="0">- Выбрать -</option>
-                                    @foreach (\App\Models\ContactsAltayModel::all() as $contact)
-                                        <option value="{{ $contact->id }}" {{ $contact->id == $dataTypeContent->manager_id ? 'selected' : '' }}>{{ $contact->name }}</option>
+                                    @foreach ($allmanagers as $contact)
+                                        <option value="{{$contact->getTable()}}:{{ $contact->id }}" {{ $contact->id == $dataTypeContent->manager_id && $contact->getTable() == $dataTypeContent->manager_table ? 'selected' : '' }}>{{ $contact->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -284,6 +291,21 @@
                 });
             });
         });
+
+        function changeManager(){
+            let self = $(this),
+                val = self.val().split(':'),
+                ns = self.closest('.form-group'),
+                manager_table = ns.find('[name="manager_table"]'),
+                manager_id = ns.find('[name="manager_id"]');
+            if (val.length) {
+                manager_table.val(val[0]);
+                manager_id.val(val[1]);
+            } else {
+                manager_table.val('');
+                manager_id.val('');
+            }
+        }
     </script>
 @stop
 
