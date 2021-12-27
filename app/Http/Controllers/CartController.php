@@ -141,7 +141,8 @@ class CartController extends Controller
        // $result = ArrayToXml::convert($order, [], true, 'UTF-8', '1.1', [], true);
         $date = date('Y-m-d',strtotime($data['order']->created_at));
         $datetime = date('H-m-s',strtotime($data['order']->created_at));
-        Storage::disk('public')->put('orders/'.$date.'_'.$datetime.'_'.$random.'.json', json_encode($order));
+        Storage::disk('public')->put('preorders/'.$date.'_'.$datetime.'_'.$random.'.json', json_encode($order));
+        Storage::disk('public')->move('preorders/'.$date.'_'.$datetime.'_'.$random.'.json', 'orders/'.$date.'_'.$datetime.'_'.$random.'.json');
         return view('profile.orders.success', $data);
     }
 

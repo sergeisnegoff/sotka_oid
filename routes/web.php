@@ -68,6 +68,7 @@ Route::prefix('/profile')->name('profile.')->group(function () {
         Route::get('/success/{random}', [\App\Http\Controllers\CartController::class, 'success'])->name('success');
     });
 
+
     Route::post('/{id}', [\App\Http\Controllers\ProfileController::class, 'update'])->name('update');
     Route::post('/change-password/{id}', [\App\Http\Controllers\ProfileController::class, 'changePassword'])->name('change-password');
 
