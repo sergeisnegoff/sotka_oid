@@ -290,7 +290,9 @@
 
     <script>
         let cityID = 0,
-            regionID = 0;
+            regionID = 0,
+            streetId = 0,
+            buildingId = 0;
 
         $(function () {
             $('[data-popup=address]').iziModal({
@@ -306,7 +308,8 @@
 
                         initRegionAutocomplete('.region-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.region-autocomplete'));
                         initCityAutocomplete('.city-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.city-autocomplete'));
-                        initAddressAutocomplete('.address-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.address-autocomplete'))
+                        initAddressAutocomplete('.street-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.street-autocomplete'));
+                        initBuildingAutocomplete('.building-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.building-autocomplete'));
                     });
                 else
                     $.get('{{ route('profile.address.edit') }}/' + $(this).data('id'), function (result) {
@@ -314,7 +317,8 @@
                         $('[data-popup=address]').iziModal('open');
 
                         initCityAutocomplete('.city-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.city-autocomplete'));
-                        initAddressAutocomplete('.address-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.address-autocomplete'))
+                        initAddressAutocomplete('.street-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.street-autocomplete'));
+                        initBuildingAutocomplete('.building-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.building-autocomplete'));
                     });
             }).on('click', '.box__profile-deleteaddress', function () {
                 let _self = $(this);
@@ -337,12 +341,12 @@
                 data: {
                     src: async function () {
                         const source = await fetch(
-                            route + "?s=" + _self.val()
+                            route + "?s=" + _self.val() + '&type=region'
                         );
                         const data = await source.json();
                         return data;
                     },
-                    key: ["id", 'name', "city"],
+                    key: ["id", 'name', "city", "type"],
                     results: (list) => {
                         const filteredResults = Array.from(
                             new Set(list.map((value) => value.match))
@@ -370,7 +374,7 @@
                 data: {
                     src: async function () {
                         const source = await fetch(
-                            route + "?s=" + _self.val() + '&regionId=' + regionID
+                            route + "?s=" + _self.val() + '&regionId=' + regionID + '&type=city'
                         );
                         const data = await source.json();
                         return data;
@@ -403,7 +407,7 @@
                 data: {
                     src: async function () {
                         const source = await fetch(
-                            route + "?s=" + _self.val() + "&cityId=" + cityID
+                            route + "?s=" + _self.val() + "&cityId=" + cityID + '&type=address'
                         );
                         const data = await source.json();
                         return data;
@@ -414,6 +418,39 @@
                             new Set(list.map((value) => value.match))
                         ).map((city) => {
                             return list.find((value) => value.match === city);
+                        });
+
+                        return filteredResults;
+                    }
+                },
+                cache: false,
+                debounce: 800,
+                selector: selector,
+                onSelection: (feedback) => {
+                    streetId = feedback.selection.value.id;
+                    _self.val(feedback.selection.value.name);
+                },
+            };
+
+            new autoComplete(settings);
+        }
+
+        function initBuildingAutocomplete(selector, route, _self) {
+            let settings = {
+                data: {
+                    src: async function () {
+                        const source = await fetch(
+                            route + "?s=" + _self.val() + "&streetId=" + streetId + '&type=building'
+                        );
+                        const data = await source.json();
+                        return data;
+                    },
+                    key: ["id", 'name', "city"],
+                    results: (list) => {
+                        const filteredResults = Array.from(
+                            new Set(list.map((value) => value.match))
+                        ).map((street) => {
+                            return list.find((value) => value.match === street);
                         });
 
                         return filteredResults;

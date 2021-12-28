@@ -85,6 +85,7 @@ class ProfileController extends Controller
     {
         $action = $request->segment('3');
 
+
         switch ($action) {
             case 'create':
                 $data['user'] = Auth::user();
@@ -98,7 +99,6 @@ class ProfileController extends Controller
                     'house' => 'required',
                     'user_id' => 'required'
                 ]);
-
                 ProfileAddress::store($data);
                 break;
             case 'edit':
@@ -135,64 +135,88 @@ class ProfileController extends Controller
                 $user->save();
                 break;
             case 'autocomplete':
-                if (empty($request->get('regionId'))) {
+                if (!empty($request->get('s')) && !empty($request->get('type') == 'region')) {
                     $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=region&query=" . $request->get('s');
                     $data = file_get_contents($url);
-
                     try {
                         $items = [];
                         collect(json_decode($data)->result)->each(function ($item) use (&$items) {
-                            $items[] = [
-                                'id' => $item->id,
-                                'name' => $item->name,
-                                "city" => true
-                            ];
-                        });
 
+                            if ($item->id != 'Free'){
+                                $items[] = [
+                                    'id' => $item->id,
+                                    'name' => $item->name,
+                                    "city" => true,
+                                    "type" => $item->type
+                                ];
+                            }
+                        });
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный регион не найден']);
                     }
-                }
-                elseif (empty($request->get('city'))) {
+                } elseif (!empty($request->get('regionId')) && (!empty($request->get('s')))) {
                     $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=city&query=" . $request->get('s').'&regionId='.$request->get('regionId');
                     $data = file_get_contents($url);
 
                     try {
                         $items = [];
                         collect(json_decode($data)->result)->each(function ($item) use (&$items) {
-                            $items[] = [
-                                'id' => $item->id,
-                                'name' => $item->name,
-                                "city" => true
-                            ];
+                            if ($item->id != 'Free') {
+                                $items[] = [
+                                    'id' => $item->id,
+                                    'name' => $item->name,
+                                    "city" => true,
+                                ];
+                            }
                         });
 
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный город не найден']);
                     }
-                } else {
-
-                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=street&query=" . $request->get('s') . '&cityId=' . $request->get('city');
+                }
+                elseif (!empty($request->get('cityId')) && (!empty($request->get('s')))) {
+                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=street&query=" . $request->get('s') . '&cityId=' . $request->get('cityId');
                     $data = file_get_contents($url);
 
                     try {
                         $items = [];
                         collect(json_decode($data)->result)->each(function ($item) use (&$items) {
-                            $items[] = [
-                                'id' => $item->id,
-                                'name' => $item->name,
-                                'city' => false
-                            ];
+                            if ($item->id != 'Free') {
+                                $items[] = [
+                                    'id' => $item->id,
+                                    'name' => $item->name,
+                                    'city' => false
+                                ];
+                            }
                         });
 
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный адрес не найден']);
                     }
+                } else {
+                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=building&query=" . $request->get('s') . '&streetId=' . $request->get('streetId');
+                    $data = file_get_contents($url);
+
+                    try {
+                        $items = [];
+                        collect(json_decode($data)->result)->each(function ($item) use (&$items) {
+                            if ($item->id != 'Free') {
+                                $items[] = [
+                                    'id' => $item->id,
+                                    'name' => $item->name,
+                                    "city" => true
+                                ];
+                            }
+                        });
+                        return \response()->json($items);
+                    } catch (\Exception $e) {
+                        return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный регион не найден']);
+                    }
                 }
-                break;
+                return response()->redirectToRoute('profile.index');
         }
 
         return \redirect()->back();

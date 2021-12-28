@@ -15,22 +15,34 @@
             <input type="hidden" name="user_id" value="{{ $user->id }}">
             <div class="row">
                 <div class="col-12">
-                    <div class="box__input"><input type="text" value="{{ @$item->region }}" class="region-autocomplete" name="region" placeholder="Регион"></div>
+                    <div class="box__input">
+                        <input type="text" value="{{ @$item->region }}" class="region-autocomplete step" autocomplete="off" name="region" placeholder="Регион">
+                        <div class="err"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="box__input"><input type="text" value="{{ @$item->city }}" class="city-autocomplete" name="city" placeholder="Населённый пункт"></div>
+                    <div class="box__input">
+                        <input type="text" value="{{ @$item->city }}" class="city-autocomplete step" autocomplete="off" name="city" placeholder="Населённый пункт" readonly>
+                        <div class="err"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="box__input"><input type="text" value="{{ @$item->address }}" class="address-autocomplete" name="address" placeholder="Улица"></div>
+                    <div class="box__input">
+                        <input type="text" value="{{ @$item->address }}" class="street-autocomplete step" autocomplete="off" name="address" placeholder="Улица" readonly>
+                        <div class="err"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="box__input"><input type="text" value="{{ @$item->house }}" name="house" placeholder="Дом"></div>
+                    <div class="box__input">
+                        <input type="text" value="{{ @$item->house }}" class="building-autocomplete step" autocomplete="off" name="house" placeholder="Дом" readonly>
+                        <div class="err"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -43,3 +55,40 @@
         </form>
     </div>
 </div>
+<style>
+    .err {
+        color: red;
+        font-size: 12px;
+    }
+</style>
+<script>
+    // The change event is fired when a form element loses focus
+    // and its value has changed since the last time we interacted with it
+    // $(".step").focusout(function(){
+    //     var all_next_steps = $(this).parent().parent().parent().nextAll().find('.step');
+    //     if ($(this).is('readonly', false)) {
+    //         all_next_steps.parent().find('.err').text('');
+    //     }
+    // });
+    $('.step').click(function() {
+        var next_step = $(this).parent().parent().parent().next().find('.step');
+        var all_next_steps = $(this).parent().parent().parent().nextAll().find('.step');
+        if($(this).is('[readonly]')) {
+            $(this).parent().find('.err').text('Вернитесь на предыдущий шаг');
+        } else {
+            all_next_steps.parent().find('.err').text('');
+        }
+    });
+    $('.step').change(function() {
+        var next_step = $(this).parent().parent().parent().next().find('.step');
+        var all_next_steps = $(this).parent().parent().parent().nextAll().find('.step');
+        // If the element *has* a value
+        if ($(this).val()) {
+            // Should also perform validation here
+            next_step.attr('readonly', false);
+        } else {
+            all_next_steps.val('');
+            all_next_steps.attr('readonly', true);
+        }
+    });
+</script>
