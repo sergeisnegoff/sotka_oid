@@ -294,7 +294,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="col-6">
+                                                    <div class="col-6 col-md-6">
                                                         <div class="ifcart">@if($cartKeys->contains($seed->id))Товар есть в корзине@endif</div>
                                                     </div>
                                                 </div>

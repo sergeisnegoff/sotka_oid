@@ -12,6 +12,13 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css?' . 2) }}" rel="stylesheet">
 
+    <!-- Favicon -->
+    <?php $admin_favicon = Voyager::setting('admin.icon_image', ''); ?>
+    <?php if($admin_favicon == ''): ?>
+    <link rel="shortcut icon" href="<?php echo e(voyager_asset('images/logo-icon.png')); ?>" type="image/png">
+    <?php else: ?>
+    <link rel="shortcut icon" href="<?php echo e(Voyager::image($admin_favicon)); ?>" type="image/png">
+    <?php endif; ?>
 
     <script src="{{asset('js/jquery-3.5.1.js')}}"></script>
     <script src="{{asset('assets/js/jquery-ui.js')}}"></script>

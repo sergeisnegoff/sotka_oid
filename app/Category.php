@@ -4,8 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
-
+/**
+ * @property-read string $small_name
+ */
 class Category extends Model
 {
     protected $fillable = ['title', 'parent_id', 'sorder'];
@@ -28,5 +31,9 @@ class Category extends Model
         $query->orderBy('sorder', 'asc');
 
         return $query;
+    }
+
+    public function getSmallNameAttribute(){
+        return Str::of($this->title)->lower()->ucfirst()->__toString();
     }
 }

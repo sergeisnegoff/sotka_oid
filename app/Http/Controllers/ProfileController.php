@@ -140,56 +140,79 @@ class ProfileController extends Controller
                     $data = file_get_contents($url);
                     try {
                         $items = [];
-                        collect(json_decode($data)->result)->each(function ($item) use (&$items) {
-
-                            if ($item->id != 'Free'){
-                                $items[] = [
-                                    'id' => $item->id,
-                                    'name' => $item->name,
-                                    "city" => true,
-                                    "type" => $item->type
-                                ];
+                        collect(json_decode($data)->result)->filter(function ($item) {
+                            return $item->id != 'Free';
+                        })->each(function ($item) use (&$items) {
+                            switch ($item->type) {
+                                case 'Область':
+                                    $name = $item->name . ' область';
+                                    break;
+                                case 'Край':
+                                    $name = $item->name . ' край';
+                                    break;
+                                case 'Республика':
+                                    $name = 'Республика ' . $item->name;
+                                    break;
+                                case 'Автономный округ':
+                                    $name = $item->name . ' автономный округ';
+                                    break;
+                                case 'Автономная область':
+                                    $name = $item->name . ' автономная область';
+                                    break;
+                                default:
+                                    $name = $item->name;
                             }
+                            $items[] = [
+                                'id' => $item->id,
+                                'name' => $name,
+                                "city" => true,
+                                "type" => $item->type
+                            ];
                         });
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный регион не найден']);
                     }
                 } elseif (!empty($request->get('regionId')) && (!empty($request->get('s')))) {
-                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=city&query=" . $request->get('s').'&regionId='.$request->get('regionId');
+                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=city&query=" . $request->get('s') . '&regionId=' . $request->get('regionId');
                     $data = file_get_contents($url);
 
                     try {
                         $items = [];
-                        collect(json_decode($data)->result)->each(function ($item) use (&$items) {
-                            if ($item->id != 'Free') {
-                                $items[] = [
-                                    'id' => $item->id,
-                                    'name' => $item->name,
-                                    "city" => true,
-                                ];
-                            }
+
+                        collect(json_decode($data)->result)->filter(function ($item) {
+                            return $item->id != 'Free';
+                        })->each(function ($item) use (&$items) {
+                            $items[] = [
+                                'id' => $item->id,
+                                'name' => $item->name,
+                                "city" => true,
+                            ];
                         });
+
+                        if (collect($items)->isEmpty()) {
+                            throw new \Exception();
+                        }
 
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный город не найден']);
                     }
-                }
-                elseif (!empty($request->get('cityId')) && (!empty($request->get('s')))) {
+                } elseif (!empty($request->get('cityId')) && (!empty($request->get('s')))) {
                     $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=street&query=" . $request->get('s') . '&cityId=' . $request->get('cityId');
                     $data = file_get_contents($url);
 
                     try {
                         $items = [];
-                        collect(json_decode($data)->result)->each(function ($item) use (&$items) {
-                            if ($item->id != 'Free') {
+
+                        collect(json_decode($data)->result)->filter(function ($item) {
+                            return $item->id != 'Free';
+                        })->each(function ($item) use (&$items) {
                                 $items[] = [
                                     'id' => $item->id,
                                     'name' => $item->name,
                                     'city' => false
                                 ];
-                            }
                         });
 
                         return \response()->json($items);
@@ -202,14 +225,15 @@ class ProfileController extends Controller
 
                     try {
                         $items = [];
-                        collect(json_decode($data)->result)->each(function ($item) use (&$items) {
-                            if ($item->id != 'Free') {
+
+                        collect(json_decode($data)->result)->filter(function ($item) {
+                            return $item->id != 'Free';
+                        })->each(function ($item) use (&$items) {
                                 $items[] = [
                                     'id' => $item->id,
                                     'name' => $item->name,
                                     "city" => true
                                 ];
-                            }
                         });
                         return \response()->json($items);
                     } catch (\Exception $e) {
@@ -222,7 +246,8 @@ class ProfileController extends Controller
         return \redirect()->back();
     }
 
-    public function orders(Request $request) {
+    public function orders(Request $request)
+    {
         $action = $request->segment(3);
         $data = [];
 
@@ -239,7 +264,9 @@ class ProfileController extends Controller
 
         return \response()->view('profile.orders.current', $data);
     }
-    public function reOrders( $id) {
+
+    public function reOrders($id)
+    {
 
         $expr = DB::table('order_products')
             ->join('orders', 'orders.id', '=', 'order_products.order_id')
@@ -265,8 +292,8 @@ class ProfileController extends Controller
 
 //        dd($expr);
 
-        $cart=[];
-        foreach ($expr as $exp ) {
+        $cart = [];
+        foreach ($expr as $exp) {
             $cart[$exp->id] = [
                 "title" => $exp->title,
                 "images" => $exp->images,
@@ -278,9 +305,9 @@ class ProfileController extends Controller
         session()->put(compact('cart'));
 
         if (DB::table('cart')->where('user_id', Auth::id())->first())
-            DB::table('cart')->where('user_id', Auth::id())->update(['json' =>  json_encode(session()->get('cart'))]);
+            DB::table('cart')->where('user_id', Auth::id())->update(['json' => json_encode(session()->get('cart'))]);
         else
-            DB::table('cart')->insert(['user_id' => Auth::id(), 'json' =>  json_encode(session()->get('cart'))]);
+            DB::table('cart')->insert(['user_id' => Auth::id(), 'json' => json_encode(session()->get('cart'))]);
 
         $cart = session()->get('cart');
 
@@ -288,7 +315,8 @@ class ProfileController extends Controller
 //        return redirect()->back()->with('success', 'Товар добавлен в корзину');
     }
 
-    public function orderHistory(Request $request) {
+    public function orderHistory(Request $request)
+    {
         $action = $request->segment(3);
         $data['page'] = 'order-history';
 
@@ -311,11 +339,12 @@ class ProfileController extends Controller
             ->where('orders.user_id', Auth::id())
             ->get();
 
-        return \response()->view('profile.orders.'.$action, $data);
+        return \response()->view('profile.orders.' . $action, $data);
 
     }
 
-    public function updateTableCategories(Request $request, $id) {
+    public function updateTableCategories(Request $request, $id)
+    {
         $data = \Illuminate\Support\Facades\Request::post('userRange');
         $categoriesCheckBox = \Illuminate\Support\Facades\Request::post('category');
         $categoryChilds = \Illuminate\Support\Facades\Request::post('category_childs');
@@ -337,7 +366,8 @@ class ProfileController extends Controller
         return Redirect::route('voyager.users.edit', ['id' => $id]);
     }
 
-    public function updateTableBrands(Request $request, $id) {
+    public function updateTableBrands(Request $request, $id)
+    {
         $data = \Illuminate\Support\Facades\Request::post('priceRange');
         $brandsCheckBox = \Illuminate\Support\Facades\Request::post('brands');
 
@@ -355,17 +385,18 @@ class ProfileController extends Controller
         return Redirect::route('voyager.users.edit', ['id' => $id]);
     }
 
-    public function activeAccount(Request $request, $id){
-        if($request->active){
+    public function activeAccount(Request $request, $id)
+    {
+        if ($request->active) {
             $userData = User::find($id);
             $userData->active = $request->active;
             $userData->save();
 
-            if($request->active == 'on'){
+            if ($request->active == 'on') {
                 Mail::to($userData->email)->send(new AccountAcepted());
             }
 
-            return json_encode(array('statusCode'=>200));
+            return json_encode(array('statusCode' => 200));
         }
     }
 }

@@ -4,8 +4,6 @@ const jQuery = require('jquery');
 // other packages here
 window.$ = window.jQuery = jQuery;
 
-jQuery.ajaxSettings.dataType = 'json';
-
 //bootstarp-grid
 import "../libs/bootstrap/css/bootstrap4-grid.min.css";
 
@@ -475,7 +473,7 @@ $(function () {
                         class: 'invalid-message'
                     }))
                 },
-                200: () => {
+                204: () => {
                     window.location.reload();
                 }
             }
@@ -515,7 +513,7 @@ $(function () {
                         class: 'invalid-message'
                     }))
                 },
-                200: () => {
+                201: () => {
                     window.location.reload();
                 }
             }

@@ -23,13 +23,13 @@ class Controller extends BaseController
     {
     }
 
-    public function resetPassword(Request $request) {
-        $data = $request->validate([
-            'email' => 'required'
-        ]);
-
-        User::sendResetPasswordMail($data['email']);
-
-        return response()->redirectToRoute('home');
-    }
+//    public function resetPassword(Request $request) {
+//        $data = $request->validate([
+//            'email' => 'required'
+//        ]);
+//
+//        User::sendResetPasswordMail($data['email']);
+//
+//        return response()->redirectToRoute('home');
+//    }
 }

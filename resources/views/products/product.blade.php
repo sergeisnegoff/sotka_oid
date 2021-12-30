@@ -7,7 +7,7 @@
                     <ul>
                         <li><a href="/">{{setting('site.main_title_buttom')}}</a></li>
                         <li><a href="{{route('products')}}">Каталог</a></li>
-                        <li><a href="/products/{{$seed->category->title}}">{{$seed->category->title}}</a></li>
+                        <li><a href="/products/{{$seed->category->title}}">{{$seed->category->small_name}}</a></li>
                         <li>{{$seed->title}}</li>
                     </ul>
                 </div>
@@ -72,7 +72,7 @@
                                 $video = explode('/', $seed->video_link);?>
                                 <div class="col-12 col-md-6">
                                     <iframe width="100%" height="300"
-                                            src="https://www.youtube-nocookie.com/embed/{{$video[3]}}?controls=0"
+                                            src="https://www.youtube-nocookie.com/embed/{{$video[4]}}?controls=0"
                                             frameborder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen></iframe>

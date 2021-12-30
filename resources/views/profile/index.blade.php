@@ -51,7 +51,8 @@
                                                                minlength="4">
                                                         @error('email')
                                                         <label class="label-error"
-                                                               style="color: #ca0003; display:block;opacity:1;visibility:inherit">email уже существует</label>
+                                                               style="color: #ca0003; display:block;opacity:1;visibility:inherit">email
+                                                            уже существует</label>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -376,8 +377,7 @@
                         const source = await fetch(
                             route + "?s=" + _self.val() + '&regionId=' + regionID + '&type=city'
                         );
-                        const data = await source.json();
-                        return data;
+                        return await source.json();
                     },
                     key: ["id", 'name', "city"],
                     results: (list) => {
@@ -386,16 +386,26 @@
                         ).map((city) => {
                             return list.find((value) => value.match === city);
                         });
-
+                        if (!filteredResults.length) {
+                            filteredResults.push({
+                                key: 'empty',
+                                match: 'Город с таким названием не найден',
+                            })
+                            _self.val('');
+                        }
                         return filteredResults;
-                    }
+                    },
                 },
                 cache: false,
-                debounce: 800,
+                debounce: 500,
                 selector: selector,
                 onSelection: (feedback) => {
-                    cityID = feedback.selection.value.id;
-                    _self.val(feedback.selection.value.name);
+                    if (feedback.selection.key === 'empty') {
+                        _self.val('');
+                    } else {
+                        cityID = feedback.selection.value.id;
+                        _self.val(feedback.selection.value.name);
+                    }
                 },
             };
 
@@ -419,6 +429,13 @@
                         ).map((city) => {
                             return list.find((value) => value.match === city);
                         });
+                        if (!filteredResults.length) {
+                            filteredResults.push({
+                                key: 'empty',
+                                match: 'Улица с таким названием не найдена',
+                            })
+                            _self.val('');
+                        }
 
                         return filteredResults;
                     }
@@ -427,8 +444,12 @@
                 debounce: 800,
                 selector: selector,
                 onSelection: (feedback) => {
-                    streetId = feedback.selection.value.id;
-                    _self.val(feedback.selection.value.name);
+                    if (feedback.selection.key === 'empty') {
+                        _self.val('');
+                    } else {
+                        streetId = feedback.selection.value.id;
+                        _self.val(feedback.selection.value.name);
+                    }
                 },
             };
 
@@ -449,13 +470,14 @@
                     results: (list) => {
                         const filteredResults = Array.from(
                             new Set(list.map((value) => value.match))
-                        ).map((street) => {
+                        ).filter((street) => street.length <= 12).map((street) => {
                             return list.find((value) => value.match === street);
                         });
 
                         return filteredResults;
                     }
                 },
+                maxResults: 15,
                 cache: false,
                 debounce: 800,
                 selector: selector,
