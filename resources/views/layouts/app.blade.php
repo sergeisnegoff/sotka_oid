@@ -16,10 +16,10 @@
     <?php $admin_favicon = Voyager::setting('admin.icon_image', ''); ?>
     <?php if($admin_favicon == ''): ?>
     <link rel="shortcut icon" href="<?php echo e(voyager_asset('images/logo-icon.png')); ?>" type="image/png">
-    <link rel="shortcut icon" href="<?php echo e(voyager_asset('img/image/favicon.ico')); ?>">
+    <link rel="shortcut icon" href="<?php echo e(asset('img/image/favicon.ico')); ?>">
     <?php else: ?>
     <link rel="shortcut icon" href="<?php echo e(Voyager::image($admin_favicon)); ?>" type="image/png">
-    <link rel="shortcut icon" href="<?php echo e(voyager_asset('img/image/favicon.ico')); ?>">
+    <link rel="shortcut icon" href="<?php echo e(asset('img/image/favicon.ico')); ?>">
     <?php endif; ?>
 
     <script src="{{asset('js/jquery-3.5.1.js')}}"></script>
