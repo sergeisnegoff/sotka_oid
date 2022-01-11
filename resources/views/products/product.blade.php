@@ -42,7 +42,7 @@
                             <ul>
                             <!--                                <li data-tab="characteristics" class="active">{{setting('site.specifications_product')}}</li>-->
                                 <li data-tab="description">{{setting('site.description_product')}}</li>
-                                @if (!empty($seed->video_link))
+                                @if ($seed->video_link)
                                     <li data-tab="video">{{setting('site.video_product')}}</li>
                                 @endif
                             </ul>
