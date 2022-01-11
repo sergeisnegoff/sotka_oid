@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->region }}" class="region-autocomplete step" autocomplete="off" name="region" placeholder="Регион">
+                        <input type="text" value="{{ @$item->region }}" class="region-autocomplete step" autocomplete="off" required name="region" placeholder="Регион">
                         <div class="err"></div>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->city }}" class="city-autocomplete step" autocomplete="off" name="city" placeholder="Населённый пункт" readonly>
+                        <input type="text" value="{{ @$item->city }}" class="city-autocomplete step" autocomplete="off" required name="city" placeholder="Населённый пункт" readonly>
                         <div class="err"></div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->address }}" class="street-autocomplete step" autocomplete="off" name="address" placeholder="Улица" readonly>
+                        <input type="text" value="{{ @$item->address }}" class="street-autocomplete step" autocomplete="off" required name="address" placeholder="Улица" readonly>
                         <div class="err"></div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->house }}" class="building-autocomplete step" autocomplete="off" name="house" placeholder="Дом" readonly>
+                        <input type="text" value="{{ @$item->house }}" class="building-autocomplete step" autocomplete="off" required name="house" placeholder="Дом" readonly>
                         <div class="err"></div>
                     </div>
                 </div>
@@ -80,6 +80,15 @@
             all_next_steps.parent().find('.err').text('');
             $(this).attr('readonly', false);
         }
+        if ($(this).filter("[name=house]").val().length > 5) {
+            $(this).parent().find('.err').text('Введите корректный адрес');
+        } else {
+            if($(this).is('[readonly]') && prev_step.val().length === 0) {
+                $(this).parent().find('.err').text('Вернитесь на предыдущий шаг');
+            } else {
+            $(this).parent().find('.err').text('');
+            }
+        }
     });
     $('.step').change(function() {
         var next_step = $(this).parent().parent().parent().next().find('.step');
@@ -92,8 +101,10 @@
             all_next_steps.val('');
             all_next_steps.attr('readonly', true);
         }
-        if ($(this).filter("[name=house]").length > 5) {
-            alert('123');
+        if ($(this).filter("[name=house]").val().length > 5) {
+            $(this).parent().find('.err').text('Введите корректный адрес');
+        } else {
+            $(this).parent().find('.err').text('');
         }
     });
 </script>
