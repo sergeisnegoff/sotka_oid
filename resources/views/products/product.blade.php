@@ -73,7 +73,7 @@
                                 $video = trim($video[3], 'watch?v=');?>
                                 <div class="col-12 col-md-6">
                                     <iframe width="100%" height="300"
-                                            src="https://www.youtube.com/embed/{{$video}}?controls=0"
+                                            src="https://www.youtube-nocookie.com/embed/{{$video}}?controls=0"
                                             frameborder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen></iframe>
