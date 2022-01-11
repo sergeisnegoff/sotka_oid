@@ -70,7 +70,7 @@
                                 <?php
                                 if(!empty($seed->video_link)) {
                                 $video = explode('/', $seed->video_link);
-                                $video = trim($video[3], 'watch?v=');?>
+                                $video = trim($video[4], 'watch?v=');?>
                                 <div class="col-12 col-md-6">
                                     <iframe width="100%" height="300"
                                             src="https://www.youtube-nocookie.com/embed/{{$video}}?controls=0"
