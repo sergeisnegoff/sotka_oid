@@ -69,11 +69,10 @@
                             <div class="row">
                                 <?php
                                 if(!empty($seed->video_link)) {
-                                $video = explode('/', $seed->video_link);
-                                $video = trim($video[4], 'watch?v=');?>
+                                $video = explode('=', $seed->video_link);?>
                                 <div class="col-12 col-md-6">
                                     <iframe width="100%" height="300"
-                                            src="https://www.youtube-nocookie.com/embed/{{$video}}?controls=0"
+                                            src="https://www.youtube-nocookie.com/embed/{{$video[1]}}?controls=0"
                                             frameborder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen></iframe>
