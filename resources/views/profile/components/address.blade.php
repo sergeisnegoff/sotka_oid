@@ -72,11 +72,13 @@
     // });
     $('.step').click(function() {
         var next_step = $(this).parent().parent().parent().next().find('.step');
+        var prev_step = $(this).parent().parent().parent().prev().find('.step');
         var all_next_steps = $(this).parent().parent().parent().nextAll().find('.step');
-        if($(this).is('[readonly]')) {
+        if($(this).is('[readonly]') && prev_step.val().length === 0) {
             $(this).parent().find('.err').text('Вернитесь на предыдущий шаг');
         } else {
             all_next_steps.parent().find('.err').text('');
+            $(this).attr('readonly', false);
         }
     });
     $('.step').change(function() {
@@ -89,6 +91,9 @@
         } else {
             all_next_steps.val('');
             all_next_steps.attr('readonly', true);
+        }
+        if ($(this).filter("[name=house]").length > 5) {
+            alert('123');
         }
     });
 </script>

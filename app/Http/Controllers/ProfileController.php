@@ -96,7 +96,7 @@ class ProfileController extends Controller
                     'city' => 'required',
                     'address' => 'required',
                     'region' => 'required',
-                    'house' => 'required',
+                    'house' => 'required|max:4',
                     'user_id' => 'required'
                 ]);
                 ProfileAddress::store($data);
@@ -109,11 +109,12 @@ class ProfileController extends Controller
             case 'update':
                 $item = ProfileAddress::find($id);
 
+
                 $data = $request->validate([
                     'city' => 'required',
                     'address' => 'required',
                     'region' => 'required',
-                    'house' => 'required',
+                    'house' => 'required|max:4',
                     'user_id' => 'required'
                 ]);
 
