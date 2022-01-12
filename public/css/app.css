@@ -10889,6 +10889,10 @@ section.box__page-contact .box__contact-item .box__image {
   overflow: hidden;
   background-color: var(--color-4);
 }
+section.box__page-contact .box__contact-item .box__image.general {
+  width: 180px;
+  height: 180px;
+}
 section.box__page-contact .box__contact-item .box__image span {
   position: absolute;
   display: block;

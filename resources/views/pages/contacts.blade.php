@@ -24,29 +24,25 @@
                 </div>
                 <div class="box__contact-personal">
                     <div class="row">
-                        <div class="col-12"><h3>{{ setting('site.CONTACTS_MANAGERS') }}</h3></div>
+                        <div class="col-12"><h3>{{ setting('site.CONTACTS_SUPERVISOR') }}</h3></div>
                     </div>
                     <div class="row wrapper__personal-row">
-                        @foreach ($contactsAltay as $contact)
-                            <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                        @foreach ($contactsRegional as $contact)
+                            <div class="col-12 col-md-7 col-xl-6 col-xxl-4">
                                 <div class="box__contact-item">
                                     <div class="row">
-                                        <div class="col-4">
-                                            <div class="box__image"><span
-                                                    style="background-image: url({{ thumbImg($contact->img, 90, 90) }});"></span>
+                                        <div class="col-12 col-md-6 col-xl-6 col-xxl-6">
+                                            <div class="box__image general"><span
+                                                    style="background-image: url({{ thumbImg($contact->img, 180, 180) }});"></span>
                                             </div>
                                         </div>
-                                        <div class="col-8">
+                                        <div class="col-12 col-md-6 col-xl-6 col-xxl-6">
                                             <div class="box__contact-link"><a
                                                     href="tel:{{ $contact->phone }}">{{ $contact->phone }}</a>
                                             </div>
                                             <div class="box__contact-link"><a
                                                     href="mailto:{{ $contact->email }}">{{ $contact->email }}</a>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
                                             <h4>{{ $contact->name }}<span>{{ $contact->position }}</span></h4>
                                         </div>
                                     </div>
@@ -55,10 +51,10 @@
                         @endforeach
                     </div>
                     <div class="row">
-                        <div class="col-12"><h3>{{ setting('site.CONTACTS_REGIONAL') }}</h3></div>
+                        <div class="col-12"><h3>{{ setting('site.CONTACTS_MANAGERS') }}</h3></div>
                     </div>
                     <div class="row wrapper__personal-row">
-                        @foreach ($contactsRegional as $contact)
+                        @foreach ($contactsAltay as $contact)
                             <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
                                 <div class="box__contact-item">
                                     <div class="row">

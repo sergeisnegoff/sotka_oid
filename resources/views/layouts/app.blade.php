@@ -154,10 +154,10 @@
             </div>
             <div class="col-12 col-md-4 col-xl-5">
                 <div class="box__footer-link"><a
-                        href="tel:8(3852)463620">{{setting('site.CONTACTS_ALTAY_PHONE')}}</a><span>{{setting('site.CONTACTS_ALTAY')}}</span>
+                        href="tel:8(3852)463620">{{setting('site.CONTACTS_SUPERVISOR_PHONE')}}</a><span>{{setting('site.CONTACTS_SUPERVISOR_PHONE')}}</span>
                 </div>
                 <div class="box__footer-link"><a
-                        href="tel:8(3852)504098">{{setting('site.CONTACTS_REGIONAL_PHONE')}}</a><span>{{setting('site.CONTACTS_REGIONAL')}}</span>
+                        href="tel:8(3852)504098">{{setting('site.CONTACTS_MANAGERS_PHONE')}}</a><span>{{setting('site.CONTACTS_MANAGERS_PHONE')}}</span>
                 </div>
                 <div class="box__footer-info">{{setting('site.ADDRESS_TEXT')}}</div>
                 <div class="box__footer-link"><a href="mailto:info@sotka-sem.ru">{{setting('site.CONTACTS_EMAIL')}}</a>
