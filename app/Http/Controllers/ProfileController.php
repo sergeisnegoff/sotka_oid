@@ -94,8 +94,11 @@ class ProfileController extends Controller
             case 'store':
                 $data = $request->validate([
                     'city' => 'required',
+                    'city_id' => 'required',
                     'address' => 'required',
+                    'address_id' => 'required',
                     'region' => 'required',
+                    'region_id' => 'required',
                     'house' => 'required|max:4',
                     'user_id' => 'required'
                 ]);

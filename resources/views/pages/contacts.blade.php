@@ -19,12 +19,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h2>{{ $info->title }}</h2>
+                        <h2>Контакты отдела продаж</h2>
                     </div>
                 </div>
                 <div class="box__contact-personal">
                     <div class="row">
-                        <div class="col-12"><h3>{{ setting('site.CONTACTS_ALTAY') }}</h3></div>
+                        <div class="col-12"><h3>{{ setting('site.CONTACTS_MANAGERS') }}</h3></div>
                     </div>
                     <div class="row wrapper__personal-row">
                         @foreach ($contactsAltay as $contact)

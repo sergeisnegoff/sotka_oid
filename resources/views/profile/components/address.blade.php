@@ -65,7 +65,6 @@
     }
 </style>
 <script>
-    $('form').attr('autocomplete','off');
     // The change event is fired when a form element loses focus
     // and its value has changed since the last time we interacted with it
     // $(".step").focusout(function(){
