@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="box__form">
-        <form method="post" action="{{  !isset($item) ? route('profile.address.store') : route('profile.address.update', ['id' => $item->id]) }}">
+        <form method="post" action="{{  !isset($item) ? route('profile.address.store') : route('profile.address.update', ['id' => $item->id]) }}"  autocomplete="off">
             @csrf
             @if (isset($item))
                 @method('PATCH')
@@ -16,7 +16,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->region }}" class="region-autocomplete step" autocomplete="nope" required name="region" placeholder="Регион">
+                        <input type="text" value="{{ @$item->region }}" class="region-autocomplete step" autocomplete="off" required name="region" placeholder="Регион">
+                        <input type="hidden" name="region_id" value="{{ @$item->region_id }}">
                         <div class="err"></div>
                     </div>
                 </div>
@@ -24,7 +25,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->city }}" class="city-autocomplete step" autocomplete="nope" required name="city" placeholder="Населённый пункт" readonly>
+                        <input type="text" value="{{ @$item->city }}" class="city-autocomplete step" autocomplete="off" required name="city" placeholder="Населённый пункт" readonly>
+                        <input type="hidden" name="city_id" value="{{ @$item->city_id }}">
                         <div class="err"></div>
                     </div>
                 </div>
@@ -32,7 +34,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->address }}" class="street-autocomplete step" autocomplete="nope" required name="address" placeholder="Улица" readonly>
+                        <input type="text" value="{{ @$item->address }}" class="street-autocomplete step" autocomplete="off" required name="address" placeholder="Улица" readonly>
+                        <input type="hidden" name="address_id" value="{{ @$item->address_id }}">
                         <div class="err"></div>
                     </div>
                 </div>
@@ -40,7 +43,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="box__input">
-                        <input type="text" value="{{ @$item->house }}" class="building-autocomplete step" autocomplete="nope" required name="house" placeholder="Дом" readonly>
+                        <input type="text" value="{{ @$item->house }}" class="building-autocomplete step" autocomplete="off" required name="house" placeholder="Дом" readonly>
                         <div class="err"></div>
                     </div>
                 </div>
@@ -62,6 +65,7 @@
     }
 </style>
 <script>
+    $('form').attr('autocomplete','off');
     // The change event is fired when a form element loses focus
     // and its value has changed since the last time we interacted with it
     // $(".step").focusout(function(){
@@ -93,10 +97,18 @@
     $('.step').change(function() {
         var next_step = $(this).parent().parent().parent().next().find('.step');
         var all_next_steps = $(this).parent().parent().parent().nextAll().find('.step');
+        var autoclick = false;
         // If the element *has* a value
         if ($(this).val()) {
             // Should also perform validation here
-            next_step.attr('readonly', false);
+            $('.autoComplete_result').click(function() {
+                autoclick = true;
+                if(autoclick){
+                    next_step.attr('readonly', false);
+                }
+                return true;
+            });
+            $(this).val('');
         } else {
             all_next_steps.val('');
             all_next_steps.attr('readonly', true);

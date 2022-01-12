@@ -317,6 +317,7 @@
                         $('#address-content').html(result);
                         $('[data-popup=address]').iziModal('open');
 
+                        initRegionAutocomplete('.region-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.region-autocomplete'));
                         initCityAutocomplete('.city-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.city-autocomplete'));
                         initAddressAutocomplete('.street-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.street-autocomplete'));
                         initBuildingAutocomplete('.building-autocomplete', "{{ route('profile.address.autocomplete') }}", $('.building-autocomplete'));
@@ -354,7 +355,13 @@
                         ).map((city) => {
                             return list.find((value) => value.match === city);
                         });
-
+                        if (!filteredResults.length) {
+                            filteredResults.push({
+                                key: 'empty',
+                                match: 'Регион с таким названием не найден',
+                            })
+                            _self.val('');
+                        }
                         return filteredResults;
                     }
                 },
@@ -363,6 +370,7 @@
                 selector: selector,
                 onSelection: (feedback) => {
                     regionID = feedback.selection.value.id;
+                    _self.parent().find('input[type=hidden]').val(feedback.selection.value.id);
                     _self.val(feedback.selection.value.name);
                 },
             };
@@ -374,6 +382,9 @@
             let settings = {
                 data: {
                     src: async function () {
+                        if(typeof regionID === "undefined") {
+                            var regionID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
+                        }
                         const source = await fetch(
                             route + "?s=" + _self.val() + '&regionId=' + regionID + '&type=city'
                         );
@@ -404,6 +415,7 @@
                         _self.val('');
                     } else {
                         cityID = feedback.selection.value.id;
+                        _self.parent().find('input[type=hidden]').val(feedback.selection.value.id);
                         _self.val(feedback.selection.value.name);
                     }
                 },
@@ -413,9 +425,13 @@
         }
 
         function initAddressAutocomplete(selector, route, _self) {
+            var cityID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
             let settings = {
                 data: {
                     src: async function () {
+                        if(typeof cityID === "undefined") {
+                            var cityID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
+                        }
                         const source = await fetch(
                             route + "?s=" + _self.val() + "&cityId=" + cityID + '&type=address'
                         );
@@ -448,6 +464,7 @@
                         _self.val('');
                     } else {
                         streetId = feedback.selection.value.id;
+                        _self.parent().find('input[type=hidden]').val(feedback.selection.value.id);
                         _self.val(feedback.selection.value.name);
                     }
                 },
@@ -457,9 +474,13 @@
         }
 
         function initBuildingAutocomplete(selector, route, _self) {
+            var streetId = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
             let settings = {
                 data: {
                     src: async function () {
+                        if(typeof streetId === "undefined") {
+                            var streetId = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
+                        }
                         const source = await fetch(
                             route + "?s=" + _self.val() + "&streetId=" + streetId + '&type=building'
                         );

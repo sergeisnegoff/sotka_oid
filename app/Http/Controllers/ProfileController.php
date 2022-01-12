@@ -112,8 +112,11 @@ class ProfileController extends Controller
 
                 $data = $request->validate([
                     'city' => 'required',
+                    'city_id' => 'required',
                     'address' => 'required',
+                    'address_id' => 'required',
                     'region' => 'required',
+                    'region_id' => 'required',
                     'house' => 'required|max:4',
                     'user_id' => 'required'
                 ]);
@@ -170,6 +173,11 @@ class ProfileController extends Controller
                                 "type" => $item->type
                             ];
                         });
+
+                        if (collect($items)->isEmpty()) {
+                            throw new \Exception();
+                        }
+
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный регион не найден']);
@@ -216,6 +224,10 @@ class ProfileController extends Controller
                                 ];
                         });
 
+                        if (collect($items)->isEmpty()) {
+                            throw new \Exception();
+                        }
+
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный адрес не найден']);
@@ -236,9 +248,14 @@ class ProfileController extends Controller
                                     "city" => true
                                 ];
                         });
+
+                        if (collect($items)->isEmpty()) {
+                            throw new \Exception();
+                        }
+
                         return \response()->json($items);
                     } catch (\Exception $e) {
-                        return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный регион не найден']);
+                        return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный адрес не найден']);
                     }
                 }
                 return response()->redirectToRoute('profile.index');
