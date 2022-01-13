@@ -10865,6 +10865,11 @@ section.box__page-contact .box__contact-item .row .col-12 {
   padding-right: 7.5px;
   padding-left: 7.5px;
 }
+@media (max-width: 768px) {
+  section.box__page-contact .box__contact-item .row .col-12.supervisor {
+    text-align: center;
+  }
+}
 section.box__page-contact .box__contact-item h4 {
   font-style: normal;
   font-weight: 500;

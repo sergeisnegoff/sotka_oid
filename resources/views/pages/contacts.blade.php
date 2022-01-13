@@ -31,12 +31,12 @@
                             <div class="col-12 col-md-7 col-xl-6 col-xxl-4">
                                 <div class="box__contact-item">
                                     <div class="row">
-                                        <div class="col-12 col-md-6 col-xl-6 col-xxl-6">
+                                        <div class="col-12 col-md-6 col-xl-6 col-xxl-6 flex__wrapper-center">
                                             <div class="box__image general"><span
                                                     style="background-image: url({{ thumbImg($contact->img, 180, 180) }});"></span>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6 col-xl-6 col-xxl-6">
+                                        <div class="col-12 col-md-6 col-xl-6 col-xxl-6 supervisor">
                                             <div class="box__contact-link phone"><a
                                                     href="tel:{{ $contact->phone }}">{{ $contact->phone }}</a>
                                             </div>
