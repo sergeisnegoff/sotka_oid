@@ -27,7 +27,7 @@
                         <div class="col-12"><h3>{{ setting('site.CONTACTS_SUPERVISOR') }}</h3></div>
                     </div>
                     <div class="row wrapper__personal-row">
-                        @foreach ($contactsRegional as $contact)
+                        @foreach ($contactsSupervisor as $contact)
                             <div class="col-12 col-md-7 col-xl-6 col-xxl-4">
                                 <div class="box__contact-item">
                                     <div class="row">
@@ -37,7 +37,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6 col-xl-6 col-xxl-6">
-                                            <div class="box__contact-link"><a
+                                            <div class="box__contact-link phone"><a
                                                     href="tel:{{ $contact->phone }}">{{ $contact->phone }}</a>
                                             </div>
                                             <div class="box__contact-link"><a
@@ -54,7 +54,7 @@
                         <div class="col-12"><h3>{{ setting('site.CONTACTS_MANAGERS') }}</h3></div>
                     </div>
                     <div class="row wrapper__personal-row">
-                        @foreach ($contactsAltay as $contact)
+                        @foreach ($contactsManagers as $contact)
                             <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
                                 <div class="box__contact-item">
                                     <div class="row">
@@ -64,7 +64,7 @@
                                             </div>
                                         </div>
                                         <div class="col-8">
-                                            <div class="box__contact-link"><a
+                                            <div class="box__contact-link phone"><a
                                                     href="tel:{{ $contact->phone }}">{{ $contact->phone }}</a>
                                             </div>
                                             <div class="box__contact-link"><a
@@ -137,12 +137,12 @@
                             <div class="box__companyinformation-item">
                                 <h4>{{ setting('site.PHONE') }}</h4>
                                 <div class="box__link">
-                                    <a href="tel:{{ setting('site.CONTACTS_ALTAY_PHONE') }}">{{ setting('site.CONTACTS_ALTAY_PHONE') }}</a>
-                                    <span>{{ setting('site.CONTACTS_ALTAY') }}</span>
+                                    <a href="tel:{{ setting('site.CONTACTS_MANAGERS_PHONE') }}">{{ setting('site.CONTACTS_MANAGERS_PHONE') }}</a>
+                                    <span>Региональный отдел продаж</span>
                                 </div>
                                 <div class="box__link">
-                                    <a href="tel:{{ setting('site.CONTACTS_REGIONAL_PHONE') }}">{{ setting('site.CONTACTS_REGIONAL_PHONE') }}</a>
-                                    <span>{{ setting('site.CONTACTS_REGIONAL') }}</span>
+                                    <a href="tel:{{ setting('site.CONTACTS_SUPERVISOR_PHONE') }}">{{ setting('site.CONTACTS_SUPERVISOR_PHONE') }}</a>
+                                    <span>Отдел продаж по Алтайскому краю</span>
                                 </div>
                             </div>
                         </div>

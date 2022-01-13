@@ -10904,6 +10904,9 @@ section.box__page-contact .box__contact-item .box__image span {
   background-position: 50%;
   background-repeat: no-repeat;
 }
+section.box__page-contact .box__contact-item .box__contact-link.phone a {
+  font-weight: 700;
+}
 section.box__page-contact .box__contact-item .box__contact-link a {
   color: var(--color-1);
 }

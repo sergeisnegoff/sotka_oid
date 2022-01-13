@@ -61,7 +61,7 @@
                                        value="{{ old('name', $dataTypeContent->name ?? '') }}">
                             </div>
 
-                            <input type="hidden" name="manager_table" value="contacts_altay">
+                            <input type="hidden" name="manager_table" value="contacts_managers">
 
                             <div class="form-group">
                                 <label for="email">{{ __('voyager::generic.email') }}</label>
@@ -99,8 +99,8 @@
                             <div class="form-group">
                                 <label for="manager_id">Менеджер</label>
                                 @php
-                                    $altaymanagers = \App\Models\ContactsAltayModel::all();
-                                    $regionalmanagers = \App\Models\ContactsRegionalModel::all();
+                                    $altaymanagers = \App\Models\ContactsManagersModel::all();
+                                    $regionalmanagers = \App\Models\ContactsSupervisorModel::all();
                                     $allmanagers = $altaymanagers->merge($regionalmanagers);
                                 @endphp
                                 <input type="hidden" name="manager_id" value="{{$dataTypeContent->manager_id}}">

@@ -7,8 +7,8 @@ use App\Models\AdvProductsCategory;
 use App\Models\BlockquoteModel;
 use App\Models\BrandsModel;
 use App\Models\CertificateModel;
-use App\Models\ContactsAltayModel;
-use App\Models\ContactsRegionalModel;
+use App\Models\ContactsManagersModel;
+use App\Models\ContactsSupervisorModel;
 use App\Models\CountersModel;
 use App\Models\FAQModel;
 use App\Models\OurGoals;
@@ -79,8 +79,8 @@ class PagesController extends Controller
 
     public function contacts() {
         $data['info'] = PagesModel::where('slug', 'like' ,'%contacts%')->first();
-        $data['contactsAltay'] = ContactsAltayModel::where('visible', 1)->get();
-        $data['contactsRegional'] = ContactsRegionalModel::all();
+        $data['contactsManagers'] = ContactsManagersModel::where('visible', 1)->get();
+        $data['contactsSupervisor'] = ContactsSupervisorModel::all();
 
         return view('pages.contacts', $data);
     }

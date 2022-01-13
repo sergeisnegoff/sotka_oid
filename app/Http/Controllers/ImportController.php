@@ -51,7 +51,7 @@ class ImportController extends Controller
                 continue;
             }
 
-            $contact = DB::table('contacts_altay')->where('uuid', $row['M'])->count() ? 'contacts_altay' : 'contacts_regional';
+            $contact = DB::table('contacts_managers')->where('uuid', $row['M'])->count() ? 'contacts_managers' : 'contacts_supervisor';
 
             if (is_null($user = User::query()->where('email',$email)->first())) {
                 $user = new User([
@@ -131,9 +131,9 @@ class ImportController extends Controller
             ];
 
             if ($manager->getAttribute('Регион') == 'Краевой менеджер')
-                DB::table('contacts_altay')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
+                DB::table('contacts_managers')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
             else
-                DB::table('contacts_regional')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
+                DB::table('contacts_supervisor')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
         }
     }
 
