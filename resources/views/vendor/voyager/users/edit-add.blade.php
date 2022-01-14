@@ -102,7 +102,6 @@
                                     $managers = \App\Models\ContactsManagersModel::all();
                                     $supervisor = \App\Models\ContactsSupervisorModel::all();
                                     $managers = $managers->merge($supervisor);
-                                    dd($managers);
                                 @endphp
                                 <input type="hidden" name="manager_id" value="{{$dataTypeContent->manager_id}}">
                                 <input type="hidden" name="manager_table" value="{{$dataTypeContent->manager_table}}">
