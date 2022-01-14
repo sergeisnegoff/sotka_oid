@@ -130,10 +130,7 @@ class ImportController extends Controller
                 'phone' => $manager->getAttribute('Телефон')
             ];
 
-            if ($manager->getAttribute('Регион') == 'Краевой менеджер')
-                DB::table('contacts_managers')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
-            else
-                DB::table('contacts_supervisor')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
+            DB::table('contacts_managers')->updateOrInsert(['uuid' => $toDB['uuid']], $toDB);
         }
     }
 
