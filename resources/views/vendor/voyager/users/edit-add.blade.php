@@ -99,15 +99,16 @@
                             <div class="form-group">
                                 <label for="manager_id">Менеджер</label>
                                 @php
-                                    $altaymanagers = \App\Models\ContactsManagersModel::all();
-                                    $regionalmanagers = \App\Models\ContactsSupervisorModel::all();
-                                    $allmanagers = $altaymanagers->merge($regionalmanagers);
+                                    $managers = \App\Models\ContactsManagersModel::all();
+                                    $supervisor = \App\Models\ContactsSupervisorModel::all();
+                                    $managers = $managers->merge($supervisor);
+                                    dd($managers);
                                 @endphp
                                 <input type="hidden" name="manager_id" value="{{$dataTypeContent->manager_id}}">
                                 <input type="hidden" name="manager_table" value="{{$dataTypeContent->manager_table}}">
                                 <select class="form-control" id="manager_morph" onchange="changeManager.call(this)">
                                     <option value="0">- Выбрать -</option>
-                                    @foreach ($allmanagers as $contact)
+                                    @foreach ($managers as $contact)
                                         <option value="{{$contact->getTable()}}:{{ $contact->id }}" {{ $contact->id == $dataTypeContent->manager_id && $contact->getTable() == $dataTypeContent->manager_table ? 'selected' : '' }}>{{ $contact->name }}</option>
                                     @endforeach
                                 </select>
