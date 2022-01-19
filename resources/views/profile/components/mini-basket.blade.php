@@ -6,8 +6,9 @@
                 <div class="box__image"><a href="#">
                     @if (!empty($details['images']))
                         <img
-                            src="{{ Voyager::image( $details['images'] ) }}" alt=""></a></div>
+                            src="{{ Voyager::image( $details['images'] ) }}" alt="">
                     @endif
+                    </a></div>
             </div>
             <div class="col-9">
                 <a href="#" class="item_remove remove-from-cart" data-id="{{ $id }}">x</a>
