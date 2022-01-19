@@ -143,7 +143,10 @@ class CartController extends Controller
         $date = date('Y-m-d',strtotime($data['order']->created_at));
         $datetime = date('H-m-s',strtotime($data['order']->created_at));
         Storage::disk('public')->put('orders/'.$date.'_'.$datetime.'_'.$random.'.json', json_encode($order));
-        Log::channel('orders')->info('Record order '.$date.'_'.$datetime.'_'.$random.' exists', [Storage::disk('public')->exists('orders/'.$date.'_'.$datetime.'_'.$random.'.json')]);
+        Log::channel('orders')->info('Record order '.$date.'_'.$datetime.'_'.$random, [
+            'is_exists' => Storage::disk('public')->exists('orders/'.$date.'_'.$datetime.'_'.$random.'.json'),
+            'order' => $order
+        ]);
         return view('profile.orders.success', $data);
     }
 
