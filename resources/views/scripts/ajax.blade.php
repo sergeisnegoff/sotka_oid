@@ -99,7 +99,7 @@
                         })
                         // console.log(`total: ${total}`);
 
-                        $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Number(total).toFixed(2) + ' ₽')
+                        $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Number(total).toFixed(0) + ' ₽')
                     });
                 }
             });
