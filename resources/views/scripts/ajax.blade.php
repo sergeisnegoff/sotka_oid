@@ -93,10 +93,13 @@
                         $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
                         let total = 0;
                         $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
-                            total += parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                            let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                            console.log(num);
+                            total += num;
                         })
+                        console.log(`total: ${total}`);
 
-                        $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Math.round(total) + ' ₽')
+                        $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Number(total).toFixed(2) + ' ₽')
                     });
                 }
             });

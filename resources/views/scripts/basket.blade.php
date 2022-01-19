@@ -15,10 +15,13 @@
                     $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
                     let total = 0;
                     $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
-                        total += parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                        let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                        console.log(num);
+                        total += num;
                     })
+                    console.log(`total: ${total}`);
 
-                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Math.round(total) + ' ₽')
+                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
                     _self.closest('.wrapper__baskets-item').find('.wrapper__baskets-cost').text(result.itemAmount + ' ₽');
                     $('.wrapper__bascket-bottom .box__bascket-total').find('h4').find('b').text(result.totalAmount + ' ₽')
                 });
@@ -49,11 +52,14 @@
                     $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
                     let total = 0;
                     $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
-                        total += parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                        let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                        console.log(num);
+                        total += num;
                     })
+                    console.log(`total: ${total}`);
 
-                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Math.round(total) + ' ₽')
-                    $('#total-price').text(Math.round(total) + ' ₽');
+                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
+                    $('#total-price').text(Number(total).toFixed(0) + ' ₽');
                 });
             }, 'json')
         }).on('click', '.box__basket-item .btn__quality-plus, .wrapper__baskets-item .btn__quality-plus', function () {
@@ -80,11 +86,14 @@
                     $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
                     let total = 0;
                     $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
-                        total += parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                        let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                        console.log(num);
+                        total += num;
                     })
+                    console.log(`total: ${total}`);
 
-                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Math.round(total) + ' ₽');
-                    $('#total-price').text(Math.round(total) + ' ₽');
+                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
+                    $('#total-price').text(Number(total).toFixed(0) + ' ₽');
                 });
             }, 'json')
         })
