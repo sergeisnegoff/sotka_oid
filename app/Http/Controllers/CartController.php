@@ -78,9 +78,9 @@ class CartController extends Controller
         ]);
 
         $data['user_id'] = $user->id;
-        $data['random'] = rand(100000, 999999);
 
         $order = Order::create($data);
+
         foreach (session()->get('cart') as $id => $product) {
             $percent = \App\Product::getMaxSaleToProduct($id, $product['price'], $product['quantity']);
             $price = $percent ? ($product['price'] - (($product['price'] * $percent) / 100)) * $product['quantity'] : $product['price'] * $product['quantity'];
@@ -91,12 +91,12 @@ class CartController extends Controller
 
         $this->empty();
 
-        return response()->redirectToRoute('profile.orders.success', ['random' => $data['random']]);
+        return response()->redirectToRoute('profile.orders.success', ['random' => $order->id]);
     }
 
     public function success(Request $request, $random) {
         $data['page'] = 'basket';
-        $data['order'] = Order::where('random', $random)->first();
+        $data['order'] = Order::where('id', $random)->first();
         $data['products'] = Order::getOrderProducts($data['order']->id);
         $user = User::where('id',$data['order']->user_id)->first();
 
