@@ -96,7 +96,7 @@
                             total += parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
                         })
 
-                        $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Math.round(total) + ' ₽')
+                        $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Math.round(total * 100) / 100 + ' ₽')
                     });
                 }
             });
