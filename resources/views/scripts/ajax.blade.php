@@ -36,7 +36,7 @@
             }
         });*/
         /*function load_more(pageNumber) {
-            console.log(($('.box__catalog-view li.active').val()));
+            // console.log(($('.box__catalog-view li.active').val()));
             if (pageNumber > 1)
                 $.ajax({
                     dataType: 'html',
@@ -58,7 +58,7 @@
                         $('#productFind').append(data);
 
                     }).fail(function (jqXHR, ajaxOptions, thrownError) {
-                    console.log('No response from server');
+                    // console.log('No response from server');
                 });
         }*/
 
@@ -94,10 +94,10 @@
                         let total = 0;
                         $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
                             let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
-                            console.log(num);
+                            // console.log(num);
                             total += num;
                         })
-                        console.log(`total: ${total}`);
+                        // console.log(`total: ${total}`);
 
                         $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Number(total).toFixed(2) + ' ₽')
                     });
@@ -170,7 +170,7 @@
                     loaded = 0;
 
                 }).fail(function (jqXHR, ajaxOptions, thrownError) {
-                    console.log('No response from server');
+                    // console.log('No response from server');
                 });
         }).on('click', '[data-btn-popup]', function () {
             let _self = $(this);

@@ -16,10 +16,10 @@
                     let total = 0;
                     $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
                         let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
-                        console.log(num);
+                        //console.log(num);
                         total += num;
                     })
-                    console.log(`total: ${total}`);
+                    //console.log(`total: ${total}`);
 
                     $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
                     _self.closest('.wrapper__baskets-item').find('.wrapper__baskets-cost').text(result.itemAmount + ' ₽');
@@ -33,7 +33,7 @@
 
             if (typeof id == "undefined") {
                 id = $(this).data('id')
-                console.log($(this).data('id'))
+                //console.log($(this).data('id'))
             }
             $.post("{{ route('cart.updateQty') }}", {
                 id: id,
@@ -53,10 +53,10 @@
                     let total = 0;
                     $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
                         let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
-                        console.log(num);
+                        //console.log(num);
                         total += num;
                     })
-                    console.log(`total: ${total}`);
+                    //console.log(`total: ${total}`);
 
                     $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
                     $('#total-price').text(Number(total).toFixed(0) + ' ₽');
@@ -69,7 +69,7 @@
             if (typeof id == "undefined")
                 id = $(this).data('id')
 
-            // console.log(_self.closest('.box__quality').find('input[name*=quantity]').val());
+            // //console.log(_self.closest('.box__quality').find('input[name*=quantity]').val());
             $.post("{{ route('cart.updateQty') }}", {
                 id: id,
                 qty: _self.closest('.box__quality').find('input[name*=quantity]').val()
@@ -87,10 +87,10 @@
                     let total = 0;
                     $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
                         let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
-                        console.log(num);
+                        //console.log(num);
                         total += num;
                     })
-                    console.log(`total: ${total}`);
+                    //console.log(`total: ${total}`);
 
                     $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
                     $('#total-price').text(Number(total).toFixed(0) + ' ₽');
