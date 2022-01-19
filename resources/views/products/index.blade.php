@@ -95,18 +95,13 @@
                     <?php $count = 0; ?>
                     @if(\Request::is('products'))
                         @foreach(App\Category::all() as $cat)
-                            @if( count($cat->product) > 0 && (\Request::is('products'))  )
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h2>{{$cat->title}}</h2>
-                                    </div>
-                                </div>
-                            @endif
                             <div class="row prodAttr"
                                  data-catalog <?= !empty($atrProd) ? $atrProd : 'data-catalog-grid'  ?>>
-
                                 @foreach ($seeds as $seed)
                                     @if($seed->category_id == $cat->id)
+                                        <div class="col-12">
+                                            <h2>{{$cat->title}}</h2>
+                                        </div>
                                         <div class="col-6 col-md-4 col-xl-2 fadeIn">
                                             <div class="box__product-item">
                                                 <div class="wrapper-img">

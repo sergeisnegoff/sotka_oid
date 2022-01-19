@@ -9,6 +9,7 @@ use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,7 +48,7 @@ class CartController extends Controller
 
                 $totalAmount += $item->price * $post['qty'];
             } else
-            $totalAmount += $product['price'] * $product['quantity'];
+                $totalAmount += $product['price'] * $product['quantity'];
         }
 
         if (DB::table('cart')->where('user_id', Auth::id())->first())
@@ -138,10 +139,11 @@ class CartController extends Controller
 
         }
 
-       // $result = ArrayToXml::convert($order, [], true, 'UTF-8', '1.1', [], true);
+        // $result = ArrayToXml::convert($order, [], true, 'UTF-8', '1.1', [], true);
         $date = date('Y-m-d',strtotime($data['order']->created_at));
         $datetime = date('H-m-s',strtotime($data['order']->created_at));
         Storage::disk('public')->put('orders/'.$date.'_'.$datetime.'_'.$random.'.json', json_encode($order));
+        Log::channel('orders')->info('writing', [Storage::disk('public')->exists('orders/'.$date.'_'.$datetime.'_'.$random.'.json')]);
         return view('profile.orders.success', $data);
     }
 
