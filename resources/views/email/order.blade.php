@@ -944,7 +944,7 @@
                                     <td class="column_cell px text_primary text_center"
                                         style="vertical-align: top;color: #2376dc;text-align: center;padding-left: 16px;padding-right: 16px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
                                         <h1 style="color: inherit;font-family: Arial, Helvetica, sans-serif;margin-top: 0px;margin-bottom: 0px;word-break: break-word;font-size: 38px;line-height: 48px;font-weight: bold;">
-                                            Заказ #{{ $order->random }}</h1>
+                                            Заказ #{{ $order->id }}</h1>
                                     </td>
                                 </tr>
                                 </tbody>

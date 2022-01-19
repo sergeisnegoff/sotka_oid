@@ -24,7 +24,7 @@
                                     <div class="row">
                                         <div class="col-12 col-xl-2">
                                             <div class="box__currentorder-ordernumber">Заказ
-                                                № {{ $order->random }}</div>
+                                                № {{ $order->id }}</div>
                                             <div class="btn btn__currentorder-order" data-href="/reorder/{{$order->id}}"
                                                  data-btn-popup="repeatorder"><a href="#">Повторить заказ</a>
                                             </div>
