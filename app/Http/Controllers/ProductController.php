@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\ProductFilter;
 use App\Product;
 use Illuminate\Support\Facades\Auth;
@@ -19,8 +20,10 @@ class ProductController extends Controller
         $seeds = Product::with(['category', 'subSpecification'])
             ->where('catalog_page', 1)->where('total', '!=', 0)->orderBy('id', "desc")->paginate(100);
 
+        $cats = Category::with('products')
+            ->where('catalog_page', 1);
 
-//        dd($seeds);
+//      dd($seeds);
 
 //        $sort = explode('/', $request->sort);
 //
@@ -42,7 +45,7 @@ class ProductController extends Controller
             return response()->json($seeds);
         }
 
-        return view('products.index', compact('seeds'));
+        return view('products.index', compact('seeds', 'cats'));
     }
 
     public function getProductsCat(Request $request, $cat, ProductFilter $filters)

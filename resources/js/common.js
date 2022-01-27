@@ -424,6 +424,20 @@ $(document).ready(function () {
     global.seed.init();
 });
 
+$(document).on('submit', '#order-form', function() {
+    let container = $('<span>', {class: 'loading formbtn'});
+    for (let i = 0; i < 5; i++)
+        container.append($('<span>', {
+            class: 'dot'
+        }))
+    $('#order-form').find('.box-bottom button').append(container);
+    $('#order-form').find('.box-bottom button').prop('disabled', true);
+    setTimeout(function(){
+        $('#order-form').find('.box-bottom button').find(container).remove();
+        $('#order-form').find('.box-bottom button').prop('disabled', false);
+    }, 5000);
+});
+
 $(window).on('scroll', function () {
 
 });

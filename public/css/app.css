@@ -6315,16 +6315,7 @@ button.swiper-pagination-bullet {
 }
 .btn button:disabled {
   cursor: default;
-  opacity: 0.1;
-}
-.btn button:disabled:active {
-  opacity: 0.1;
-}
-.btn button:disabled:focus {
-  opacity: 0.1;
-}
-.btn button:disabled:hover {
-  opacity: 0.1;
+  background: rgba(187, 187, 187, 0.3);
 }
 .btn button span {
   position: relative;
@@ -10358,6 +10349,9 @@ section.box__profilebasketpage {
 .box__basketpage .wrapper__basket-total.wrapper__basketbottom-total .box-bottom .btn button {
   width: auto;
 }
+.box__basketpage .wrapper__basket-total.wrapper__basketbottom-total .box-bottom .btn button:disabled {
+  background: rgba(187, 187, 187, 0.3);
+}
 .box__basketpage .wrapper__basket-total .box__basket-title h4 {
   font-style: normal;
   font-weight: 400;
@@ -11502,6 +11496,12 @@ form .invalid-message {
 }
 .loading .dot:nth-child(5)::before {
   animation-delay: 1s;
+}
+.loading.formbtn {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  margin: 0;
 }
 @media (min-width: 375px) {
   .container {

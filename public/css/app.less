@@ -6627,16 +6627,7 @@ button.swiper-pagination-bullet {
         z-index: 0;
         &:disabled {
             cursor: default;
-            opacity: .1;
-            &:active {
-                opacity: .1;
-            }
-            &:focus {
-                opacity: .1;
-            }
-            &:hover {
-                opacity: .1;
-            }
+            background: rgba(187, 187, 187, 0.3);
         }
         span {
             position: relative;
@@ -11034,6 +11025,9 @@ section.box__profilebasketpage {
                 text-align: left;
                 button {
                     width: auto;
+                    &:disabled {
+                        background: rgba(187, 187, 187, 0.3);
+                    }
                 }
             }
         }
@@ -12283,6 +12277,12 @@ form {
                 animation-delay: 1s;
             }
         }
+    }
+    &.formbtn {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        margin: 0;
     }
 }
 @media (min-width: 375px) {
