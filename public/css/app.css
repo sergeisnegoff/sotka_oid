@@ -10352,7 +10352,7 @@ section.box__profilebasketpage {
 .box__basketpage .wrapper__basket-total.wrapper__basketbottom-total .box-bottom .btn button:disabled {
   background: rgba(187, 187, 187, 0.3);
 }
-.box__basketpage .wrapper__basket-total.wrapper__basketbottom-total .box-bottom .btn button:active {
+.box__basketpage .wrapper__basket-total.wrapper__basketbottom-total .box-bottom .btn button:disabled:active {
   background: rgba(187, 187, 187, 0.3);
 }
 .box__basketpage .wrapper__basket-total .box__basket-title h4 {
