@@ -10352,6 +10352,9 @@ section.box__profilebasketpage {
 .box__basketpage .wrapper__basket-total.wrapper__basketbottom-total .box-bottom .btn button:disabled {
   background: rgba(187, 187, 187, 0.3);
 }
+.box__basketpage .wrapper__basket-total.wrapper__basketbottom-total .box-bottom .btn button:active {
+  background: rgba(187, 187, 187, 0.3);
+}
 .box__basketpage .wrapper__basket-total .box__basket-title h4 {
   font-style: normal;
   font-weight: 400;
