@@ -435,7 +435,7 @@ $(document).on('submit', '#order-form', function() {
     setTimeout(function(){
         $('#order-form').find('.box-bottom button').find(container).remove();
         $('#order-form').find('.box-bottom button').prop('disabled', false);
-    }, 5000);
+    }, 10000);
 });
 
 $(window).on('scroll', function () {
