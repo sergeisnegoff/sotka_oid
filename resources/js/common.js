@@ -144,6 +144,40 @@ global.seed = {
         }
 
         /**
+         init slider in products Page
+         **/
+        if ($('.mySwiper .col-12').length > 5) {
+            var swiper = new Swiper(".mySwiper", {
+                slidesPerView: 5,
+                navigation: {
+                    nextEl: '.slider-product-next',
+                    prevEl: '.slider-product-prev',
+                },
+                watchOverflow: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                breakpoints: {
+                    // when window width is >= 320px
+                    320: {
+                        slidesPerView: 2,
+                    },
+                    // when window width is >= 480px
+                    767: {
+                        slidesPerView: 2,
+                    },
+                    // when window width is >= 640px
+                    1199: {
+                        slidesPerView: 3,
+                    }
+                },
+            });
+        }
+
+
+
+        /**
          init slider in home page
          **/
         if ($('.box__slider-big .swiper-container').length > 0) {
@@ -161,6 +195,9 @@ global.seed = {
                     type: 'bullets',
                     clickable: true
                 },
+                slidesPerView: 4,
+                spaceBetween: 30,
+                centeredSlides: true,
             });
 
         }

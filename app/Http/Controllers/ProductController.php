@@ -20,17 +20,11 @@ class ProductController extends Controller
         $seeds = Product::with(['category', 'subSpecification'])
             ->where('catalog_page', 1)->where('total', '!=', 0)->orderBy('id', "desc")->paginate(100);
 
-        $cats = Category::with('products')
-            ->where('catalog_page', 1);
+        $cats = Category::whereHas('product', function($query) {
+            $query->where('catalog_page', 1);
+        })->get();
 
-//      dd($seeds);
 
-//        $sort = explode('/', $request->sort);
-//
-//
-//        $seeds = $seeds->orderBy(!empty($sort[1]) ? $sort[1] : 'title', !empty($sort[0]) ? $sort[0] : 'ASC')->where('quantity', '>', 0)->where('total', '!=', 0);
-
-//        $seeds = $seeds->get();
         if (empty($seeds->items()))
             abort(404);
         if (!empty($request->attributeStyle)) {

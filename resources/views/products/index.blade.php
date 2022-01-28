@@ -90,106 +90,127 @@
                     </div>
                 </div>
             </div>
+
+
+
             <div id="productFind">
                 <div id="productData">
                     <?php $count = 0; ?>
                     @if(\Request::is('products'))
-                        @foreach(App\Category::all() as $cat)
+                        @foreach($cats as $cat)
                             <div class="row prodAttr"
                                  data-catalog <?= !empty($atrProd) ? $atrProd : 'data-catalog-grid'  ?>>
-                                @foreach ($seeds as $seed)
-                                    @if($seed->category_id == $cat->id)
-                                        <div class="col-12">
-                                            <h2>{{$cat->title}}</h2>
-                                        </div>
-                                        <div class="col-6 col-md-4 col-xl-2 fadeIn">
-                                            <div class="box__product-item">
-                                                <div class="wrapper-img">
-                                                    <div class="box__image"><a href="/product/{{$seed->id}}"><span
-                                                                style="background-image: url( '{{ thumbImg($seed->images, 220, 345) }}' );"></span></a>
-                                                    </div>
-                                                </div>
-                                                <div class="wrapper-info">
-                                                    <div class="box__category"><a
-                                                            href="/products/{{$seed->category->parent_id}}/{{$seed->category->title}}">{{$seed->category->title}}</a>
-                                                    </div>
-                                                    <div class="box__title"><a href="/product/{{$seed->id}}">
-                                                            <h3> {{$seed->title}} </h3></a>
-                                                    </div>
-                                                    <div class="box__description">
-                                                        <div class="box__characteristics">
-                                                            <ul>
-                                                                <?php $specscount = 0 ?>
-                                                                @foreach($seed->subSpecification as $specs)
-                                                                    <li>{{$specs->specification}}:
-                                                                        <span>{{$specs->title}}</span></li>
-                                                                    <?php $specscount++ ?>
-                                                                @endforeach
-                                                            </ul>
-                                                            @if($specscount >= 7)
-                                                                <div class="box__characteristics-button">
-                                                                    <span class="box__characteristics-status">Все характеристики</span>
-                                                                    <span class="box__characteristics-status">Скрыть характеристики</span>
-                                                                </div>
-                                                            @endif
+                                <div class="col-12">
+                                    <a href="/products/{{$cat->id}}/{{ $cat->title }}"
+                                       style="text-transform: capitalize;"><h2>{{$cat->title}}</h2></a>
+                                </div>
+
+                                <div style="width: 100%;overflow: hidden;position: relative;margin-bottom: 20px;">
+                                    <div class="swiper mySwiper">
+                                        <div class="swiper-wrapper">
+
+                                            @foreach ($seeds as $seed)
+                                                @if($seed->category_id == $cat->id)
+                                            <div class="swiper-slide">
+                                                <div class="col-12 col-md-12 col-xl-12 fadeIn">
+                                                    <div class="box__product-item">
+                                                        <div class="wrapper-img">
+                                                            <div class="box__image"><a href="/product/{{$seed->id}}"><span
+                                                                        style="background-image: url( '{{ thumbImg($seed->images, 220, 345) }}' );"></span></a>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                @guest
-                                                    <div class="wrapper-button">
-                                                        <div class="btn"><a href="{{route('login')}}"> Купить</a></div>
-                                                    </div>
-                                                @else
-                                                    <div class="wrapper-button wrapper-button-auth">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="box__product-price">
-                                                                    @if(!empty($seed->new_price))
-                                                                        <span class="box__price-sale">{{$seed->new_price}} ₽</span>
-                                                                        <span class="box__price-normal">{{$seed->price}} ₽</span>
-                                                                    @else
-                                                                        <span
-                                                                            class="box__price-sale">{{$seed->price}} ₽</span>
+                                                        <div class="wrapper-info">
+                                                            <div class="box__category"><a
+                                                                    href="/products/{{$seed->category->parent_id}}/{{$seed->category->title}}">{{$seed->category->title}}</a>
+                                                            </div>
+                                                            <div class="box__title"><a href="/product/{{$seed->id}}">
+                                                                    <h3> {{$seed->title}} </h3></a>
+                                                            </div>
+                                                            <div class="box__description">
+                                                                <div class="box__characteristics">
+                                                                    <ul>
+                                                                        <?php $specscount = 0 ?>
+                                                                        @foreach($seed->subSpecification as $specs)
+                                                                            <li>{{$specs->specification}}:
+                                                                                <span>{{$specs->title}}</span></li>
+                                                                            <?php $specscount++ ?>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                    @if($specscount >= 7)
+                                                                        <div class="box__characteristics-button">
+                                                                            <span class="box__characteristics-status">Все характеристики</span>
+                                                                            <span class="box__characteristics-status">Скрыть характеристики</span>
+                                                                        </div>
                                                                     @endif
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6">
-                                                                <div class="box__quality">
-                                                                    <div class="box__quality-value"><input type="number"
-                                                                                                           name="quantity"
-                                                                                                           class="quantity{{$seed->id}}"
-                                                                                                           data-number="0"
-                                                                                                           step="{{ $seed->multiplicity }}"
-                                                                                                           min="1"
-                                                                                                           max="100"
-                                                                                                           value="1">
+                                                        </div>
+                                                        @guest
+                                                            <div class="wrapper-button">
+                                                                <div class="btn"><a href="{{route('login')}}"> Купить</a></div>
+                                                            </div>
+                                                        @else
+                                                            <div class="wrapper-button wrapper-button-auth">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <div class="box__product-price">
+                                                                            @if(!empty($seed->new_price))
+                                                                                <span class="box__price-sale">{{$seed->new_price}} ₽</span>
+                                                                                <span class="box__price-normal">{{$seed->price}} ₽</span>
+                                                                            @else
+                                                                                <span
+                                                                                    class="box__price-sale">{{$seed->price}} ₽</span>
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
-                                                                    @if ($seed->multiplicity <= $seed->total)
-                                                                        <span class="btn__quality-nav">
+                                                                    <div class="col-6">
+                                                                        <div class="box__quality">
+                                                                            <div class="box__quality-value"><input type="number"
+                                                                                                                   name="quantity"
+                                                                                                                   class="quantity{{$seed->id}}"
+                                                                                                                   data-number="0"
+                                                                                                                   step="{{ $seed->multiplicity }}"
+                                                                                                                   min="1"
+                                                                                                                   max="100"
+                                                                                                                   value="1">
+                                                                            </div>
+                                                                            @if ($seed->multiplicity <= $seed->total)
+                                                                                <span class="btn__quality-nav">
                                                                             <span class="btn__quality-minus update-cart"
                                                                                   data-id="{{$seed->id}}"
                                                                                   data-prev-quality>-</span>
                                                                 <span class="btn__quality-plus update-cart"
                                                                       data-id="{{$seed->id}}" data-next-quality>+</span>
                                                                 </span>
-                                                                    @endif
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div class="btn">
+                                                                            <button class="add-to-cart" value="{{$seed->id}}">
+                                                                                Купить
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-12">
-                                                                <div class="btn">
-                                                                    <button class="add-to-cart" value="{{$seed->id}}">
-                                                                        Купить
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        @endguest
                                                     </div>
-                                                @endguest
+                                                </div>
                                             </div>
+                                                    <?php $count++ ?>
+                                                @endif
+                                            @endforeach
+
+
                                         </div>
-                                        <?php $count++ ?>
-                                    @endif
-                                @endforeach
+                                        <div class="swiper-pagination" style="position: relative;bottom: 0;"></div>
+                                        <div class="slider-product-next"></div>
+                                        <div class="slider-product-prev"></div>
+                                        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+                                </div>
+
+
                             </div>
                         @endforeach
                     @else

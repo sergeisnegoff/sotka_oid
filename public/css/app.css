@@ -9097,6 +9097,53 @@ section.box__slider-home .box__slider-mini .box__sale {
   text-align: center;
   z-index: 1;
 }
+.mySwiper .slider-product-next {
+  position: absolute;
+  display: block;
+  width: 25px;
+  height: 25px;
+  top: 38%;
+  transform: translateY(-50%);
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  outline: none;
+  z-index: 1;
+  background-image: url(/img/icon/btn-arrowsliderright-white.svg);
+  right: 15px;
+  -webkit-filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+  /* Similar syntax to box-shadow */
+}
+.mySwiper .slider-product-next.swiper-button-lock {
+  opacity: 0;
+}
+.mySwiper .slider-product-prev {
+  position: absolute;
+  display: block;
+  width: 25px;
+  height: 25px;
+  top: 38%;
+  transform: translateY(-50%);
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  outline: none;
+  z-index: 1;
+  background-image: url(/img/icon/btn-arrowsliderleft-white.svg);
+  left: 15px;
+  -webkit-filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+  /* Similar syntax to box-shadow */
+}
+.mySwiper .slider-product-prev.swiper-button-lock {
+  opacity: 0;
+}
+.mySwiper .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #6dac52;
+}
 .slider-brands-next {
   position: absolute;
   display: block;

@@ -9703,6 +9703,58 @@ section.box__slider-home {
         }
     }
 }
+
+
+.mySwiper {
+    .slider-product-next {
+        position: absolute;
+        display: block;
+        width: 25px;
+        height: 25px;
+        top: 38%;
+        transform: translateY(-50%);
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        outline: none;
+        z-index: 1;
+        background-image: url(/img/icon/btn-arrowsliderright-white.svg);
+        right: 15px;
+        -webkit-filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+        /* Similar syntax to box-shadow */
+        &.swiper-button-lock {
+            opacity: 0;
+        }
+    }
+    .slider-product-prev {
+        position: absolute;
+        display: block;
+        width: 25px;
+        height: 25px;
+        top: 38%;
+        transform: translateY(-50%);
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        outline: none;
+        z-index: 1;
+        background-image: url(/img/icon/btn-arrowsliderleft-white.svg);
+        left: 15px;
+        -webkit-filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.5));
+        /* Similar syntax to box-shadow */
+        &.swiper-button-lock {
+            opacity: 0;
+        }
+    }
+    .swiper-pagination-bullet.swiper-pagination-bullet-active {
+        background-color: #6dac52;
+    }
+}
+
 .slider-brands-next {
     position: absolute;
     display: block;
