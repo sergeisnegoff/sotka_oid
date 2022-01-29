@@ -14467,6 +14467,12 @@ form .invalid-message {
   .wrapper__baskets .wrapper__baskets-item .wrapper__baskets-quality span.wrapper__baskets-titlequality {
     display: block;
   }
+  .mySwiper .slider-product-next {
+    top: 27%;
+  }
+  .mySwiper .slider-product-prev {
+    top: 27%;
+  }
   .wrapper__bascket-items .box__basketpage-item .wrapper__bascket-info {
     margin: 0 0 10px;
   }
