@@ -6159,6 +6159,87 @@ button.swiper-pagination-bullet {
 .swiper-container-coverflow .swiper-wrapper {
   -ms-perspective: 1200px;
 }
+.gallery-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.gallery-main {
+  width: 335px;
+  height: 467px;
+}
+.gallery-main .swiper-button-prev {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: auto;
+  left: auto;
+  background-image: url(/img/icon/productsviewed-prev.svg);
+  background-position: 8px 7px;
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #dcdcdc;
+  transition: opacity 0.3s ease-out;
+  background-size: 11px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  outline: none;
+  background-color: #fff;
+}
+.gallery-main .swiper-button-next {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: auto;
+  left: auto;
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #dcdcdc;
+  transition: opacity 0.3s ease-out;
+  background-size: 11px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  outline: none;
+  background-image: url(/img/icon/productsviewed-next.svg);
+  background-position: 11px 7px;
+  background-color: #fff;
+}
+.gallery-main .swiper-button-next::after {
+  font-size: 12px;
+}
+.gallery-main .swiper-button-prev {
+  right: 40px;
+}
+.gallery-thumbs {
+  order: -1;
+  width: 100px;
+  height: 467px;
+  margin-right: 15px;
+  padding-left: 15px;
+}
+.gallery-thumbs .swiper-slide img {
+  transition: 0.3s;
+}
+.gallery-thumbs .swiper-slide-active {
+  opacity: 0.9;
+}
+.gallery-thumbs .swiper-slide-thumb-active {
+  opacity: 1;
+}
+.gallery-thumbs .swiper-slide-thumb-active img {
+  margin-left: -15px;
+}
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    right: -50%;
+  }
+}
 :root {
   --color-1: #000;
   --color-2: #242424;
@@ -7135,7 +7216,7 @@ input[type=number]::-webkit-outer-spin-button {
   position: absolute;
   display: block;
   top: 50%;
-  width: 15px;
+  width: 30px;
   height: 30px;
   text-align: center;
   transform: translateY(-50%);
@@ -7148,7 +7229,7 @@ input[type=number]::-webkit-outer-spin-button {
   position: absolute;
   display: block;
   top: 50%;
-  width: 15px;
+  width: 30px;
   height: 30px;
   text-align: center;
   transform: translateY(-50%);
@@ -7805,7 +7886,7 @@ section.box__relatedproducts h2 {
   height: 370px;
   background-color: var(--color-9);
 }
-.box__product-item .wrapper-img .box__image span {
+.box__product-item .wrapper-img .box__image span.imgslide {
   position: absolute;
   display: block;
   top: 50%;
@@ -9144,6 +9225,9 @@ section.box__slider-home .box__slider-mini .box__sale {
 .mySwiper .swiper-pagination-bullet.swiper-pagination-bullet-active {
   background-color: #6dac52;
 }
+.gallery-product-card .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #6dac52;
+}
 .slider-brands-next {
   position: absolute;
   display: block;
@@ -9571,11 +9655,23 @@ section.box__product .box__product-information:before {
   background-color: var(--color-7);
 }
 section.box__product .box__product-information .box__image {
-  width: 385px;
+  width: 333px;
+  height: 467px;
   border: 20px solid var(--color-4);
 }
 section.box__product .box__product-information .box__image img {
   width: 100%;
+  max-height: 100%;
+}
+section.box__product .box__product-information .box__image_thumb {
+  width: 100%;
+  height: 143px;
+  cursor: pointer;
+  border: 2px solid var(--color-4);
+}
+section.box__product .box__product-information .box__image_thumb img {
+  width: 100%;
+  max-height: 100%;
 }
 section.box__product .box__product-information .box__tabs ul li {
   font-size: 24px;
@@ -13024,6 +13120,9 @@ form .invalid-message {
   section.box__slider-home .box__slider-mini .box__slider-item {
     height: 220px;
   }
+  .gallery-thumbs {
+    display: none;
+  }
   .box__product-header .box__catalog-sorting {
     margin: 0 0 0 75px;
   }
@@ -13750,6 +13849,7 @@ form .invalid-message {
   section.box__product .box__product-information .box__image {
     width: 275px;
     margin: 0 auto 30px;
+    height: auto;
   }
   section.box__product h1 {
     font-size: 23px;
