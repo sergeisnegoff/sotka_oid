@@ -7892,7 +7892,12 @@ section.box__relatedproducts h2 {
   height: 370px;
   background-color: var(--color-9);
 }
-.box__product-item .wrapper-img .box__image span.imgslide {
+.box__product-item .wrapper-img .box__image a.aslide {
+  display: block;
+  width: 100%;
+  height: 346px;
+}
+.box__product-item .wrapper-img .box__image a.aslide span.imgslide {
   position: absolute;
   display: block;
   top: 50%;
@@ -14620,6 +14625,9 @@ form .invalid-message {
     font-size: 12px;
   }
   .box__product-item .wrapper-img {
+    height: 180px;
+  }
+  .box__product-item .wrapper-img .box__image a.aslide {
     height: 180px;
   }
   .box__product-item .wrapper-info .box__title a h3 {
