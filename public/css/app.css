@@ -7216,7 +7216,7 @@ input[type=number]::-webkit-outer-spin-button {
   position: absolute;
   display: block;
   top: 50%;
-  width: 30px;
+  width: 15px;
   height: 30px;
   text-align: center;
   transform: translateY(-50%);
@@ -7229,7 +7229,7 @@ input[type=number]::-webkit-outer-spin-button {
   position: absolute;
   display: block;
   top: 50%;
-  width: 30px;
+  width: 15px;
   height: 30px;
   text-align: center;
   transform: translateY(-50%);
@@ -7241,10 +7241,16 @@ input[type=number]::-webkit-outer-spin-button {
 }
 @media (max-width: 540px) {
   .box__quality {
-    width: 67px;
+    width: 87px;
   }
   .box__quality .box__quality-value input {
     width: 42px;
+  }
+  .box__quality .btn__quality-nav .btn__quality-minus {
+    width: 30px;
+  }
+  .box__quality .btn__quality-nav .btn__quality-plus {
+    width: 30px;
   }
 }
 .box__select {
