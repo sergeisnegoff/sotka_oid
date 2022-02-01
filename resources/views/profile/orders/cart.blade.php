@@ -206,7 +206,11 @@
     <script src="{{ asset('js/libs/izimodal/js/iziModal.js') }}"></script>
 
     <script>
-        let cityID = 0;
+        let cityID = 0,
+            regionID = 0,
+            streetId = 0,
+            buildingId = 0;
+
         $(function () {
             $('[data-popup=address]').iziModal({
                 width: 370,
@@ -276,7 +280,13 @@
                         ).map((city) => {
                             return list.find((value) => value.match === city);
                         });
-
+                        if (!filteredResults.length) {
+                            filteredResults.push({
+                                key: 'empty',
+                                match: 'Регион с таким названием не найден',
+                            })
+                            _self.val('');
+                        }
                         return filteredResults;
                     }
                 },
@@ -285,6 +295,7 @@
                 selector: selector,
                 onSelection: (feedback) => {
                     regionID = feedback.selection.value.id;
+                    _self.parent().find('input[type=hidden]').val(feedback.selection.value.id);
                     _self.val(feedback.selection.value.name);
                 },
             };
@@ -296,11 +307,13 @@
             let settings = {
                 data: {
                     src: async function () {
+                        if(typeof regionID === "undefined") {
+                            var regionID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
+                        }
                         const source = await fetch(
                             route + "?s=" + _self.val() + '&regionId=' + regionID + '&type=city'
                         );
-                        const data = await source.json();
-                        return data;
+                        return await source.json();
                     },
                     key: ["id", 'name', "city"],
                     results: (list) => {
@@ -309,16 +322,27 @@
                         ).map((city) => {
                             return list.find((value) => value.match === city);
                         });
-
+                        if (!filteredResults.length) {
+                            filteredResults.push({
+                                key: 'empty',
+                                match: 'Город с таким названием не найден',
+                            })
+                            _self.val('');
+                        }
                         return filteredResults;
-                    }
+                    },
                 },
                 cache: false,
-                debounce: 800,
+                debounce: 500,
                 selector: selector,
                 onSelection: (feedback) => {
-                    cityID = feedback.selection.value.id;
-                    _self.val(feedback.selection.value.name);
+                    if (feedback.selection.key === 'empty') {
+                        _self.val('');
+                    } else {
+                        cityID = feedback.selection.value.id;
+                        _self.parent().find('input[type=hidden]').val(feedback.selection.value.id);
+                        _self.val(feedback.selection.value.name);
+                    }
                 },
             };
 
@@ -326,9 +350,13 @@
         }
 
         function initAddressAutocomplete(selector, route, _self) {
+            var cityID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
             let settings = {
                 data: {
                     src: async function () {
+                        if(typeof cityID === "undefined") {
+                            var cityID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
+                        }
                         const source = await fetch(
                             route + "?s=" + _self.val() + "&cityId=" + cityID + '&type=address'
                         );
@@ -342,6 +370,13 @@
                         ).map((city) => {
                             return list.find((value) => value.match === city);
                         });
+                        if (!filteredResults.length) {
+                            filteredResults.push({
+                                key: 'empty',
+                                match: 'Улица с таким названием не найдена',
+                            })
+                            _self.val('');
+                        }
 
                         return filteredResults;
                     }
@@ -350,8 +385,13 @@
                 debounce: 800,
                 selector: selector,
                 onSelection: (feedback) => {
-                    streetId = feedback.selection.value.id;
-                    _self.val(feedback.selection.value.name);
+                    if (feedback.selection.key === 'empty') {
+                        _self.val('');
+                    } else {
+                        streetId = feedback.selection.value.id;
+                        _self.parent().find('input[type=hidden]').val(feedback.selection.value.id);
+                        _self.val(feedback.selection.value.name);
+                    }
                 },
             };
 
@@ -359,9 +399,13 @@
         }
 
         function initBuildingAutocomplete(selector, route, _self) {
+            var streetId = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
             let settings = {
                 data: {
                     src: async function () {
+                        if(typeof streetId === "undefined") {
+                            var streetId = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
+                        }
                         const source = await fetch(
                             route + "?s=" + _self.val() + "&streetId=" + streetId + '&type=building'
                         );
@@ -372,13 +416,14 @@
                     results: (list) => {
                         const filteredResults = Array.from(
                             new Set(list.map((value) => value.match))
-                        ).map((street) => {
+                        ).filter((street) => street.length <= 12).map((street) => {
                             return list.find((value) => value.match === street);
                         });
 
                         return filteredResults;
                     }
                 },
+                maxResults: 15,
                 cache: false,
                 debounce: 800,
                 selector: selector,

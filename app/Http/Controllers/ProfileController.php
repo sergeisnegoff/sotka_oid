@@ -180,13 +180,12 @@ class ProfileController extends Controller
                         if (collect($items)->isEmpty()) {
                             throw new \Exception();
                         }
-
                         return \response()->json($items);
                     } catch (\Exception $e) {
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный регион не найден']);
                     }
                 } elseif (!empty($request->get('regionId')) && (!empty($request->get('s')))) {
-                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=city&query=" . $request->get('s') . '&regionId=' . $request->get('regionId');
+                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&withParent=true&contentType=city&query=" . $request->get('s') . '&regionId=' . $request->get('regionId');
                     $data = file_get_contents($url);
 
                     try {
@@ -195,9 +194,10 @@ class ProfileController extends Controller
                         collect(json_decode($data)->result)->filter(function ($item) {
                             return $item->id != 'Free';
                         })->each(function ($item) use (&$items) {
+                            $district = collect($item->parents)->where('contentType', 'district')->first();
                             $items[] = [
                                 'id' => $item->id,
-                                'name' => $item->name,
+                                'name' => ($district ? "$district->typeShort $district->name, ": '') . $item->typeShort . ' ' . $item->name,
                                 "city" => true,
                             ];
                         });
@@ -216,13 +216,12 @@ class ProfileController extends Controller
 
                     try {
                         $items = [];
-
                         collect(json_decode($data)->result)->filter(function ($item) {
                             return $item->id != 'Free';
                         })->each(function ($item) use (&$items) {
                                 $items[] = [
                                     'id' => $item->id,
-                                    'name' => $item->name,
+                                    'name' => $item->typeShort . ' ' . $item->name,
                                     'city' => false
                                 ];
                         });
