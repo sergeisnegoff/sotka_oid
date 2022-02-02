@@ -20094,7 +20094,7 @@ global.seed = {
     if ($('.box__slider-big .swiper-container').length > 0) {
       var galleryTop = new swiper_dist_js_swiper_js__WEBPACK_IMPORTED_MODULE_9___default.a('.box__slider-big .swiper-container', {
         spaceBetween: 30,
-        slidesPerView: 5,
+        slidesPerView: 1,
         loopedSlides: 20,
         loop: true,
         speed: 500,

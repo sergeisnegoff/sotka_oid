@@ -242,7 +242,7 @@ global.seed = {
         if ($('.box__slider-big .swiper-container').length > 0) {
             var galleryTop = new Swiper('.box__slider-big .swiper-container', {
                 spaceBetween: 30,
-                slidesPerView: 5,
+                slidesPerView: 1,
                 loopedSlides: 20,
                 loop: true,
                 speed: 500,
