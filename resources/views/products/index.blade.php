@@ -64,7 +64,7 @@
                             <?php $atrProd = $s?>
                         @endforeach
                     @endif
-                    <div class="col-3 col-md-5 col-lg-5 col-xl-4">
+                    <div class="col-5 col-md-5 col-lg-5 col-xl-4">
                         <div class="box__catalog-view">
                             <ul>
                                 <li data-catalog-grid
@@ -114,14 +114,33 @@
                                             <div class="swiper-slide">
                                                 <div class="col-12 col-md-12 col-xl-12 fadeIn">
                                                     <div class="box__product-item">
-                                                        <div class="wrapper-img">
-                                                            <div class="box__image"><a href="/product/{{$seed->id}}"><span
-                                                                        style="background-image: url( '{{ thumbImg($seed->images, 220, 345) }}' );"></span></a>
+                                                        <div class="wrapper-img" style="position: relative;">
+                                                            <div class="box__image" style="width: 100%;height: 100%;position: relative;">
+                                                                <div class="swiper gallery-product-card" style="height: 100%;">
+                                                                    <div class="swiper-wrapper">
+                                                                        <div class="swiper-slide">
+                                                                            <a class="aslide" href="/product/{{$seed->id}}">
+                                                                                <span class="imgslide" style="background-image: url( '{{Voyager::image($seed->images)}}' );">
+
+                                                                                </span>
+                                                                            </a>
+                                                                        </div>
+{{--                                                                        @foreach(json_decode($seed->images_gallery) ?? [] as $image)--}}
+{{--                                                                            <div class="swiper-slide">--}}
+{{--                                                                                <a class="aslide" href="/product/{{$seed->id}}">--}}
+{{--                                                                                    <span class="imgslide" style="background-image: url( '{{ Voyager::image($image) }}' );"></span>--}}
+{{--                                                                                </a>--}}
+{{--                                                                            </div>--}}
+{{--                                                                        @endforeach--}}
+                                                                    </div>
+                                                                    <!-- If we need pagination -->
+{{--                                                                    <div class="swiper-pagination"></div>--}}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="wrapper-info">
-                                                            <div class="box__category"><a
-                                                                    href="/products/{{$seed->category->parent_id}}/{{$seed->category->title}}">{{$seed->category->title}}</a>
+                                                            <div class="box__category">
+                                                                <a href="/products/{{$seed->category->parent_id}}/{{$seed->category->title}}">{{$seed->category->title}}</a>
                                                             </div>
                                                             <div class="box__title"><a href="/product/{{$seed->id}}">
                                                                     <h3> {{$seed->title}} </h3></a>
@@ -220,8 +239,25 @@
                                 <div class="col-6 col-md-4 col-xl-2 fadeIn">
                                     <div class="box__product-item">
                                         <div class="wrapper-img">
-                                            <div class="box__image"><a href="/product/{{$seed->id}}"><span
-                                                        style="background-image: url( '{{Voyager::image($seed->images)}}' );"></span></a>
+                                            <div class="box__image" style="width: 100%;height: 100%;position: relative;">
+                                                <div class="swiper gallery-product-card" style="height: 100%;">
+                                                    <div class="swiper-wrapper">
+                                                        <div class="swiper-slide">
+                                                            <a class="aslide" href="/product/{{$seed->id}}">
+                                                                <span class="imgslide" style="background-image: url( '{{Voyager::image($seed->images)}}' );"></span>
+                                                            </a>
+                                                        </div>
+                                                        @foreach(json_decode($seed->images_gallery) ?? [] as $image)
+                                                            <div class="swiper-slide">
+                                                                <a class="aslide" href="/product/{{$seed->id}}">
+                                                                    <span class="imgslide" style="background-image: url( '{{ Voyager::image($image) }}' );"></span>
+                                                                </a>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                    <!-- If we need pagination -->
+                                                    <div class="swiper-pagination"></div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="wrapper-info">

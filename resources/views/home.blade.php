@@ -88,16 +88,16 @@
                                     <div class="box__product-item">
                                             <div class="wrapper-img" style="position: relative;">
                                                 <div class="box__image" style="width: 100%;height: 100%;position: relative;">
-                                                    <div class="swiper gallery-product-card">
+                                                    <div class="swiper gallery-product-card" style="height: 100%;">
                                                         <div class="swiper-wrapper">
                                                             <div class="swiper-slide">
-                                                                <a href="/product/{{$seed->id}}" style="display: block;width: 100%;height: 346px;">
+                                                                <a class="aslide" href="/product/{{$seed->id}}">
                                                                     <span class="imgslide" style="background-image: url( '{{Voyager::image($seed->images)}}' );"></span>
                                                                 </a>
                                                             </div>
                                                             @foreach(json_decode($seed->images_gallery) ?? [] as $image)
                                                                 <div class="swiper-slide">
-                                                                    <a href="/product/{{$seed->id}}" style="display: block;width: 100%;height: 346px;">
+                                                                    <a class="aslide" href="/product/{{$seed->id}}">
                                                                         <span class="imgslide" style="background-image: url( '{{ Voyager::image($image) }}' );"></span>
                                                                     </a>
                                                                 </div>
