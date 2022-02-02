@@ -14,8 +14,25 @@
                 <div class="box__slider-productsviewed123">
                     @foreach($seedsViewed as $sv)
                         <div class="box__product-item" style="margin-left: 10px; margin-right: 10px">
-                            <div class="wrapper-img">
-                                <div class="box__image"><a href="/product/{{$sv->id}}"><span style="background-image: url({{ Voyager::image( $sv->images ) }});"></span></a></div>
+                            <div class="wrapper-img" style="position: relative;">
+                                <div class="box__image" style="width: 100%;height: 100%;position: relative;">
+                                    <div class="swiper gallery-product-card" style="height: 100%;">
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide">
+                                                <a class="aslide" href="/product/{{$sv->id}}">
+                                                    <span class="imgslide" style="background-image: url({{ Voyager::image( $sv->images ) }});"></span>
+                                                </a>
+                                            </div>
+                                            @foreach(json_decode($sv->images_gallery) ?? [] as $image)
+                                                <div class="swiper-slide">
+                                                    <a class="aslide" href="/product/{{$sv->id}}">
+                                                        <span class="imgslide" style="background-image: url( '{{ Voyager::image($image) }}' );"></span>
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="wrapper-info">
                                 <div class="box__category"><a href="/products/{{$sv->category->title}}">{{$sv->category->title}}</a></div>

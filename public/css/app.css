@@ -5778,6 +5778,7 @@ html.iziModal-isOverflow body {
   bottom: 10px;
   left: 0;
   width: 100%;
+  position: relative;
 }
 .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet {
   margin: 0 4px;
@@ -7892,7 +7893,7 @@ section.box__relatedproducts h2 {
   height: 370px;
   background-color: var(--color-9);
 }
-.box__product-item .wrapper-img .box__image span.imgslide {
+.box__product-item .wrapper-img .box__image a span.imgslide {
   position: absolute;
   display: block;
   top: 50%;

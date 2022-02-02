@@ -125,16 +125,16 @@
                                                                                 </span>
                                                                             </a>
                                                                         </div>
-{{--                                                                        @foreach(json_decode($seed->images_gallery) ?? [] as $image)--}}
-{{--                                                                            <div class="swiper-slide">--}}
-{{--                                                                                <a class="aslide" href="/product/{{$seed->id}}">--}}
-{{--                                                                                    <span class="imgslide" style="background-image: url( '{{ Voyager::image($image) }}' );"></span>--}}
-{{--                                                                                </a>--}}
-{{--                                                                            </div>--}}
-{{--                                                                        @endforeach--}}
+                                                                        @foreach(json_decode($seed->images_gallery) ?? [] as $image)
+                                                                            <div class="swiper-slide">
+                                                                                <a class="aslide" href="/product/{{$seed->id}}">
+                                                                                    <span class="imgslide" style="background-image: url( '{{ Voyager::image($image) }}' );"></span>
+                                                                                </a>
+                                                                            </div>
+                                                                        @endforeach
                                                                     </div>
                                                                     <!-- If we need pagination -->
-{{--                                                                    <div class="swiper-pagination"></div>--}}
+                                                                    <div class="swiper-pagination"></div>
                                                                 </div>
                                                             </div>
                                                         </div>

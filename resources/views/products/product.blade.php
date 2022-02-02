@@ -34,51 +34,53 @@
 
                     @if (!empty( Voyager::image($seed->images) ))
                         <div class="col-12 col-md-5 col-lg-4 col-xl-3 col-xxl-4">
-                    <div class="gallery-container">
-                        <div class="swiper-container gallery-main">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="box__image">
-                                        <a href="{{ Voyager::image($seed->images) }}" data-fancybox="img">
-                                            <img src="{{ Voyager::image( $seed->images ) }}" alt="{{$seed->title}}">
-                                        </a>
-                                    </div>
-                                </div>
+                            <div class="gallery-container">
+                                <div class="swiper-container gallery-main">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                                            <div class="box__image">
+                                                <a href="{{ Voyager::image($seed->images) }}" data-fancybox="img">
+                                                    <img src="{{ Voyager::image( $seed->images ) }}" alt="{{$seed->title}}">
+                                                </a>
+                                            </div>
+                                        </div>
 
-                                @foreach(json_decode($seed->images_gallery, true) ?? [] as $image)
-                                    <div class="swiper-slide">
-                                        <div class="box__image">
-                                            <a href="{{ Voyager::image($image) }}" data-fancybox="img">
-                                                <img src="{{ Voyager::image($image) }}" alt="{{$seed->title}}">
-                                            </a>
-                                        </div>
+                                        @if (!empty( $seed->images_gallery ))
+                                            @foreach(json_decode($seed->images_gallery, true) as $image)
+                                                <div class="swiper-slide">
+                                                    <div class="box__image">
+                                                        <a href="{{ Voyager::image($image) }}" data-fancybox="img">
+                                                            <img src="{{ Voyager::image($image) }}" alt="{{$seed->title}}">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
-                                @endforeach
-                            </div>
-                            @if (!empty( $seed->images_gallery ))
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-button-next"></div>
-                            @endif
-                        </div>
-                        @if (!empty( $seed->images_gallery ))
-                        <div class="swiper-container gallery-thumbs">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="box__image_thumb">
-                                        <img src="{{ Voyager::image( $seed->images ) }}" alt="{{$seed->title}}">
-                                    </div>
+                                    @if (!empty( $seed->images_gallery ))
+                                        <div class="swiper-button-prev"></div>
+                                        <div class="swiper-button-next"></div>
+                                    @endif
                                 </div>
-                                @foreach(json_decode($seed->images_gallery, true) as $image)
-                                    <div class="swiper-slide">
-                                        <div class="box__image_thumb">
-                                            <img src="{{ Voyager::image($image) }}" alt="{{$seed->title}}">
+                                @if (!empty( $seed->images_gallery ))
+                                    <div class="swiper-container gallery-thumbs">
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide">
+                                                <div class="box__image_thumb">
+                                                    <img src="{{ Voyager::image( $seed->images ) }}" alt="{{$seed->title}}">
+                                                </div>
+                                            </div>
+                                            @foreach(json_decode($seed->images_gallery, true) as $image)
+                                                <div class="swiper-slide">
+                                                    <div class="box__image_thumb">
+                                                        <img src="{{ Voyager::image($image) }}" alt="{{$seed->title}}">
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
-                                @endforeach
+                                @endif
                             </div>
-                        </div>
-                        @endif
-                    </div>
                         </div>
                     @endif
                     <div class="col-12 col-md-7 col-lg-8 col-xl-9 offset-xxl-1 col-xxl-7">
@@ -192,9 +194,10 @@
                                 @foreach($seeds as $sv)
                                     @if (in_array($sv->id, $continue)) @continue @endif
                                     <div class="swiper-slide">
+                                        <div class="col-12 col-md-12 col-xl-12 fadeIn">
                                         <div class="box__product-item">
                                             <div class="wrapper-img">
-                                                <div class="box__image"><a href="/product/{{$sv->id}}"><span
+                                                <div class="box__image"><a class="aslide" href="/product/{{$sv->id}}"><span class="imgslide"
                                                             style="background-image: url({{ Voyager::image( $sv->images ) }});"></span></a>
                                                 </div>
                                             </div>
@@ -209,6 +212,7 @@
                                             <div class="wrapper-button">
                                                 <div class="btn"><a href="/product/{{$sv->id}}">Купить</a></div>
                                             </div>
+                                        </div>
                                         </div>
                                     </div>
                                     @php($continue[] = $sv->id)

@@ -155,7 +155,7 @@ global.seed = {
                 },
                 watchOverflow: true,
                 pagination: {
-                    el: ".swiper-pagination",
+                    el: ".my.swiper-pagination",
                     clickable: true,
                 },
                 breakpoints: {
@@ -175,45 +175,48 @@ global.seed = {
             });
         }
 
-        /**
-         init gallery in one product Page
-         **/
-        var galleryThumbs = new Swiper(".gallery-thumbs", {
-            spaceBetween: 10,
-            centeredSlides: true,
-            centeredSlidesBounds: true,
-            slidesPerView: 3,
-            watchOverflow: true,
-            watchSlidesVisibility: true,
-            watchSlidesProgress: true,
-            direction: 'vertical'
-        });
+        if ($('.gallery-thumbs').length && $('.gallery-main').length) {
+            /**
+             init gallery in one product Page
+             **/
+            var galleryThumbs = new Swiper(".gallery-thumbs", {
+                spaceBetween: 10,
+                centeredSlides: true,
+                centeredSlidesBounds: true,
+                slidesPerView: 3,
+                watchOverflow: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                direction: 'vertical'
+            });
 
-        var galleryMain = new Swiper(".gallery-main", {
-            watchOverflow: true,
-            watchSlidesVisibility: true,
-            watchSlidesProgress: true,
-            preventInteractionOnTransition: true,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            effect: 'fade',
-            fadeEffect: {
-                crossFade: true
-            },
-            thumbs: {
-                swiper: galleryThumbs
-            }
-        });
+            var galleryMain = new Swiper(".gallery-main", {
+                watchOverflow: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                preventInteractionOnTransition: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                effect: 'fade',
+                fadeEffect: {
+                    crossFade: true
+                },
+                thumbs: {
+                    swiper: galleryThumbs
+                }
+            });
 
-        galleryMain.on('slideChangeTransitionStart', function() {
-            galleryThumbs.slideTo(galleryMain.activeIndex);
-        });
+            galleryMain.on('slideChangeTransitionStart', function() {
+                galleryThumbs.slideTo(galleryMain.activeIndex);
+            });
 
-        galleryThumbs.on('transitionStart', function(){
-            galleryMain.slideTo(galleryThumbs.activeIndex);
-        });
+
+            galleryThumbs.on('transitionStart', function(){
+                galleryMain.slideTo(galleryThumbs.activeIndex);
+            });
+        }
 
 
 
@@ -221,17 +224,16 @@ global.seed = {
          init slider in home page
          **/
         if ($('.gallery-product-card').length > 0) {
-
             var galleryTop = new Swiper('.gallery-product-card', {
                 watchOverflow: true,
                 speed: 1000,
+                simulateTouch:false,
                 pagination: {
                     el: '.swiper-pagination',
                     type: 'bullets',
                     clickable: true,
                 }
             });
-
         }
 
         /**
@@ -263,7 +265,6 @@ global.seed = {
          init slider in about page and other page
          **/
         if ($('.box__slider-productsviewed .swiper-container').length > 0) {
-
             var galleryTop = new Swiper('.box__slider-productsviewed .swiper-container', {
                 spaceBetween: 30,
                 slidesPerView: 5,
