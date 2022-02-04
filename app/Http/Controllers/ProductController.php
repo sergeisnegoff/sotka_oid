@@ -109,7 +109,7 @@ class ProductController extends Controller
     public function getProduct($id)
     {
         $seed = Product::multiplicity()->with(['category', 'subSpecification'])->where('id', $id)->first();
-        $seeds = Product::multiplicity()->whereHas('category', function ($query) use ($seed) {
+        $seeds = Product::multiplicity()->where('total', '!=', 0)->whereHas('category', function ($query) use ($seed) {
             $query->where('title', $seed->category->title);
         })->whereNotIn('id', [$seed->id])->paginate(5);
         session()->push('products.product', $seed->getKey());
