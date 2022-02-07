@@ -240,25 +240,22 @@ global.seed = {
          init slider in home page
          **/
         if ($('.box__slider-big .swiper-container').length > 0) {
+
             var galleryTop = new Swiper('.box__slider-big .swiper-container', {
-                spaceBetween: 30,
-                slidesPerView: 1,
-                loopedSlides: 20,
+                loopedSlides: 1,
                 loop: true,
-                speed: 500,
+                speed: 1000,
                 navigation: {
-                    nextEl: '.slider-productsviewed-next',
-                    prevEl: '.slider-productsviewed-prev',
+                    nextEl: '.slider-big-next',
+                    prevEl: '.slider-big-prev',
                 },
-                breakpoints: {
-                    767: {
-                        slidesPerView: 2,
-                    },
-                    1199: {
-                        slidesPerView: 3,
-                    }
-                }
+                pagination: {
+                    el: '.slider-big-pagination',
+                    type: 'bullets',
+                    clickable: true
+                },
             });
+
         }
 
         /**
