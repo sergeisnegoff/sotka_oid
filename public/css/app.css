@@ -9662,7 +9662,7 @@ section.box__product .box__product-information:before {
   background-color: var(--color-7);
 }
 section.box__product .box__product-information .box__image {
-  width: 333px;
+  width: 300px;
   height: 467px;
   border: 20px solid var(--color-4);
 }

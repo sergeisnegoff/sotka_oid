@@ -244,6 +244,9 @@ global.seed = {
             var galleryTop = new Swiper('.box__slider-big .swiper-container', {
                 loopedSlides: 1,
                 loop: true,
+                autoplay: {
+                    delay: 5000,
+                },
                 navigation: {
                     nextEl: '.slider-big-next',
                     prevEl: '.slider-big-prev',
