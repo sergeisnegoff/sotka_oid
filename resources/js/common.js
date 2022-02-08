@@ -244,7 +244,6 @@ global.seed = {
             var galleryTop = new Swiper('.box__slider-big .swiper-container', {
                 loopedSlides: 1,
                 loop: true,
-                speed: 1000,
                 navigation: {
                     nextEl: '.slider-big-next',
                     prevEl: '.slider-big-prev',
@@ -254,6 +253,7 @@ global.seed = {
                     type: 'bullets',
                     clickable: true
                 },
+
             });
 
         }
