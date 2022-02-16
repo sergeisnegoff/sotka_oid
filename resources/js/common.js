@@ -293,9 +293,7 @@ global.seed = {
         if ($('.box__slider-productsviewed123 .swiper-container').length > 0) {
             var galleryTop = new Swiper('.box__slider-productsviewed123 .swiper-container', {
                 slidesPerView: 5,
-                loopedSlides: 20,
                 watchOverflow: true,
-                loop: true,
                 speed: 500,
                 navigation: {
                     nextEl: '.slider-productsviewed-next123',
