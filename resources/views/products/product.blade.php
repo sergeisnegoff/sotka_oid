@@ -197,8 +197,10 @@
                                         <div class="col-12 col-md-12 col-xl-12 fadeIn">
                                         <div class="box__product-item">
                                             <div class="wrapper-img">
-                                                <div class="box__image"><a class="aslide" href="/product/{{$sv->id}}"><span class="imgslide"
-                                                            style="background-image: url({{ Voyager::image( $sv->images ) }});"></span></a>
+                                                <div class="box__image">
+                                                    <a class="aslide" href="/product/{{$sv->id}}">
+                                                        <span class="imgslide" style="background-image: url({{ Voyager::image( $sv->images ) }});"></span>
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="wrapper-info">
@@ -232,7 +234,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
           integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw=="
           crossorigin="anonymous"/>
-    <script>
+{{--    <script>
         $('.box__slider-productsviewed123').slick({
             slidesToShow: 5,
             slidesToScroll: 1,
@@ -241,7 +243,7 @@
             prevArrow: $('.slider-productsviewed-prev-slick'),
             nextArrow: $('.slider-productsviewed-next-slick'),
         });
-    </script>
+    </script>--}}
 
     <style>
         .slider-productsviewed-prev-slick {

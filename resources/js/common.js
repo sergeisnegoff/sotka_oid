@@ -187,7 +187,7 @@ global.seed = {
                 watchOverflow: true,
                 watchSlidesVisibility: true,
                 watchSlidesProgress: true,
-                direction: 'vertical'
+                direction: 'vertical',
             });
 
             var galleryMain = new Swiper(".gallery-main", {
@@ -274,6 +274,32 @@ global.seed = {
                 navigation: {
                     nextEl: '.slider-productsviewed-next',
                     prevEl: '.slider-productsviewed-prev',
+                },
+                breakpoints: {
+                    767: {
+                        slidesPerView: 2,
+                    },
+                    1199: {
+                        slidesPerView: 3,
+                    }
+                }
+            });
+
+        }
+
+        /**
+         init slider in about page and other page
+         **/
+        if ($('.box__slider-productsviewed123 .swiper-container').length > 0) {
+            var galleryTop = new Swiper('.box__slider-productsviewed123 .swiper-container', {
+                slidesPerView: 5,
+                loopedSlides: 20,
+                watchOverflow: true,
+                loop: true,
+                speed: 500,
+                navigation: {
+                    nextEl: '.slider-productsviewed-next123',
+                    prevEl: '.slider-productsviewed-prev123',
                 },
                 breakpoints: {
                     767: {
