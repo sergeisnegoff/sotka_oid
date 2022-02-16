@@ -130,9 +130,9 @@ class Product extends Model
                 $max = $sale;
         }*/
 
-        $max = Auth::user()->personal_sale;
+//        $max = Auth::user()->personal_sale;
 
-        return $max;
+//        return $max;
     }
     public static function deleteSpecifications($id) {
         return DB::table('products_pivot_specifications')->where(['product_id' => $id])->delete();

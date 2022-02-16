@@ -50,10 +50,6 @@
                     $('.box__accodion').find('.box__content').slideUp();
                     $('.box__accodion').find('.box__accodion-arrow').removeClass('reverse');
 
-                    let parent = $(this).parent();
-                    parent.find('.box__content').slideToggle();
-
-                    parent.find('.box__accodion-arrow').toggleClass('reverse');
                 } else {
                     $('.box__accodion').find('.box__content').slideUp();
                     $('.box__accodion').find('.box__accodion-arrow').removeClass('reverse');

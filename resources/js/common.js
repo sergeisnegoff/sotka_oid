@@ -226,7 +226,6 @@ global.seed = {
         if ($('.gallery-product-card').length > 0) {
             var galleryTop = new Swiper('.gallery-product-card', {
                 watchOverflow: true,
-                speed: 1000,
                 simulateTouch:false,
                 pagination: {
                     el: '.swiper-pagination',
@@ -234,6 +233,11 @@ global.seed = {
                     clickable: true,
                 }
             });
+            setTimeout(function(){
+                $('.gallery-product-card').each(function (){
+                    this.swiper.update();
+                });
+            }, 2000);
         }
 
         /**
