@@ -9,6 +9,89 @@
                     </div>
                 </div>
             @endif
+            <div class="box__product-header">
+                <div class="row">
+                    <div class="col-6 col-md-2 col-lg-2 d-xl-none">
+                        <div class="box__catalog-category">
+                            <button data-btn-popup="navigation">Категории</button>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-1 col-lg-1 col-xl-2" style="max-width: 120px;">
+                        <div class="box__catalog-filter">
+                            <button data-btn-popup="filter">Фильтр</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 col-lg-2 col-xl-2" style="align-items: center">
+                        <div class="box__catalog-checkproduction">
+                            <div class="box__checkbox">
+                                <div class="wrapper-checkbox">
+                                    @foreach (App\Subfilter::all() as $subFilter)
+                                        @if($subFilter->title == 'ЗОЛОТАЯ СОТКА АЛТАЯ')
+                                            <label style="margin: 0;">
+                                                <input class="filterShow filterChecked" id="sotka-sem-checkbox"
+                                                       value="{{$subFilter->title}}" type="checkbox">
+                                                <span>
+                                                    <span class="box__checkbox-icon"></span>
+                                                    <span
+                                                        class="box__checkbox-text">Продукция Золотой Сотки Алтая</span>
+                                                </span>
+                                            </label>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-7 col-md-4 col-lg-4 col-xl-4">
+                        <div class="box__catalog-sorting">
+                            <div class="wrapper-sorting-title d-none d-xl-block">Сортировать</div>
+                            <div>
+                                <select name="sort" id="sortSelect"
+                                        style="width: 100%; border-color: #6dac52; border-radius: 20px;padding: 5px 20px;">
+                                    <option selected>По умолчанию</option>
+                                    <option value="ASC/title">Название (А - Я)</option>
+                                    <option value="DESC/title">Название (Я - А)</option>
+                                    <option value="ASC/price">Цена (низкая &gt; высокая)</option>
+                                    <option value="DESC/price">Цена (высокая &gt; низкая)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <?php $atrProd = []; ?>
+                    @if(session('dataAttr'))
+                        @foreach(session('dataAttr') as $s)
+                            <?php $atrProd = $s?>
+                        @endforeach
+                    @endif
+                    <div class="col-5 col-md-5 col-lg-5 col-xl-4">
+                        <div class="box__catalog-view">
+                            <ul>
+                                <li data-catalog-grid
+                                    class="gridAttr <?= $atrProd == 'data-catalog-grid' ? 'active' : '' ?>  <?= empty($atrProd) ? 'active' : '' ?>">
+                                    <button class="gridBtn" type="button" value="data-catalog-grid"><span
+                                            style="background-image: url({{asset('img/icon/sorting-card.svg')}});"></span>
+                                    </button>
+                                </li>
+                                <li data-catalog-list
+                                    class="listAttr <?= $atrProd == 'data-catalog-list' ? 'active' : '' ?>">
+                                    <button class="listBtn" type="button" value="data-catalog-list"><span
+                                            style="background-image: url({{asset('img/icon/sorting-list.svg')}});"></span>
+                                    </button>
+                                </li>
+                                <li data-catalog-card
+                                    class="cardAttr <?= $atrProd == 'data-catalog-card' ? 'active' : '' ?>">
+                                    <button class="cardBtn" type="button" value="data-catalog-card"><span
+                                            style="background-image: url({{asset('img/icon/sorting-grid.svg')}});"></span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
             <div id="productFind">
                 <div id="productData">
