@@ -23,6 +23,7 @@
                         function (data) {
                             data = $(data).find('div#productData');
                             $('#productFind').html(data);
+                            window.seed.initSlider();
                         }
                 });
             });
@@ -40,6 +41,7 @@
                         function (data) {
                             data = $(data).find('div#productData');
                             $('#productFind').html(data);
+                            window.seed.initSlider();
                         }
                 });
             });
@@ -61,6 +63,7 @@
                             else {
                                 $(".wrapper__cataloglimit-active").text(radios);
                             }
+                            window.seed.initSlider();
                         }
                 });
             });

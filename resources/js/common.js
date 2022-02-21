@@ -219,7 +219,6 @@ global.seed = {
         }
 
 
-
         /**
          init slider in home page
          **/
