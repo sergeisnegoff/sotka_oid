@@ -45,14 +45,16 @@ class ProductController extends Controller
     {
         $sort = isset($_GET['sort']) ? explode('/', $request->get('sort')) : ['', ''];
 
-        $seeds = Product::multiplicity()->with(['category', 'subSpecification', 'subFilter'])->whereHas('category', function ($query) use ($cat) {
-            $query->where('parent_id', $cat);
-        })->filter($filters)
-            ->select('products.*')
-            ->join('categories AS c', 'c.id', '=', 'products.category_id')
-            ->orderBy('c.sorder', 'ASC')->where('total', '!=', 0);
+//        $seeds = Product::multiplicity()->with(['category', 'subSpecification', 'subFilter'])->filter($filters);
 
-        $seeds = $seeds->get();
+        $seeds = Product::with(['category', 'subSpecification'])
+            ->where('catalog_page', 1)
+            ->where('total', '!=', 0)
+            ->orderBy('id', "desc")
+            ->get();
+
+        $cats = Category::where('title', $cat)->first()->childrenCategories;
+
 
         if (empty($seeds))
             abort(404);
@@ -71,7 +73,7 @@ class ProductController extends Controller
         if ($request->expectsJson()) {
             return response()->json($seeds);
         }
-        return view('products.index', compact('seeds'));
+        return view('products.index', compact('seeds', 'cats'));
     }
 
     public function getProductsSubCat(Request $request, $cat, $subcat, ProductFilter $filters)

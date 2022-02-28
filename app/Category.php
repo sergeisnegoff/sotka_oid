@@ -16,6 +16,10 @@ class Category extends Model
     {
         return $this->hasMany('App\Product','category_id');
     }
+    public function childrenCategories()
+    {
+        return $this->hasMany('App\Category','parent_id');
+    }
     public static function addSaleToCategory($category_id, $amount, $sale) {
         return DB::table('categories_sales')->insert(['category_id' => $category_id, 'amount' => $amount, 'sale' => $sale]);
     }

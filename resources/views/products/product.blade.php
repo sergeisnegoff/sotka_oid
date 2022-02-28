@@ -172,8 +172,6 @@
         </div>
     </section>
 
-
-
     <section class="box__productsviewed">
         <div class="container">
             <div class="row">

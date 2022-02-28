@@ -96,7 +96,7 @@
             <div id="productFind">
                 <div id="productData">
                     <?php $count = 0; ?>
-                    @if(\Request::is('products'))
+                    @if(\Request::is('products') || Request::routeIs('products_parent_cats'))
                         @foreach($cats as $cat)
                             <div class="row prodAttr"
                                  data-catalog <?= !empty($atrProd) ? $atrProd : 'data-catalog-grid'  ?>>
