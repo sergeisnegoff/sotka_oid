@@ -43,37 +43,38 @@ class ProductController extends Controller
 
     public function getProductsCat(Request $request, $cat, ProductFilter $filters)
     {
-        $sort = isset($_GET['sort']) ? explode('/', $request->get('sort')) : ['', ''];
 
-//        $seeds = Product::multiplicity()->with(['category', 'subSpecification', 'subFilter'])->filter($filters);
+        $pipe = function($query){
+            $query->where('catalog_page', 1)
+                ->where('total', '!=', 0)
+                ->orderBy('id', "desc")
+                ->with('SubSpecification');
+        };
 
-        $seeds = Product::with(['category', 'subSpecification'])
-            ->where('catalog_page', 1)
-            ->where('total', '!=', 0)
-            ->orderBy('id', "desc")
-            ->get();
+        $cats = optional(Category::query()->where('title', $cat)
+            ->whereHas('category.product', $pipe)
+            ->with([
+                'category.product' => $pipe,
+            ])
+            ->first())->category;
 
-        $cats = Category::where('title', $cat)->first()->childrenCategories;
-
-
-        if (empty($seeds))
+        if (is_null($cats))
             abort(404);
+
+        $cats = $cats->filter(function (Category $category){
+            return $category->product->isNotEmpty();
+        });
 
         if (!empty($request->attributeStyle)) {
 
-            $dataAttr = session()->get($request->attributeStyle);
             $dataAttr = [
                 "attributeStyle" => $request->attributeStyle,
-
             ];
             session()->put(compact('dataAttr'));
             return redirect()->back();
         }
 
-        if ($request->expectsJson()) {
-            return response()->json($seeds);
-        }
-        return view('products.index', compact('seeds', 'cats'));
+        return view('products.index', compact('cats'));
     }
 
     public function getProductsSubCat(Request $request, $cat, $subcat, ProductFilter $filters)
@@ -87,6 +88,7 @@ class ProductController extends Controller
         if (empty($seeds))
             abort(404);
 
+        dd($seeds);
 
         if (!empty($request->attributeStyle)) {
 

@@ -1,7 +1,7 @@
 <ul>
     @foreach($categories as $category)
         <li>
-            <a href="javascript:void(0);">{{ mb_ucfirst(mb_strtolower($category['title'])) }}</a>
+            <a href="/products/{{$category['title']}}">{{ mb_ucfirst(mb_strtolower($category['title'])) }}</a>
             @if (!empty($category['children']))
                 @php($category['children'] = collect($category['children'])->chunk(10))
                 <span></span>

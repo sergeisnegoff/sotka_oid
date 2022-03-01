@@ -95,7 +95,6 @@
 
             <div id="productFind">
                 <div id="productData">
-                    <?php $count = 0; ?>
                     @if(\Request::is('products') || Request::routeIs('products_parent_cats'))
                         @foreach($cats as $cat)
                             <div class="row prodAttr"
@@ -109,8 +108,7 @@
                                     <div class="swiper mySwiper">
                                         <div class="swiper-wrapper">
 
-                                            @foreach ($seeds as $seed)
-                                                @if($seed->category_id == $cat->id)
+                                            @foreach ($cat->product as $seed)
                                             <div class="swiper-slide">
                                                 <div class="col-12 col-md-12 col-xl-12 fadeIn">
                                                     <div class="box__product-item">
@@ -217,8 +215,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                                    <?php $count++ ?>
-                                                @endif
                                             @endforeach
 
 
@@ -354,7 +350,6 @@
                                         @endguest
                                     </div>
                                 </div>
-                                <?php $count++ ?>
                             @endforeach
                         </div>
                     @endif
