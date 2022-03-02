@@ -196,6 +196,7 @@ class ProductsController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContro
     }
 
     public function update(Request $request, $id){
+        dd(1);
         $back = $request->get('__back');
         $request->request->remove('__back');
         $response = parent::update($request, $id);
