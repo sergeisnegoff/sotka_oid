@@ -7941,6 +7941,9 @@ section.box__relatedproducts h2 {
   line-height: 17px;
   color: #747474;
 }
+.box__product-item .wrapper-info .box__title {
+  min-height: 60px;
+}
 .box__product-item .wrapper-info .box__title a {
   text-decoration: none;
 }
