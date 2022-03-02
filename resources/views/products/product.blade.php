@@ -6,7 +6,7 @@
                 <div class="col-12">
                     <ul>
                         <li><a href="/">{{setting('site.main_title_buttom')}}</a></li>
-                        <li><a href="{{route('products')}}">Каталог</a></li>
+                        <li><a href="/products/{{$cat->title}}/">{{$cat->small_name}}</a></li>
                         <li><a href="/products/{{$seed->category->id}}/{{$seed->category->title}}">{{$seed->category->small_name}}</a></li>
                         <li>{{$seed->title}}</li>
                     </ul>

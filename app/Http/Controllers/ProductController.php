@@ -88,8 +88,6 @@ class ProductController extends Controller
         if (empty($seeds))
             abort(404);
 
-        dd($seeds);
-
         if (!empty($request->attributeStyle)) {
 
             $dataAttr = session()->get($request->attributeStyle);
@@ -117,12 +115,14 @@ class ProductController extends Controller
         })->whereNotIn('id', [$seed->id])->paginate(5);
         session()->push('products.product', $seed->getKey());
 
+        $cat = Category::where('id', $seed->category->parent_id)->first();
+
         $seedsSession = session()->get('products.product');
         $seedsViewed = Product::multiplicity()->with(['category'])->where('id', '!=', $id)->find($seedsSession);
 
         $cartKeys = collect(session()->get('cart'))->keys();
 
-        return view('products.product', compact('seed', 'seeds', 'seedsViewed', 'cartKeys'));
+        return view('products.product', compact('seed', 'seeds', 'seedsViewed', 'cartKeys', 'cat'));
     }
 
     public function searchProducts(Request $request, ProductFilter $filters)

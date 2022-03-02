@@ -24,7 +24,7 @@ Route::group(['prefix' => 'admin'], function () {
 });
 Route::post('/users/active/{id}', [\App\Http\Controllers\ProfileController::class, 'activeAccount'])->name('voyager.users-active');
 
-Route::get('/products', [ProductController::class, 'index'])->name('products');
+//Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/products/{title}', [ProductController::class, 'getProductsCat'])->name('products_parent_cats');
 Route::get('/products/{id}/{title}', [ProductController::class, 'getProductsSubCat'])->name('products_cats');
 
