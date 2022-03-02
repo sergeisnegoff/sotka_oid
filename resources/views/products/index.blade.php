@@ -216,6 +216,16 @@
                                                 </div>
                                             </div>
                                             @endforeach
+                                            <div class="swiper-slide">
+                                                <div class="col-12 col-md-12 col-xl-12 fadeIn">
+                                                    <div class="box__product-item">
+                                                        <div class="wrapper" style="position: relative;">
+                                                            <div class="btn"><a href="/products/{{ @$seed->category->parent_id }}/{{ @$seed->category->title }}">Посмотреть все</a></div>
+                                                            <div class="btn btn-white"><a href="{{ route('home') }}">На главную</a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
                                         </div>

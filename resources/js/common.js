@@ -146,34 +146,32 @@ global.seed = {
         /**
          init slider in products Page
          **/
-        if ($('.mySwiper .col-12').length > 5) {
-            var swiper = new Swiper(".mySwiper", {
-                slidesPerView: 5,
-                navigation: {
-                    nextEl: '.slider-product-next',
-                    prevEl: '.slider-product-prev',
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 5,
+            navigation: {
+                nextEl: '.slider-product-next',
+                prevEl: '.slider-product-prev',
+            },
+            watchOverflow: true,
+            pagination: {
+                el: ".my.swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                // when window width is >= 320px
+                320: {
+                    slidesPerView: 2,
                 },
-                watchOverflow: true,
-                pagination: {
-                    el: ".my.swiper-pagination",
-                    clickable: true,
+                // when window width is >= 480px
+                767: {
+                    slidesPerView: 2,
                 },
-                breakpoints: {
-                    // when window width is >= 320px
-                    320: {
-                        slidesPerView: 2,
-                    },
-                    // when window width is >= 480px
-                    767: {
-                        slidesPerView: 2,
-                    },
-                    // when window width is >= 640px
-                    1199: {
-                        slidesPerView: 3,
-                    }
-                },
-            });
-        }
+                // when window width is >= 640px
+                1199: {
+                    slidesPerView: 3,
+                }
+            },
+        });
 
         if ($('.gallery-thumbs').length && $('.gallery-main').length) {
             /**
