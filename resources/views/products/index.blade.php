@@ -109,6 +109,7 @@
                                         <div class="swiper-wrapper">
 
                                             @foreach ($cat->product as $seed)
+                                            @if($loop->iteration <= 30)
                                             <div class="swiper-slide KOHb">
                                                 <div class="col-12 col-md-12 col-xl-12 fadeIn">
                                                     <div class="box__product-item">
@@ -215,6 +216,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            @endif
                                             @endforeach
                                             <div class="swiper-slide">
                                                 <div class="col-12 col-md-12 col-xl-12 fadeIn">
@@ -373,7 +375,6 @@
     <script>
         $(document).ready(function () {
             var height = $('.mySwiper .box__product-item:last-child').height();
-            console.log(height);
             $('.box__product-item .wrapper').height(height);
 
             $("body").on('click', '.add-to-cart-prod', function (e) {
