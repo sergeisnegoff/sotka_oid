@@ -209,7 +209,7 @@
                     $percent = \App\Product::getMaxSaleToProduct($id, $details['price'], $details['quantity']);
                     ?>
 
-                    @dump($product, $details['multiplicity']);
+                    @dd($product, $details['multiplicity']);
                     <div class="box__basket-item">
                         <div class="row">
                             <div class="col-3">
