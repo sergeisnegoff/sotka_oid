@@ -205,7 +205,7 @@
                     @if (!isset($details['price'])) @continue @endif
                     <?php
                     $product = \App\Product::multiplicity()->find($id);
-                    $details['multiplicity'] = \App\Product::multiplicity()->find($id)->multiplicity;
+                    $details['multiplicity'] = \App\Product::multiplicity()->find($id);
                     $percent = \App\Product::getMaxSaleToProduct($id, $details['price'], $details['quantity']);
                     ?>
                     <div class="box__basket-item">
