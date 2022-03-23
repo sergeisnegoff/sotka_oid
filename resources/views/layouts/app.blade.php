@@ -204,7 +204,7 @@
                 @foreach(session('cart') as $id => $details)
                     @if (!isset($details['price'])) @continue @endif
                     <?php
-                    $product = \App\Product::multiplicity()->find($id);
+                    $product = \App\Product::multiplicity()->find($id)->multiplicity;
                     $details['multiplicity'] = \App\Product::multiplicity()->find($id)->multiplicity;
                     $percent = \App\Product::getMaxSaleToProduct($id, $details['price'], $details['quantity']);
                     ?>
