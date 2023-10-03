@@ -2,20 +2,10 @@
 
 namespace App\Http\Controllers\Voyager;
 
-use App\Category;
-use App\Http\Controllers\Controller;
 use App\Models\Brands;
 use App\Models\BrandSalesModel;
 use App\Models\UserBrandSaleSystem;
-use App\Salesystem;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Response;
-use TCG\Voyager\Database\Schema\SchemaManager;
-use TCG\Voyager\Facades\Voyager;
 
 class SalesystemController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
