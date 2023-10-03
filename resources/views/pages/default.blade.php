@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
     <main>
         <div class="box__breadcrumbs">
@@ -26,16 +25,15 @@
                     <div class="col-12 offset-xl-1 col-xl-10 offset-xxl-2 col-xxl-8">
                         <div class="box__life-item">
                             <div class="box__image">
-                                <span style="background-image: url( {{ thumbImg(json_decode($info->gallery)[0], 935, 420, 1)  }} );">
+                                @if(!is_null($info->gallery))
+                                    <span style="background-image: url( {{ thumbImg(json_decode($info->gallery)[0], 935, 420, 1)  }} );">
                                 </span>
+                                @endif
                             </div>
                             <div class="wrapper-info">
-                                <h3>{{ $info->title }}</h3>
+                                {!! nl2br($info->text) !!}
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        {!! nl2br($info->text) !!}
                     </div>
                 </div>
             </div>

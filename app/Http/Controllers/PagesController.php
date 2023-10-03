@@ -15,8 +15,6 @@ use App\Models\OurGoals;
 use App\Models\OurLifeModel;
 use App\Models\PagesModel;
 use App\Models\PriceListsModel;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 
 class PagesController extends Controller
 {

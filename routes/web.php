@@ -45,6 +45,8 @@ Route::name('cart.')->prefix('cart')->group(function () {
     Route::post('reorder/{id?}', [\App\Http\Controllers\ProfileController::class, 'reOrders'])->name('reorder');
 });
 
+Route::get('resend-orders', [CartController::class, 'resendMail']);
+
 Route::prefix('import')->name('import')->group(function () {
     Route::get('products', [\App\Http\Controllers\ImportController::class, 'products']);
 });

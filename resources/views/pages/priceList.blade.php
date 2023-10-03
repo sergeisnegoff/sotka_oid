@@ -26,9 +26,7 @@
 				<div class="row">
 					@foreach ($priceLists as $priceList)
                         @php($files = json_decode($priceList->file))
-                        @if (empty($files) || is_null($files))
-                            @continue
-                        @endif
+                        @continue(empty($files))
 						@php($fileURL = $files[0])
 						<div class="col-12 col-xl-2">
 							<div class="box__price-item">

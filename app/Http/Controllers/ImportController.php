@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use App\Imports\ProductUpdateImport;
-use App\Jobs\ProcessImportJob;
-use App\Models\Brands;
+use App\Mail\UpdateOrder;
 use App\Models\cronSettings;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
-use App\Order;
-use App\Product;
-use App\Specification;
-use App\Subspecification;
 use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpSpreadsheet\Exception;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ImportController extends Controller
 {
@@ -79,31 +75,31 @@ class ImportController extends Controller
         foreach ($sheetData as $key => $row) {
             if (in_array($key, range(1, 2))) continue;
             if (!empty($row['B'])) {
-                $order = Order::updateOrCreate(['random' => $row['L']], [
+                $order = Order::updateOrCreate(['id' => $row['L']], [
                     'status' => $row['E']
                 ]);
 
                 $products = Order::getOrderProducts($order->id);
+                $productIDs = $products->pluck('id', 'product_id');
                 $orderProducts = $missingProducts = collect($products)->pluck('info.oneC_7')->toArray();
 
-                if (!empty($missingProducts))
-                    foreach ($missingProducts as $product)
-                        if (!is_null($product)) {
-                            Order::orderProducts($order->id, Product::where('oneC_7', (int)$product)->first()->id, 0, 0);
-                        }
+            if (!empty($missingProducts))
+                foreach ($missingProducts as $product)
+                    if (!is_null($product)) {
+                        Order::orderProducts($order->id, Product::where('oneC_7', $product)->first()->id, 0, 0, 0, 0, 0, 0);
+                    }
             } else if (!empty($order)) {
-                $productID = Product::where('oneC_7', 'like', (int)$row['D'])->first();
+                $productID = Product::where('oneC_7', 'like', $row['D'])->first();
 
-                if (!is_null($productID)) {
-                    $product = $products[array_search($productID->id, array_column($products->toArray(), 'product_id'))];
-
-                    if (in_array((int)$row['D'], $orderProducts)) {
-                        if (isset($productID->id)) {
-                            Order::orderProducts($order->id, $productID->id, (empty($row['G']) ? 0 : (int)$row['G']), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ?: 0, !empty(trim($row['N'])) || !empty(trim($row['M'])) ? 1 : 0, $row['O'], $row['N']);
-                            unset($missingProducts[array_search((int)$row['D'], $missingProducts)]);
-                        }
-                    } else
-                        Order::orderProducts($order->id, $productID->id, (empty($row['G']) ? 0 : (int)$row['G']), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ?: 0, !empty(trim($row['N'])) || !empty(trim($row['M'])) ? 1 : 0, $row['O'], $row['N']);
+                if(!is_null($productID)) {
+                    if ($productIDs->has($productID->id)) {
+                        Order::orderProducts($order->id, $productID->id, (!empty(trim($row['G'])) ? $row['G'] : 0), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ?: 0, !empty(trim($row['N'])) ? 1 : 0, $row['O'], $row['N']);
+                        unset($missingProducts[array_search($row['D'], $missingProducts)]);
+                        Log::channel('import')->info('one '.$row['O']);
+                    } else {
+                        Order::orderProducts($order->id, $productID->id, (!empty(trim($row['G'])) ? $row['G'] : 0), (!empty(trim($row['I'])) ? $row['I'] : 0), (int)$row['H'] ?: 0, !empty(trim($row['N'])) ? 1 : 0, $row['O'], $row['N']);
+                        Log::channel('import')->info('two '.$row['O']);
+                    }
                 }
 
                 $product = [];
@@ -113,7 +109,13 @@ class ImportController extends Controller
         if (!empty($missingProducts))
             foreach ($missingProducts as $product)
                 if (!is_null($product))
-                    Order::orderProducts($order->id, Product::where('oneC_7', (int)$product)->first()->id, 0, 0, 0, 1);
+                    Order::orderProducts($order->id, Product::where('oneC_7', $product)->first()->id, 0, 0, 0, 1);
+
+
+        $user_id = Order::query()->where('id', $order->id)->first();
+        $userData = User::find($user_id)->first();
+
+        Mail::to($userData->email)->send(new UpdateOrder($order, Order::getOrderProducts($order->id)));
     }
 
     public function managers()

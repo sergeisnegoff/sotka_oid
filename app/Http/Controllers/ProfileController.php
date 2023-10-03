@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportXls;
+use App\Exports\TcpdfOrder;
 use App\Mail\AccountAcepted;
+use App\Models\Order;
 use App\Models\ProfileAddress;
 use App\Models\User;
 use App\Models\UserBrandSaleSystem;
 use App\Models\UserSaleSystem;
-use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProfileController extends Controller
 {
@@ -81,6 +85,27 @@ class ProfileController extends Controller
         return response()->redirectToRoute('profile.index');
     }
 
+    protected function kladarQuery(array $input)
+    {
+        return collect(
+            Http::get(
+                'https://kladr-api.ru/api.php',
+                array_merge(
+                    config('services.kladar'),
+                    $input
+                )
+            )
+                ->json('result')
+        )
+            ->map(function ($item) {
+                return json_decode(json_encode($item));
+            })
+            ->filter(function ($item) {
+                return $item->id != 'Free';
+            })
+            ->values();
+    }
+
     public function address(Request $request, $id = 0)
     {
         $action = $request->segment('3');
@@ -143,13 +168,13 @@ class ProfileController extends Controller
                 break;
             case 'autocomplete':
                 if (!empty($request->get('s')) && !empty($request->get('type') == 'region')) {
-                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=region&query=" . $request->get('s');
-                    $data = file_get_contents($url);
                     try {
-                        $items = [];
-                        collect(json_decode($data)->result)->filter(function ($item) {
-                            return $item->id != 'Free';
-                        })->each(function ($item) use (&$items) {
+                        $items = $this->kladarQuery(
+                            [
+                                'query' => $request->get('s'),
+                                'contentType' => 'region',
+                            ]
+                        )->map(function ($item) {
                             switch ($item->type) {
                                 case 'Область':
                                     $name = $item->name . ' область';
@@ -169,7 +194,7 @@ class ProfileController extends Controller
                                 default:
                                     $name = $item->name;
                             }
-                            $items[] = [
+                            return [
                                 'id' => $item->id,
                                 'name' => $name,
                                 "city" => true,
@@ -185,19 +210,21 @@ class ProfileController extends Controller
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный регион не найден']);
                     }
                 } elseif (!empty($request->get('regionId')) && (!empty($request->get('s')))) {
-                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&withParent=true&contentType=city&query=" . $request->get('s') . '&regionId=' . $request->get('regionId');
-                    $data = file_get_contents($url);
-
                     try {
-                        $items = [];
-
-                        collect(json_decode($data)->result)->filter(function ($item) {
+                        $items = $this->kladarQuery(
+                            [
+                                'regionId' => $request->get('regionId'),
+                                'query' => $request->get('s'),
+                                'contentType' => 'city',
+                                'withParent' => 'true',
+                            ]
+                        )->filter(function ($item) {
                             return $item->id != 'Free';
-                        })->each(function ($item) use (&$items) {
+                        })->map(function ($item) use (&$items) {
                             $district = collect($item->parents)->where('contentType', 'district')->first();
-                            $items[] = [
+                            return [
                                 'id' => $item->id,
-                                'name' => ($district ? "$district->typeShort $district->name, ": '') . $item->typeShort . ' ' . $item->name,
+                                'name' => ($district ? "$district->typeShort $district->name, " : '') . $item->typeShort . ' ' . $item->name,
                                 "city" => true,
                             ];
                         });
@@ -211,19 +238,21 @@ class ProfileController extends Controller
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный город не найден']);
                     }
                 } elseif (!empty($request->get('cityId')) && (!empty($request->get('s')))) {
-                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=street&query=" . $request->get('s') . '&cityId=' . $request->get('cityId');
-                    $data = file_get_contents($url);
-
                     try {
-                        $items = [];
-                        collect(json_decode($data)->result)->filter(function ($item) {
+                        $items = $this->kladarQuery(
+                            [
+                                'cityId' => $request->get('cityId'),
+                                'query' => $request->get('s'),
+                                'contentType' => 'street',
+                            ]
+                        )->filter(function ($item) {
                             return $item->id != 'Free';
-                        })->each(function ($item) use (&$items) {
-                                $items[] = [
-                                    'id' => $item->id,
-                                    'name' => $item->typeShort . ' ' . $item->name,
-                                    'city' => false
-                                ];
+                        })->map(function ($item) use (&$items) {
+                            return [
+                                'id' => $item->id,
+                                'name' => $item->typeShort . ' ' . $item->name,
+                                'city' => false
+                            ];
                         });
 
                         if (collect($items)->isEmpty()) {
@@ -235,21 +264,23 @@ class ProfileController extends Controller
                         return \response()->json(['status' => 'error', 'msg' => 'К сожалению, данный адрес не найден']);
                     }
                 } else {
-                    $url = "https://kladr-api.ru/api.php?token=9dTKNARAAFBGtQYTebaTie53NfA254EF&contentType=building&query=" . $request->get('s') . '&streetId=' . $request->get('streetId');
-                    $data = file_get_contents($url);
-
                     try {
-                        $items = [];
-
-                        collect(json_decode($data)->result)->filter(function ($item) {
+                        $items = $this->kladarQuery(
+                            [
+                                'streetId' => $request->get('streetId'),
+                                'query' => $request->get('s'),
+                                'contentType' => 'building',
+                            ]
+                        )->filter(function ($item) {
                             return $item->id != 'Free';
-                        })->each(function ($item) use (&$items) {
-                                $items[] = [
-                                    'id' => $item->id,
-                                    'name' => $item->name,
-                                    "city" => true
-                                ];
+                        })->map(function ($item) use (&$items) {
+                            return [
+                                'id' => $item->id,
+                                'name' => $item->name,
+                                "city" => true
+                            ];
                         });
+
 
                         if (collect($items)->isEmpty()) {
                             throw new \Exception();
@@ -418,5 +449,31 @@ class ProfileController extends Controller
 
             return json_encode(array('statusCode' => 200));
         }
+    }
+
+    public function exportPdf(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(404);
+        }
+        $order->load(['products']);
+        if ($order instanceof \App\Models\Order) {
+            ob_end_clean();
+            return new TcpdfOrder($order, TcpdfOrder::TYPE_PRINT);
+        }
+        return $order;
+    }
+
+    public function exportXls(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(404);
+        }
+
+        $order->load(['products']);
+        if ($order instanceof \App\Models\Order) {
+            return Excel::download(new ExportXls($order), 'order.xlsx');
+        }
+        return $order;
     }
 }

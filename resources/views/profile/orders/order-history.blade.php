@@ -13,7 +13,7 @@
                                 $changes = false;
                                 foreach ($order->products as $product) {
                                 	if (is_null($product->info)) continue;
-                                    $sale = \App\Product::getMaxSaleToProduct($product->info->id, $product->price, $product->qty);
+                                    $sale = \App\Models\Product::getMaxSaleToProduct($product->info->id, $product->price, $product->qty);
                                     $amount += ($product->info->price - ( $sale * $product->info->price / 100)) * $product->qty;
 
                                     if ($product->qty == 0 || $product->excepted == 1)
@@ -23,7 +23,7 @@
                             <div class="box__item">
                                 <div class="wrapper__currentorder">
                                     <div class="row">
-                                        <div class="col-12 col-xl-2">
+                                        <div class="col-12 col-xl-3">
                                             <div class="box__currentorder-ordernumber">Заказ
                                                 № {{ $order->id }}</div>
                                             <div class="btn btn__currentorder-order" data-href="/reorder/{{$order->id}}"
@@ -34,7 +34,7 @@
                                             <div
                                                 class="box__currentorder-orderdate">{{ date('d', strtotime($order->created_at)) }} {{ rusDate(date('m', strtotime($order->created_at))) }} {{ date('Y', strtotime($order->created_at)) }}</div>
                                         </div>
-                                        <div class="col-12 col-xl-5">
+                                        <div class="col-12 col-xl-4">
                                             @if ($changes)
                                                 <div class="box__currentorder-warning">Имеются изменения в заказе</div>
                                             @endif
@@ -93,7 +93,7 @@
                                             @continue
                                         @endif
 
-                                        @php($sale = \App\Product::getMaxSaleToProduct($product->info->id, $product->price, $product->qty))
+                                        @php($sale = \App\Models\Product::getMaxSaleToProduct($product->info->id, $product->price, $product->qty))
                                         <div class="box__item-info {{ $changes ? 'changes' : '' }} {{ $product->qty == 0 ? 'deleted-product' : '' }}"
                                              style="{{ $changes ? 'background-color:#ffdcdc' : '' }}">
                                             <div class="row">

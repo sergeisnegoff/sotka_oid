@@ -99,7 +99,7 @@
                                     <div class="box__product-characteristics">
                                         <ul>
                                             @foreach($seed->subSpecification as $s)
-                        <li><span>{{ \App\Specification::find($s->specification)->title }}:</span> {{$s->title}}</li>
+                        <li><span>{{ \App\Models\Specification::find($s->specification)->title }}:</span> {{$s->title}}</li>
                                             @endforeach
                         </ul>
                     </div>

@@ -191,7 +191,7 @@
                                 <div class="col-9">
                                     <a href="#" class="item_remove remove-from-cart" data-id="{{ $id }}">x</a>
                                     <div class="row">
-                                        <div class="col-12"><a href="product/{{$id}}"><h3>{{$details['title']}}</h3></a></div>
+                                        <div class="col-12"><a href="/product/{{$id}}"><h3>{{$details['title']}}</h3></a></div>
                                         <div class="col-5">
                                             <div class="box__quality">
                                                 <div class="box__quality-value"><input type="number" data-number="0"

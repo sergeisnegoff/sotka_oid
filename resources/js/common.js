@@ -4,6 +4,9 @@ const jQuery = require('jquery');
 // other packages here
 window.$ = window.jQuery = jQuery;
 
+import LazyLoad from "vanilla-lazyload";
+import 'intersection-observer';
+
 //bootstarp-grid
 import "../libs/bootstrap/css/bootstrap4-grid.min.css";
 
@@ -28,7 +31,6 @@ import "../libs/inputmask/jquery.inputmask.bundle.js";
 import "../libs/swiper/swiper.css";
 
 import Swiper from 'swiper/dist/js/swiper.js';
-
 
 global.seed = {
     /* init script */
@@ -139,7 +141,7 @@ global.seed = {
                 },
                 effect: 'fade',
                 speed: 1000,
-                loopedSlides: 1
+                loopedSlides: 1,
             });
         }
 
@@ -157,6 +159,13 @@ global.seed = {
                 el: ".my.swiper-pagination",
                 clickable: true,
             },
+            lazy: {
+                loadPrevNext: true,
+                loadPrevNextAmount: 12
+            },
+            touchReleaseOnEdges: true,
+            watchSlidesProgress: true,
+            watchSlidesVisibility: true,
             breakpoints: {
                 // when window width is >= 320px
                 320: {
@@ -179,9 +188,9 @@ global.seed = {
              **/
             var galleryThumbs = new Swiper(".gallery-thumbs", {
                 spaceBetween: 10,
+                slidesPerView: 3,
                 centeredSlides: true,
                 centeredSlidesBounds: true,
-                slidesPerView: 3,
                 watchOverflow: true,
                 watchSlidesVisibility: true,
                 watchSlidesProgress: true,
@@ -203,7 +212,7 @@ global.seed = {
                 },
                 thumbs: {
                     swiper: galleryThumbs
-                }
+                },
             });
 
             galleryMain.on('slideChangeTransitionStart', function() {
@@ -228,7 +237,7 @@ global.seed = {
                     el: '.swiper-pagination',
                     type: 'bullets',
                     clickable: true,
-                }
+                },
             });
             setTimeout(function(){
                 $('.gallery-product-card').each(function (){
@@ -257,7 +266,6 @@ global.seed = {
                     type: 'bullets',
                     clickable: true
                 },
-
             });
 
         }
@@ -283,7 +291,7 @@ global.seed = {
                     1199: {
                         slidesPerView: 3,
                     }
-                }
+                },
             });
 
         }
@@ -307,9 +315,8 @@ global.seed = {
                     1199: {
                         slidesPerView: 3,
                     }
-                }
+                },
             });
-
         }
 
         /**
@@ -327,7 +334,7 @@ global.seed = {
                     el: '.slider-oneslides-pagination',
                     type: 'bullets',
                     clickable: true
-                }
+                },
             });
 
         }
@@ -354,7 +361,7 @@ global.seed = {
                     1199: {
                         slidesPerView: 3,
                     }
-                }
+                },
             });
 
         }
@@ -379,7 +386,7 @@ global.seed = {
         $('body').on('click', '.box__quality [data-prev-quality]', function () {
             var el = $(this).parents('.box__quality').find('input');
             let amount = (parseInt(el.val()) - parseInt(el.attr('step'))),
-            calc = amount - (amount % parseInt(el.attr('step')));
+                calc = amount - (amount % parseInt(el.attr('step')));
 
             if (calc >= el.attr('min'))
                 el.val(calc);
@@ -388,8 +395,8 @@ global.seed = {
             var el = $(this).parents('.box__quality').find('input');
             let amount = (parseInt(el.val()) + parseInt(el.attr('step'))),
                 calc = amount - (amount % parseInt(el.attr('step')));
-
-            el.val(calc);
+            if (calc <= el.attr('max') || el.parents('.wrapper__baskets-quality').length === 0)
+                el.val(calc);
         }).on('change', '.box__quality input', function () {
             let amount = ($(this).val());
             $(this).val(Math.ceil(amount/parseInt($(this).attr('step')))*parseInt($(this).attr('step')));
@@ -493,6 +500,10 @@ global.seed = {
             $(this).parents('.box__item').toggleClass('active-warning');
         });
 
+        $('.wrapper__baskets-warning').on('click', function () {
+            $(this).parents('.wrapper__baskets').toggleClass('active-warning');
+        });
+
         $('.box__characteristics .box__characteristics-status').on('click', function () {
             $(this).parents('.box__characteristics').toggleClass('active');
         });
@@ -550,12 +561,8 @@ $(document).on('submit', '#order-form', function() {
         container.append($('<span>', {
             class: 'dot'
         }))
-    $('#order-form').find('.box-bottom button').append(container);
-    $('#order-form').find('.box-bottom button').prop('disabled', true);
-    setTimeout(function(){
-        $('#order-form').find('.box-bottom button').find(container).remove();
-        $('#order-form').find('.box-bottom button').prop('disabled', false);
-    }, 10000);
+    let btn = $('#order-form').find('.box-bottom button[type="submit"]');
+    btn.prop('disabled', true).append(container);
 });
 
 $(window).on('scroll', function () {
@@ -653,5 +660,9 @@ $(function () {
             }
         });
     })
+
+    global.lazyLoadInstance = new LazyLoad({
+        // Your custom settings go here
+    });
 })
 

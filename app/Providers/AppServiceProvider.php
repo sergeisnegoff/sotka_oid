@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Category;
+use App\Logging\Logger;
+use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -35,10 +36,10 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
             $view
-                ->with('categories', Cache::remember('catalog-categories', 30, function (){
-                    return categoryTreeSort(Category::withCount('product')->get());
-                }))
+                ->with('categories', categoryTreeSort())
                 ->with('errors', optional($view['errors'] ?? null));
         });
+
+        Logger::register($this->app);
     }
 }

@@ -29,15 +29,15 @@
 @stop
 
 @php
-    $categories = categoryTreeSort(\App\Category::all());
+    $categories = categoryTreeSort();
     $priceRange = [5000, 10000, 20000, 30000, 40000, 50000, 75000, 100000];
 
     $values = [];
-    \App\Salesystem::all()->each(function ($item) use (&$values) {
+    \App\Models\Salesystem::all()->each(function ($item) use (&$values) {
         $values[$item->amount][$item->category_id] = $item->percent;
     });
 
-    $checkedCategory = \App\Salesystem::checkedCategories()->toArray();
+    $checkedCategory = \App\Models\Salesystem::checkedCategories()->toArray();
 @endphp
 
 @section('content')

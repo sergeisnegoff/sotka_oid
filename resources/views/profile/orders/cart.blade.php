@@ -4,11 +4,17 @@
     <section class="box__profilebasketpage">
         <div class="container">
             @include('profile.components.tabs')
+
             <div class="box__basketpage">
                 @if (!empty($cart))
                     <div class="row">
                         <div class="col-12">
                             <div class="wrapper__baskets">
+
+                                @if ($hasChanges)
+                                    <div class="wrapper__baskets-warning">Имеются изменения в корзине</div>
+                                @endif
+
                                 <div class="wrapper__baskets-title">
                                     <div class="row">
                                         <div class="col-12 col-xl-3"><h4>Наименование</h4></div>
@@ -20,13 +26,106 @@
                                     </div>
                                 </div>
                                 <?php
-                                    $totalAmount = 0;
+                                $totalAmount = 0;
                                 ?>
-                                @foreach ($cart as $id => $product)
+
+                                @if ($removed_products->isNotEmpty())
+                                    @foreach($removed_products as $removed_product)
+                                        <div class="wrapper__baskets-item changes-product deleted-product">
+                                            <div class="row">
+                                                <div class="col-12 col-xl-3">
+                                                    <div class="wrapper__baskets-info">
+                                                        <div class="box__image"><span
+                                                                style="background-image: url( {{ thumbImg($removed_product['images'], 50, 70) }} );"></span>
+                                                        </div>
+                                                        <a href="#"><h3>{{ $removed_product->title }}</h3></a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-xl-2">
+                                                    <div class="wrapper__baskets-quality">
+                                                        <span class="wrapper__baskets-titlequality">Количество:</span>
+                                                        <div class="box__quality">
+                                                            Нет в наличии
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-xl-2">
+                                                    <div class="wrapper__baskets-price"><span>Цена:</span>
+                                                        -
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-xl-2">
+                                                    <div class="wrapper__baskets-discount"><span>Скидка:</span>
+                                                        -
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-xl-2">
+                                                    <div class="wrapper__baskets-priceondiscount">
+                                                        -
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-xl-2">
+                                                    <div class="wrapper__baskets-cost">
+                                                        -
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    @endforeach
+                                @endif
+
+                                @foreach($quantity_changes as $product)
+                                    <div class="wrapper__baskets-item changes-product deleted-product">
+                                        <div class="row">
+                                            <div class="col-12 col-xl-3">
+                                                <div class="wrapper__baskets-info">
+                                                    <div class="box__image"><span
+                                                            style="background-image: url( {{ thumbImg($product['images'], 50, 70) }} );"></span>
+                                                    </div>
+                                                    <a href="#"><h3>{{ $product['title'] }}</h3></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-xl-2">
+                                                <div class="wrapper__baskets-quality">
+                                                    <span class="wrapper__baskets-titlequality">Количество:</span>
+                                                    <div class="box__quality">
+                                                        {{number_format($product['quantity_changes'], 0, ',', ' ')}} шт
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-xl-2">
+                                                <div class="wrapper__baskets-price"><span>Цена:</span>
+                                                    -
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-xl-2">
+                                                <div class="wrapper__baskets-discount"><span>Скидка:</span>
+                                                    -
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-xl-2">
+                                                <div class="wrapper__baskets-priceondiscount">
+                                                    -
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-xl-2">
+                                                <div class="wrapper__baskets-cost">
+                                                    -
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                @endforeach
+
+                                @foreach ($cart as $product)
+
+                                    @if (!isset($product['price'])) @continue @endif
                                     @php
-                                    $productInfo = \App\Product::multiplicity()->find($id);
-                                        $product['multiplicity'] = $productInfo->multiplicity;
-                                        $percent = \App\Product::getMaxSaleToProduct($id, $product['price'], $product['quantity'])
+                                        $id = $product['id'];
+                                        $product['multiplicity'] = $productInfo[$id]->multiplicity;
+                                        $percent = $productInfo[$id]->sale;
                                     @endphp
                                     <div class="wrapper__baskets-item">
                                         <div class="row">
@@ -43,23 +142,29 @@
                                                     <span class="wrapper__baskets-titlequality">Количество:</span>
                                                     <div class="box__quality">
                                                         <div class="box__quality-value">
-                                                            <input type="number" data-number="{{ $product['multiplicity'] }}"
-                                                                   step="{{ $product['multiplicity'] }}" min="{{ $product['multiplicity'] }}"
+                                                            <input type="number"
+                                                                   data-number="{{ $product['multiplicity'] }}"
+                                                                   step="{{ $product['multiplicity'] }}"
+                                                                   min="{{ $product['multiplicity'] }}"
+                                                                   max="{{ $product['total'] }}"
                                                                    name="quantity[]" class="quantityUpdate{{$id}}"
-                                                                   value="{{ $product['quantity'] }}" data-id="{{ $id }}">
+                                                                   value="{{ $product['quantity'] }}"
+                                                                   data-id="{{ $id }}">
                                                         </div>
-{{--                                                        @if ($productInfo->multiplicity <= $productInfo->total)--}}
+                                                        @if ($productInfo[$id]->multiplicity <= $productInfo[$id]->total)
                                                             <span class="btn__quality-nav">
-                                                                 <span class="btn__quality-minus update-cart" data-id="{{ $id }}" data-prev-quality>-</span>
-                                                            <span class="btn__quality-plus update-cart" data-id="{{ $id }}" data-next-quality>+</span>
+                                                                 <span class="btn__quality-minus update-cart"
+                                                                       data-id="{{ $id }}" data-prev-quality>-</span>
+                                                            <span class="btn__quality-plus update-cart"
+                                                                  data-id="{{ $id }}" data-next-quality>+</span>
                                                             </span>
-{{--                                                        @endif--}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-xl-2">
                                                 <div class="wrapper__baskets-price"><span>Цена:</span>
-                                                    {{ $product['price'] }} ₽
+                                                    {{ $productInfo[$id]->price }} ₽
                                                 </div>
                                             </div>
                                             <div class="col-12 col-xl-2">
@@ -69,30 +174,33 @@
                                             </div>
                                             <div class="col-12 col-xl-2">
                                                 <div class="wrapper__baskets-priceondiscount">
-                                                    <span>Цена со скидкой:</span>{{ $product['price'] - ($percent ? (($product['price'] * $percent) / 100) : 0) }}
+                                                    <span>Цена со скидкой:</span>{{ $productInfo[$id]->price - ($percent ? (($productInfo[$id]->price * $percent) / 100) : 0) }}
                                                     ₽
                                                 </div>
                                             </div>
                                             <div class="col-12 col-xl-2">
                                                 <div class="wrapper__baskets-cost">
-                                                    <span>Стоимость:</span>{{ ($product['price'] - ($percent ? (($product['price'] * $percent) / 100) : 0)) * $product['quantity'] }}
+                                                    <span>Стоимость:</span>{{ ($productInfo[$id]->price - ($percent ? (($productInfo[$id]->price * $percent) / 100) : 0)) * $product['quantity'] }}
                                                     ₽
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="btn btn-delete remove-from-cart" data-id="{{ $id }}"><a href="javascript:;"></a></div>
+                                        <div class="btn btn-delete remove-from-cart" data-id="{{ $id }}"><a
+                                                href="javascript:;"></a></div>
                                     </div>
-                                    @php($totalAmount += ($product['price'] - ($percent ? (($product['price'] * $percent) / 100) : 0)) * $product['quantity'])
+                                    @php($totalAmount += ($productInfo[$id]->price - ($percent ? (($productInfo[$id]->price * $percent) / 100) : 0)) * $product['quantity'])
                                 @endforeach
                             </div>
                             <div class="wrapper__bascket-bottom">
                                 <div class="row">
                                     <div class="col-6">
-                                        <div class="btn btn-white"><a href="{{ route('cart.empty') }}">Очистить корзину</a></div>
+                                        <div class="btn btn-white"><a href="{{ route('cart.empty') }}">Очистить
+                                                корзину</a></div>
                                     </div>
                                     <div class="col-6">
                                         <div class="box__bascket-total">
-                                            <h4><span>Итого: </span><b>{{ number_format($totalAmount, 0, '.', '') }} ₽</b></h4>
+                                            <h4><span>Итого: </span><b>{{ number_format($totalAmount, 0, '.', '') }}
+                                                    ₽</b></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -111,12 +219,14 @@
                                                         <h3>Заказ на магазин</h3>
                                                     </div>
                                                 </div>
-                                                @foreach ($address as $item)
-                                                    <div class="box__radiobox">
-                                                        <div class="wrapper-radiobox">
-                                                            <label>
-                                                                <input type="radio" name="address_id" {{ $item->id == $user->address ? 'checked' : '' }} value="{{ $item->id }}">
-                                                                <span>
+                                                @if($address->isNotEmpty())
+                                                    @foreach ($address as $item)
+                                                        <div class="box__radiobox">
+                                                            <div class="wrapper-radiobox">
+                                                                <label>
+                                                                    <input type="radio" name="address_id"
+                                                                           {{ $item->id == $user->address ? 'checked' : '' }} value="{{ $item->id }}">
+                                                                    <span>
                                                                 <span class="box__radiobox-icon"></span>
                                                                 <span class="box__radiobox-text">
                                                                     <span
@@ -125,16 +235,19 @@
                                                                         class="box__profile-itemaddress"><span>Адрес: </span>{{ $item->address }}</span>
                                                                 </span>
                                                             </span>
-                                                            </label>
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                @endforeach
+                                                    @endforeach
+                                                @endif
                                                 <div class="box__radiobox">
                                                     <div class="wrapper-radiobox">
                                                         <label>
-                                                            <input type="radio" name="address_id" {{ 99 == $user->address ? 'checked' : '' }} value="99">
+                                                            <input type="radio" name="address_id"
+                                                                   {{ 99 == $user->address ? 'checked' : '' }} value="99">
                                                             <span>
-                                                                <span class="box__radiobox-icon" style="margin-top: 5px"></span>
+                                                                <span class="box__radiobox-icon"
+                                                                      style="margin-top: 5px"></span>
                                                                     <span class="box__radiobox-text">
                                                                         <span class="box__profile-itemaddress"><strong>Самовывоз</strong></span>
                                                                     </span>
@@ -143,7 +256,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="btn btn__address-add">
-                                                    <button data-btn-popup="address" type="button">Добавить адрес</button>
+                                                    <button data-btn-popup="address" type="button">Добавить адрес
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-xl-6">
@@ -159,7 +273,9 @@
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="btn">
-                                                                <button {{ $user->address || !empty($address) ? : 'disabled' }}>Отправить заказ</button>
+                                                                <button type="submit"{{ $user->address || !empty($address) ? '' : ' disabled' }}>
+                                                                    Отправить заказ
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -307,7 +423,7 @@
             let settings = {
                 data: {
                     src: async function () {
-                        if(typeof regionID === "undefined") {
+                        if (typeof regionID === "undefined") {
                             var regionID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
                         }
                         const source = await fetch(
@@ -354,7 +470,7 @@
             let settings = {
                 data: {
                     src: async function () {
-                        if(typeof cityID === "undefined") {
+                        if (typeof cityID === "undefined") {
                             var cityID = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
                         }
                         const source = await fetch(
@@ -403,7 +519,7 @@
             let settings = {
                 data: {
                     src: async function () {
-                        if(typeof streetId === "undefined") {
+                        if (typeof streetId === "undefined") {
                             var streetId = _self.parent().parent().parent().prev().find('input[type=hidden]').val();
                         }
                         const source = await fetch(

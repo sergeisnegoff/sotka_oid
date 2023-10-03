@@ -45,12 +45,16 @@ class User extends \TCG\Voyager\Models\User {
     public static function sendResetPasswordMail($mail)
     {
         $user = User::where('email', $mail)->first();
-        $password = resetPassword::generatePassword();
 
-        $user->password = Hash::make($password);
-        $user->save();
+        if ($user) {
+            $password = resetPassword::generatePassword();
+            $user->password = Hash::make($password);
+            $user->save();
+            Mail::to($mail)->send(new resetPassword($password));
 
-        Mail::to($mail)->send(new resetPassword($password));
+        } else {
+            // handle case when user is not found
+        }
     }
 
 
@@ -64,5 +68,9 @@ class User extends \TCG\Voyager\Models\User {
 
     public static function addSaleToBrand($brand_id, $sale, $id) {
         return DB::table('user_brand_sales')->insert(['brand_id' => $brand_id, 'sale' => $sale, 'user_id' => $id]);
+    }
+
+    public function address() {
+        return $this->hasMany(UserAddress::class);
     }
 }

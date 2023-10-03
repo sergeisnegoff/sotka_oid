@@ -20,11 +20,11 @@
                                                     <div class="btn"
                                                          style="text-align: left;position:absolute;bottom:90px;left:45px;">
                                                         @if (!empty($slide->button_text))
-                                                            <a href="{{ $slide->button_href ?? $slide->button_new_tab }}"
+                                                            <a href="{{ $slide->button_href ?? $slide->button_new_tab }}"{{ \Illuminate\Support\Str::of($slide->button_href)->afterLast('/')->contains('.') ? 'download' : '' }}
                                                                 {{ !empty($slide->button_new_tab) ? 'target="_blank"' : '' }}>{{ $slide->button_text }}</a>
                                                         @endif
                                                         @if (!empty($slide->button2_text))
-                                                            <a href="{{ $slide->button2_href ?? $slide->button2_new_tab }}"
+                                                            <a href="{{ $slide->button2_href ?? $slide->button2_new_tab }}"{{ \Illuminate\Support\Str::of($slide->button2_href)->afterLast('/')->contains('.') ? 'download' : '' }}
                                                                 {{ !empty($slide->button2_new_tab) ? 'target=_blank' : '' }}>{{ $slide->button2_text }}</a>
                                                         @endif
                                                     </div>
@@ -34,7 +34,6 @@
                                     @endforeach
                                 </div>
 
-                                <div class="slider-big-pagination"></div>
 
                                 <div class="slider-big-next"></div>
                                 <div class="slider-big-prev"></div>
@@ -55,7 +54,7 @@
                                                                     style="background-image: url( '{{ thumbImg( $slide->img, 332, 250) }}' );"></span>
                                                             </div>
                                                             <h3>{{ $slide->title }}</h3>
-                                                            <div class="btn"><a
+                                                            <div class="btn"><a {{ \Illuminate\Support\Str::of($slide->button_href)->afterLast('/')->contains('.') ? 'download' : '' }}
                                                                     href="{{ $slide->button_href ?? $slide->button_new_tab }}" {{ empty($slide->button_href) ? 'target=_blank' : '' }}>{{ $slide->button_text }}</a>
                                                             </div>
                                                         </div>

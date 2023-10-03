@@ -107,11 +107,11 @@
                                 class="box__card {{ !is_null(session('cart')) && count(session('cart')) ? '' : 'd-none' }}">
                                 <button class="d-flex" style="align-items:center;" data-btn-popup="basket">
                                     <span class="d-block" style="margin-right: 20px;" id="total-price">
-                                        {{ number_format(collect(session('cart'))->sum(function ($item) {return $item['price'] * $item['quantity'];}), 0, ',', '') }} ₽
+                                        {{ number_format($miniCartTotal, 0, ',', '') }} ₽
                                     </span>
                                     <span class="head-icon">
                                         <span
-                                            class="box__card-quality">{{ !is_null(session('cart')) && count(session('cart')) ? count(session('cart')) : 0 }}</span>
+                                            class="box__card-quality">{{ $miniCartCount }}</span>
                                     </span>
                                 </button>
                             </div>
@@ -195,66 +195,7 @@
             </div>
         </div>
         <div class="wrapper-popup-center">
-            <?php
-            $total = 0;
-            $totalAll = 0;
-            $percent = 0;
-            ?>
-            @if(session('cart'))
-                @foreach(session('cart') as $id => $details)
-                    @if (!isset($details['price'])) @continue @endif
-                    <?php
-                    $product = \App\Product::multiplicity()->find($id)->multiplicity;
-                    $details['multiplicity'] = \App\Product::multiplicity()->find($id)->multiplicity;
-                    $percent = \App\Product::getMaxSaleToProduct($id, $details['price'], $details['quantity']);
-                    ?>
-
-                    @dd($product, $details['multiplicity']);
-                    <div class="box__basket-item">
-                        <div class="row">
-                            <div class="col-3">
-                                <div class="box__image"><a href="#"><img
-                                            src="{{ Voyager::image( $details['images'] ) }}" alt=""></a></div>
-                            </div>
-                            <div class="col-9">
-                                <a href="#" class="item_remove remove-from-cart" data-id="{{ $id }}">x</a>
-                                <div class="row">
-                                    <div class="col-12"><a href="product/{{$id}}"><h3>{{$details['title']}}</h3></a>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="box__quality">
-                                            <div class="box__quality-value"><input type="number" data-number="0"
-                                                                                   step="{{ $details['multiplicity'] }}"
-                                                                                   min="1"
-                                                                                   max="{{ $details['total'] }}"
-                                                                                   name="quantity[]"
-                                                                                   class="quantityUpdate{{ $id }}"
-                                                                                   value="{{$details['quantity']}}">
-                                            </div>
-                                            @if ($product->multiplicity <= $product->total)
-                                                <span class="btn__quality-nav">
-                                        <span class="btn__quality-minus update-cart" data-id="{{ $id }}"
-                                              data-prev-quality>-</span>
-                                        <span class="btn__quality-plus update-cart" data-id="{{ $id }}"
-                                              data-next-quality>+</span>
-                                    </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-7">
-                                        <div
-                                            class="box__price"> {{ ($details['price'] - ( $percent ? (($details['price'] * $percent) / 100) : 0)) * $details['quantity'] }}
-                                            <span>₽</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php
-                    $total += $details['price'] * $details['quantity'];
-                    ?>
-                @endforeach
-            @endif
+            @include('profile.components.mini-basket')
         </div>
         <div class="wrapper-popup-bottom">
             <div class="row">
@@ -263,7 +204,7 @@
                     <div class="box__price-title">Итого:</div>
                 </div>
                 <div class="col-6 text-right">
-                    <div class="box__price">{{ $total }} <span>₽</span></div>
+                    <div class="box__price">{{ $miniCartTotal }} <span>₽</span></div>
                 </div>
             </div>
             <div class="row">
@@ -452,7 +393,6 @@
                 } else {
                     if ($(window).scrollTop() >= offsetY)
                         if (st < currentScroll) {
-                            console.log('ok');
                             $('.box__header-top').css({
                                 'position': 'fixed',
                                 'top': 0,

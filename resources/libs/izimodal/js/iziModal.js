@@ -329,8 +329,8 @@
 					that.close();
 				}, that.options.timeout);
 			}
-	
-		}, 
+
+		},
 
 		pauseProgress: function(){
 
@@ -363,7 +363,7 @@
 								$(modal).iziModal('close');
 							}
 						}
-					});				
+					});
 				}
 			} catch(e) {  /*console.warn(exc);*/  }
 
@@ -548,7 +548,7 @@
 					var transitionIn = that.options.transitionIn;
 
 					if( typeof param == 'object' ){
-						
+
 						if(param.transition !== undefined || param.transitionIn !== undefined){
 							transitionIn = param.transition || param.transitionIn;
 						}
@@ -770,7 +770,7 @@
 								if(typeof modals.in !== 'undefined'){
 
                 					$('#'+that.group.ids[index]).iziModal('open', { transition: transitionIn });
-               
+
 									break;
 								}
 							}
@@ -1336,7 +1336,7 @@
 				modal.iziModal('close');
 			}
 		}
-		
+
 		setTimeout(function(){
 			if(transitionIn !== undefined){
 				$(openModal).iziModal('open', {

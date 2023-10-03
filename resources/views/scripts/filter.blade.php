@@ -24,6 +24,7 @@
                             data = $(data).find('div#productData');
                             $('#productFind').html(data);
                             window.seed.initSlider();
+                            lazyLoadInstance.loadAll()
                         }
                 });
             });
@@ -42,6 +43,7 @@
                             data = $(data).find('div#productData');
                             $('#productFind').html(data);
                             window.seed.initSlider();
+                            lazyLoadInstance.loadAll()
                         }
                 });
             });
@@ -64,12 +66,13 @@
                                 $(".wrapper__cataloglimit-active").text(radios);
                             }
                             window.seed.initSlider();
+                            lazyLoadInstance.loadAll()
                         }
                 });
             });
         }
 
-        $.ajax().then(checkboxes).then(selectSort).then(radioSelected).then(gridAttrFun).then(listAttrFun).then(cardAttrFun);
+        $.ajax().then(checkboxes).then(selectSort).then(radioSelected);
     });
 </script>
 

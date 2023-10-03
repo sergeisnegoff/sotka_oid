@@ -1,42 +1,40 @@
-@foreach ($cart as $id => $details)
-    @php($product = \App\Product::multiplicity()->find($id))
+@foreach($miniCartData as $details)
     <div class="box__basket-item">
         <div class="row">
             <div class="col-3">
-                <div class="box__image"><a href="#">
-                    @if (!empty($details['images']))
-                        <img
-                            src="{{ Voyager::image( $details['images'] ) }}" alt="">
-                    @endif
-                    </a></div>
+                <div class="box__image"><a href="#"><img
+                            src="{{ Voyager::image( $details['images'] ) }}" alt=""></a></div>
             </div>
             <div class="col-9">
-                <a href="#" class="item_remove remove-from-cart" data-id="{{ $id }}">x</a>
+                <a href="#" class="item_remove remove-from-cart" data-id="{{ $details['id'] }}">x</a>
                 <div class="row">
-                    <div class="col-12"><a href="product/{{$id}}"><h3>{{$details['title']}}</h3></a></div>
+                    <div class="col-12"><a href="/product/{{$details['id']}}"><h3>{{$details['title']}}</h3>
+                        </a>
+                    </div>
                     <div class="col-5">
                         <div class="box__quality">
                             <div class="box__quality-value"><input type="number" data-number="0"
-                                                                   step="{{ $product->multiplicity }}"
-                                                                   max="{{ $details['total'] }}"
+                                                                   step="{{ $details['multiplicity'] }}"
                                                                    min="1"
+                                                                   max="{{ $details['total'] }}"
                                                                    name="quantity[]"
-                                                                   class="quantityUpdate{{ $id }}"
-                                                                   data-id="{{ $id }}"
-                                                                   value="{{ $details['quantity'] }}">
+                                                                   class="quantityUpdate{{ $details['id'] }}"
+                                                                   value="{{$details['quantity']}}">
                             </div>
-{{--                            @if ($product->multiplicity <= $product->total)--}}
+                            @if ($details['multiplicity'] <= $details['total_all'])
                                 <span class="btn__quality-nav">
-                                                <span class="btn__quality-minus update-cart" data-id="{{ $id }}"
-                                                      data-prev-quality>-</span>
-                                                <span class="btn__quality-plus update-cart" data-id="{{ $id }}"
-                                                      data-next-quality>+</span>
-                                            </span>
-{{--                            @endif--}}
+                                        <span class="btn__quality-minus update-cart" data-id="{{ $details['id'] }}"
+                                              data-prev-quality>-</span>
+                                        <span class="btn__quality-plus update-cart" data-id="{{ $details['id'] }}"
+                                              data-next-quality>+</span>
+                                    </span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-7">
-                        <div class="box__price"> {{ $details['price'] * $details['quantity'] }} <span>₽</span></div>
+                        <div
+                            class="box__price"> {{ $details['price'] * $details['quantity'] }}
+                            <span>₽</span></div>
                     </div>
                 </div>
             </div>

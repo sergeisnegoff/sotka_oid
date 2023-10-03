@@ -47,12 +47,12 @@
                     <div class="panel-body">
                         <div id="categoryTree">
                             <ul>
-                                @foreach (categoryTreeSort(\App\Category::all()) as $key => $value)
+                                @foreach (categoryTreeSort() as $key => $value)
                                     <li>{{ $value['title'] }}
                                         @if (!empty($value['children']))
                                             <ul>
                                                 @foreach ($value['children'] as $child)
-                                                    <li><a class="{{ isset($_GET['s']) && $_GET['s'] == $child['id'] ? 'jstree-clicked' : '' }}" href="?key=category_id&s={{ $child['title'] }}&filter=equals">{{ $child['title'] }}</a></li>
+                                                    <li><a class="{{ isset($_GET['s']) && $_GET['s'] == $child['id'] ? 'jstree-clicked' : '' }}" href="?key=category_id&s={{ $child['id'] }}&filter=equals">{{ $child['title'] }}</a></li>
                                                 @endforeach
                                             </ul>
                                         @endif

@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\StatusCron::class,
     ];
 
     /**
@@ -35,12 +35,26 @@ class Kernel extends ConsoleKernel
             '--daemon',
             '--tries' => 3,
             '--stop-when-empty',
+            '--max-jobs=100',
         ])
-            ->everyFifteenMinutes()
+            ->everyMinute()
             ->runInBackground()
             ->description('queue_import');
 
+        $schedule->command('status:cron')
+            ->everyMinute();
+
+        $schedule->command('export:orders 8')
+            ->dailyAt(setting('admin.FIRST_EXPORT'));
+
+        $schedule->command('export:orders 12')
+            ->dailyAt(setting('admin.SECOND_EXPORT'));
+
+        $schedule->command('export:orders 16')
+            ->dailyAt(setting('admin.THIRD_EXPORT'));
+
         $schedule->command('queue:restart')->daily()->runInBackground();
+
 //        $crons = cronSettings::all();
 //        if (!empty($crons))
 //            foreach ($crons as $cron) {

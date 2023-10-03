@@ -1085,7 +1085,7 @@
                                                             style="vertical-align: top;color: #333333;border-bottom: 1px solid #dee0e1;text-align: left;padding-top: 16px;padding-bottom: 16px;padding-left: 16px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
                                                             <h5 class="mb_xs"
                                                                 style="color: inherit;font-family: Arial, Helvetica, sans-serif;margin-top: 0px;margin-bottom: 8px;word-break: break-word;font-size: 16px;line-height: 21px;font-weight: bold;">
-                                                                {{ $item->info->title }} x {{ $item->qty }} шт.</h5>
+                                                                {{ $item->info->title ?? "Неизвестное название" }} x {{ $item->qty }} шт.</h5>
                                                         </td>
                                                         <td width="72"
                                                             class="column_cell pr py bb_light text_dark text_right"

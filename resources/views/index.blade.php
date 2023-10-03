@@ -25,7 +25,7 @@
                         <div class="box__catalog-checkproduction">
                             <div class="box__checkbox">
                                 <div class="wrapper-checkbox">
-                                    @foreach (App\subFilter::all() as $subFilter)
+                                    @foreach (\App\Models\subFilter::all() as $subFilter)
                                         @if($subFilter->title == 'Золотая сотка алтая')
                                     <label>
                                         <input class="filterShow filterChecked" value="{{$subFilter->title}}" type="checkbox">
@@ -108,7 +108,7 @@
                <div id="productFind">
                 <div id="productData">
                     @if(\Request::is('products'))
-                    @foreach(App\Category::all() as $cat)
+                    @foreach(\App\Models\Category::all() as $cat)
                         @if( count($cat->product) > 0 && (\Request::is('products'))  )
                             <div class="row">
                                 <div class="col-12">

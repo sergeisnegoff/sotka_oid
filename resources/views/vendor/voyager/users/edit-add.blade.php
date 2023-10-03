@@ -176,7 +176,7 @@
 
         @if(isset($dataTypeContent->id))
             @php
-                $categories = categoryTreeSort(\App\Category::all());
+                $categories = categoryTreeSort();
                 $priceRange = [5000, 10000, 20000, 30000, 40000, 50000, 75000, 100000];
 
                 $values = [];

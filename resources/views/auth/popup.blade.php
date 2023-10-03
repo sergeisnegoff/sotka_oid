@@ -144,7 +144,7 @@
                     </div>
                 </div>
                 <div class="box__form">
-                    <form method="post" action="{{ route('reset-password') }}">
+                    <form method="post" id="reset-password-form" action="{{ route('reset-password') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -157,9 +157,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12"><div class="btn"><button>Восстановить</button></div></div>
+                            <div class="col-12"><div class="btn"><button type="submit">Восстановить</button></div></div>
                         </div>
                     </form>
+                    <div id="success-message" class="alert alert-success" style="display:none;"></div>
                 </div>
             </div>
         </div>
@@ -184,6 +185,23 @@
         @endforeach
     </script>
 @endif
+
+<script>
+    $(function() {
+        $('#reset-password-form').submit(function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#success-message').text(response.success).show();
+                }
+            });
+        });
+    });
+</script>
 
 <script>
     function checkAgree() {

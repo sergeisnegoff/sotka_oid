@@ -12,7 +12,7 @@
         </div>
         <div class="box__form">
             <div class="wrapper-popupfilter-center">
-                @foreach(App\Filter::all() as $filter)
+                @foreach(\App\Models\Filter::all() as $filter)
                     <div class="warpper__filter-item active">
                         <div class="wrapper__filter-title">
                             <div class="row">
@@ -21,7 +21,7 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach (App\Subfilter::all() as $subFilter)
+                        @foreach (\App\Models\Subfilter::all() as $subFilter)
                             @if ($subFilter->filter_id == $filter->id)
                                 <div class="wrapper__filter-content">
                                     <div class="row">

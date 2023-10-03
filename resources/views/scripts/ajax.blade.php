@@ -135,11 +135,15 @@
                 data: {_token: '{{ csrf_token() }}', id: ele.attr("data-id")},
                 success: function (response) {
                     $.get('', function (result) {
-                        $('.box__popup-basket .wrapper-popup').replaceWith($(result).filter('.box__popup-basket').html());
 
-                        if ($('.box__basket-item').length === 0)
+                        $('.box__popup-basket .wrapper-popup-center').html($(result).find('.wrapper-popup-center').html());
+                        $('.box__popup-basket .wrapper-popup-bottom').html($(result).find('.wrapper-popup-bottom').html());
+
+                        $('.box__basketpage .box__bascket-total').replaceWith($(result).find('.box__bascket-total'));
+
+                        if ($('.box__basket-item').length === 0) {
                             location.reload();
-
+                        }
                         ele.closest('.wrapper__baskets-item').remove();
                     }, 'html');
                 }
@@ -168,7 +172,7 @@
                     $('#productData > .row').append($(data).find('#productData > .row').html());
 
                     loaded = 0;
-
+                    console.log('success')
                 }).fail(function (jqXHR, ajaxOptions, thrownError) {
                     // console.log('No response from server');
                 });
