@@ -63,7 +63,7 @@
                         <button data-btn-popup="navigation"><span></span><span></span>Меню</button>
                     </div>
                 </div>
-                <div class="order-4 order-md-3 col-12 d-none d-xl-block col-xl-5">
+                <div class="order-4 order-md-3 col-12 d-none d-xl-block col-xl-3">
                     <div class="box__search">
                         <div class="box__form">
                             <form action="{{ route('searchProducts') }}" method="GET" role="search">
@@ -76,12 +76,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="order-5 order-md-4 col-12 d-none d-xl-block col-xl-4">
+                <div class="order-5 order-md-4 col-12 d-none d-xl-block col-xl-5">
                     <div class="box__nav-sub">
                         {{ menu('header', 'layouts.headerMenu') }}
                     </div>
                 </div>
-                <div class="order-3 order-md-5 col-7 col-md-6 col-lg-6 col-xl-4">
+                <div class="order-3 order-md-5 col-7 col-md-6 col-lg-6 col-xl-3">
                     <div class="wrapper__header-right" style="flex-wrap: wrap">
                         @guest
                             @if (Route::has('login'))
@@ -109,7 +109,7 @@
                         @endguest
                         @if (\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->active != "off")
                             <div
-                                class="box__card {{ !is_null(session('cart')) && count(session('cart')) ? '' : 'd-none' }}">
+                                class="box__card {{ count(session('cart', [])) || count(\App\Services\Preorder\PreorderService::getCart())  ? '' : 'd-none' }}">
                                 <button class="d-flex" style="align-items:center;" data-btn-popup="basket">
                                     <span class="d-block" style="margin-right: 20px;" id="total-price">
                                            {{ number_format(collect(session('cart', []))->sum(function ($item) {
@@ -120,7 +120,7 @@
                                     </span>
                                     <span class="head-icon">
                                         <span
-                                            class="box__card-quality">{{  count(session('cart', [])) || count(\App\Services\Preorder\PreorderService::getCart()) }}</span>
+                                            class="box__card-quality">{{ count(session('cart', [])) || count(\App\Services\Preorder\PreorderService::getCart()) }}</span>
                                     </span>
                                 </button>
                             </div>

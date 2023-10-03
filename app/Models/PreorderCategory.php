@@ -11,7 +11,7 @@ class PreorderCategory extends Model
 {
     protected $fillable = [
         'title',
-        'parent_id',
+        'preorder_category_id',
         'preorder_id',
         'preorder_table_sheet_id',
     ];
@@ -23,7 +23,7 @@ class PreorderCategory extends Model
 
     public function subcategories(): HasMany
     {
-        return $this->hasMany(PreorderCategory::class, 'parent_id', 'id');
+        return $this->hasMany(PreorderCategory::class, 'preorder_category_id', 'id');
     }
 
     public function preorder(): BelongsTo
@@ -33,18 +33,18 @@ class PreorderCategory extends Model
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(PreorderCategory::class, 'parent_id', 'id');
+        return $this->belongsTo(PreorderCategory::class, 'preorder_category_id', 'id');
     }
 
     public function scopeRoot($query): void {
-        $query->whereNull('parent_id');
+        $query->whereNull('preorder_category_id');
     }
 
     public function isRoot(): bool {
-        return !$this->parent_id;
+        return !$this->preorder_category_id;
     }
 
     public function childs(): HasMany {
-        return $this->hasMany(self::class, 'parent_id',  'id');
+        return $this->hasMany(self::class, 'preorder_category_id',  'id');
     }
 }

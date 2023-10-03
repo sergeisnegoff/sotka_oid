@@ -15,7 +15,7 @@ class CreatePreorderSheetMarkupsTable extends Migration
     {
         Schema::create('preorder_sheet_markups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('preorder_sheet_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('preorder_table_sheet_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('title')->nullable();
             $table->string('barcode')->nullable();
             $table->string('price')->nullable();

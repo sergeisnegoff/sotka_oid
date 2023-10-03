@@ -37,10 +37,10 @@ class CreatePreorderProductsTable extends Migration
             $table->string('package_amount')->nullable();
             $table->string('culture_type')->nullable();
             $table->string('frost_resistance')->nullable();
-            $table->string('additional_1')->nullable();
-            $table->string('additional_2')->nullable();
-            $table->string('additional_3')->nullable();
-            $table->string('additional_4')->nullable();
+            $table->text('additional_1')->nullable();
+            $table->text('additional_2')->nullable();
+            $table->text('additional_3')->nullable();
+            $table->text('additional_4')->nullable();
             $table->string('sku', 500)->nullable();
             $table->integer('cell_number')->nullable();
             $table->unsignedInteger('soft_limit')->nullable();

@@ -127,7 +127,7 @@
                                         $product['multiplicity'] = $productInfo[$id]->multiplicity;
                                         $percent = $productInfo[$id]->sale;
                                     @endphp
-                                    <div class="wrapper__baskets-item">
+                                    <div class="wrapper__baskets-item" id="order-cart-item{{$id}}">
                                         <div class="row">
                                             <div class="col-12 col-xl-3">
                                                 <div class="wrapper__baskets-info">
@@ -182,7 +182,10 @@
                                             </div>
                                             <div class="col-12 col-xl-2">
                                                 <div class="wrapper__baskets-cost">
-                                                    <span>Стоимость:</span>{{ ($productInfo[$id]->price - ($percent ? (($productInfo[$id]->price * $percent) / 100) : 0)) * $product['quantity'] }}
+                                                    <span>Стоимость:</span>
+                                                    <div class="item-amount{{$product['id']}} item-amounts" style="display: inline">
+                                                    {{ ($productInfo[$id]->price - ($percent ? (($productInfo[$id]->price * $percent) / 100) : 0)) * $product['quantity'] }}
+                                                    </div>
                                                     ₽
                                                 </div>
                                             </div>
@@ -190,15 +193,15 @@
                                         <div class="btn btn-delete remove-from-cart" data-id="{{ $id }}"><a
                                                 href="javascript:;"></a></div>
                                     </div>
-                                        <script>
-                                            $("body").on('click', ".remove-from-cart", function () {
-                                                setTimeout(()=> {
-                                                    if ($('.wrapper__baskets-item').length === 0) {
-                                                        location.reload()
-                                                    }
-                                                }, 700)
-                                            })
-                                        </script>
+                                    <script>
+                                        $("body").on('click', ".remove-from-cart", function () {
+                                            setTimeout(()=> {
+                                                if ($('.wrapper__baskets-item').length === 0) {
+                                                    location.reload()
+                                                }
+                                            }, 700)
+                                        })
+                                    </script>
                                     @php($totalAmount += ($productInfo[$id]->price - ($percent ? (($productInfo[$id]->price * $percent) / 100) : 0)) * $product['quantity'])
                                 @endforeach
                             </div>
@@ -210,7 +213,10 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="box__bascket-total">
-                                            <h4><span>Итого: </span><b>{{ number_format($totalAmount, 0, '.', '') }}
+                                            <h4><span>Итого: </span><b>
+                                                    <div id="total-amount" style="display: inline">
+                                                    {{ number_format($totalAmount, 0, '.', '') }}
+                                                    </div>
                                                     ₽</b></h4>
                                         </div>
                                     </div>

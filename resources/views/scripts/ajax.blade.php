@@ -88,11 +88,11 @@
                     _self.show().parent().find('.loading').remove();
                     $('.box__card').removeClass('d-none').addClass('d-block')
                     $.get('/basket/load', function (html) {
-                        $('body').find('.box__popup-basket .wrapper-popup-center').html(html);
+                        $('body').find('.box__popup-basket .wrapper-popup-center #orders-tab').html(html);
 
-                        $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
+                        $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center #orders-tab').find('.box__basket-item').length);
                         let total = 0;
-                        $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
+                        $('.box__popup-basket').find('.wrapper-popup-center #orders-tab').find('.box__basket-item').each(function () {
                             let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
                             // console.log(num);
                             total += num;
@@ -101,7 +101,7 @@
                             Number(total).toFixed(0) + ' ₽')
 
                         let totalPrice = parseFloat(total) +
-                            parseFloat($('#preorders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
+                           parseFloat($('#preorders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
 
                         $('#total-price').text(Number(totalPrice).toFixed(0) + ' ₽')
                     });
@@ -204,6 +204,7 @@
             $('.showMore').trigger('click');
         }
     })
+
     $('body').on('click', '.add-to-cart-preorder', function () {
         let but = $(this).attr('value'),
             _self = $(this);

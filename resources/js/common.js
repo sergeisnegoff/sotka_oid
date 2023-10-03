@@ -51,22 +51,25 @@ function updateQty(input_element) {
         })
     }
 }
+
 function recalcTotal() {
     let total = 0
-    $(`.item-amounts`).each(function() {
+    $(`.item-amounts`).each(function () {
         total += Number($(this).text())
     })
-    $('.total-amount').each(function() {
+    $('.total-amount').each(function () {
         $(this).text(Math.round(total))
     })
 }
+
 function getTotal() {
     let total = 0
-    $(`.item-amounts`).each(function() {
+    $(`.item-amounts`).each(function () {
         total += Number($(this).text())
     })
     return Number(total)
 }
+
 window.recalcTotal = recalcTotal
 window.getTotal = getTotal
 global.seed = {
@@ -252,12 +255,12 @@ global.seed = {
                 },
             });
 
-            galleryMain.on('slideChangeTransitionStart', function() {
+            galleryMain.on('slideChangeTransitionStart', function () {
                 galleryThumbs.slideTo(galleryMain.activeIndex);
             });
 
 
-            galleryThumbs.on('transitionStart', function(){
+            galleryThumbs.on('transitionStart', function () {
                 galleryMain.slideTo(galleryThumbs.activeIndex);
             });
         }
@@ -269,15 +272,15 @@ global.seed = {
         if ($('.gallery-product-card').length > 0) {
             var galleryTop = new Swiper('.gallery-product-card', {
                 watchOverflow: true,
-                simulateTouch:false,
+                simulateTouch: false,
                 pagination: {
                     el: '.swiper-pagination',
                     type: 'bullets',
                     clickable: true,
                 },
             });
-            setTimeout(function(){
-                $('.gallery-product-card').each(function (){
+            setTimeout(function () {
+                $('.gallery-product-card').each(function () {
                     this.swiper.update();
                 });
             }, 2000);
@@ -597,7 +600,7 @@ $(document).ready(function () {
     global.seed.init();
 });
 
-$(document).on('submit', '#order-form', function() {
+$(document).on('submit', '#order-form', function () {
     let container = $('<span>', {class: 'loading formbtn'});
     for (let i = 0; i < 5; i++)
         container.append($('<span>', {
@@ -637,7 +640,7 @@ $(function () {
             data: fd,
             success: (result) => {
             },
-            beforeSend : function (){
+            beforeSend: function () {
                 form.find('.invalid-message').remove()
             },
             statusCode: {
@@ -677,7 +680,7 @@ $(function () {
             data: fd,
             success: (result) => {
             },
-            beforeSend : function (){
+            beforeSend: function () {
                 form.find('.invalid-message').remove()
             },
             statusCode: {

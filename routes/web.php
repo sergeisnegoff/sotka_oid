@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Preorder\PreorderCartController;
+use App\Http\Controllers\Preorder\PreorderController;
 use App\Http\Controllers\Preorder\PreorderReportsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -12,7 +15,7 @@ Route::get('/', ['as' => 'jquery.load_more', HomeController::class, 'index'])->n
 
 Route::post('/reset-password', [\App\Http\Controllers\Controller::class, 'resetPassword'])->name('reset-password');
 
-Route::get('/img/{path}/{img}', [\App\Http\Controllers\ImageController::class, 'show'])->where('path', '.*');
+Route::get('/img/{path}/{img}', [ImageController::class, 'show'])->where('path', '.*');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();

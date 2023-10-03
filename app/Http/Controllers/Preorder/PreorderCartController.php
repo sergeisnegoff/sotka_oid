@@ -106,6 +106,8 @@ class PreorderCartController extends Controller
         if (!$user) $user = auth()->user();
         $history = cache()->get('preorder_history_' . $user->id) ?? [];
         $cart = $this->cart()['cart'];
+        if (!isset($cart[$request->get('preorder_id')]))
+            return redirect()->back();
         $order = $cart[$request->get('preorder_id')];
 
         //$history[] = $order;

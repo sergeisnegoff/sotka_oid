@@ -23,7 +23,8 @@
         "shuchkin/simplexls": "^0.9.6",
         "spatie/array-to-xml": "^2.16",
         "symfony/dom-crawler": "*",
-        "tcg/voyager": "^1.4"
+        "tcg/voyager": "^1.4",
+        "tecnickcom/tcpdf": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

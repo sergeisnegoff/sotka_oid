@@ -181,7 +181,7 @@ class PreorderController extends Controller
         $out = [];
         foreach ($sheets as $sheet) {
             $clientSheet = $spreadsheet->getSheetByName($sheet->title);
-            $markup = PreorderSheetMarkup::where('preorder_sheet_id', $sheet->id)->first();
+            $markup = PreorderSheetMarkup::where('preorder_table_sheet_id', $sheet->id)->first();
             $row = 0;
             while ($row < $clientSheet->getHighestRow()) {
                 $barcode = $clientSheet->getCell($markup->barcode . $row)->getValue();

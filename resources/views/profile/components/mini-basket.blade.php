@@ -53,7 +53,7 @@
     <div class="row">
         <div class="col-12">
             @if ($miniCartTotal > 0)
-                <div class="btn"><a href="{{route('profile.orders.cart')}}">В корзину</a></div>
+            <div class="btn"><a href="{{route('profile.orders.cart')}}">В корзину</a></div>
             @endif
         </div>
     </div>

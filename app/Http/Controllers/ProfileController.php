@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportPreorderXlsx;
 use App\Exports\ExportXls;
 use App\Exports\TcpdfOrder;
+use App\Exports\TcpdfPreorder;
 use App\Mail\AccountAcepted;
 use App\Models\Order;
+use App\Models\PreorderCheckout;
 use App\Models\ProfileAddress;
 use App\Models\User;
 use App\Models\UserBrandSaleSystem;
@@ -453,20 +456,27 @@ class ProfileController extends Controller
 
     public function exportPdf(Order $order)
     {
-        if ($order->user_id !== Auth::id()  && auth()->user()->role_id != 1) {
+        if ($order->user_id !== Auth::id() && auth()->user()->role_id != 1) {
             abort(404);
         }
         $order->load(['products']);
         if ($order instanceof \App\Models\Order) {
-            ob_end_clean();
+            if (ob_get_contents()) ob_end_clean();
             return new TcpdfOrder($order, TcpdfOrder::TYPE_PRINT);
         }
         return $order;
     }
+    public function exportPreorderPdf(PreorderCheckout $preorder)
+    {
+        if (auth()->id() !== $preorder->user_id && auth()->user()->role_id != 1) abort(404);
+        if (ob_get_contents()) ob_end_clean();
+        return new TcpdfPreorder($preorder, TcpdfPreorder::TYPE_PRINT);
+        return $pre;
+    }
 
     public function exportXls(Order $order)
     {
-        if ($order->user_id !== Auth::id()) {
+        if ($order->user_id !== Auth::id() && auth()->user()->role->id != 1) {
             abort(404);
         }
 
@@ -475,5 +485,10 @@ class ProfileController extends Controller
             return Excel::download(new ExportXls($order), 'order.xlsx');
         }
         return $order;
+    }
+
+    public function exportPreorderXls(PreorderCheckout $preorder) {
+        if (auth()->id() !== $preorder->user_id && auth()->user()->role_id != 1) abort(404);
+        return Excel::download(new ExportPreorderXlsx($preorder), 'preorder.xlsx');
     }
 }

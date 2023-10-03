@@ -10303,6 +10303,48 @@ section.box__personalarea .box__pagination {
   height: 2px;
   background-color: #fff;
 }
+.box__ptofile-currentorder .box__item .btn__currentorder-export {
+  position: relative;
+  display: block;
+  margin: 5px 0 0;
+}
+.box__ptofile-currentorder .box__item .btn__currentorder-export a {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 24px;
+  color: var(--color-4);
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  line-height: 1;
+  border-radius: 0;
+  border-bottom: 1px dashed var(--color-4);
+  overflow: inherit;
+}
+.box__ptofile-currentorder .box__item .btn__currentorder-export a:before {
+  position: relative;
+  display: inline-block;
+  content: "";
+  width: 13px;
+  height: 13px;
+  margin: 0 5px 0 0;
+  background-image: url(/img/icon/order-export.svg);
+  vertical-align: middle;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+.box__ptofile-currentorder .box__item .btn__currentorder-export a:after {
+  position: absolute;
+  display: inline-block;
+  content: "";
+  bottom: -1px;
+  left: 0;
+  width: 17px;
+  height: 2px;
+  background-color: #fff;
+}
 .box__ptofile-currentorder .box__item .box__currentorder-ordernumber {
   font-size: 16px;
   font-weight: 600;
@@ -10518,6 +10560,12 @@ section.box__profilebasketpage {
   position: relative;
   display: block;
   padding: 60px 0;
+}
+.removed-products {
+  margin-top: 20px;
+}
+.removed-products ol {
+  margin-top: 20px;
 }
 .box__basketpage {
   position: relative;
@@ -10757,6 +10805,38 @@ section.box__profilebasketpage {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 15px 30px rgba(8, 50, 51, 0.1);
   border-radius: 0 0 6px 6px;
 }
+.wrapper__baskets.active-warning .wrapper__baskets-item.changes-product {
+  display: block;
+}
+.wrapper__baskets.active-warning .wrapper__baskets-warning:after {
+  transform: rotate(0);
+}
+.wrapper__baskets .wrapper__baskets-warning {
+  position: relative;
+  display: block;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ee4848;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  padding: 10px 20px;
+}
+.wrapper__baskets .wrapper__baskets-warning:after {
+  position: relative;
+  display: inline-block;
+  content: "";
+  top: -1px;
+  width: 10px;
+  height: 10px;
+  margin: 0 0 0 5px;
+  vertical-align: middle;
+  background-image: url(/img/icon/arrow-red.svg);
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  transform: rotate(180deg);
+}
 .wrapper__baskets .wrapper__baskets-item {
   position: relative;
   display: block;
@@ -10905,6 +10985,15 @@ section.box__profilebasketpage {
   color: #000;
   padding: 0 15px 0 20px;
   vertical-align: middle;
+}
+.wrapper__baskets .wrapper__baskets-item.changes-product {
+  display: none;
+}
+.wrapper__baskets .wrapper__baskets-item.deleted-product {
+  background-color: #ffdcdc;
+}
+.wrapper__baskets .wrapper__baskets-item.deleted-product h3 {
+  text-decoration: line-through;
 }
 .wrapper__baskets .wrapper__baskets-title {
   position: relative;
@@ -11626,6 +11715,7 @@ section.box__page-contact .box__contact-map .box__map {
 }
 .box__popup-basket {
   right: 0 !important;
+    width: 100% !important;
   left: auto !important;
 }
 .box__catalog-limit label.active {
@@ -13125,7 +13215,6 @@ form .invalid-message {
   header .box__header-center nav ul li {
     padding: 10px 0;
     margin: 0 15px;
-    white-space: nowrap;
   }
   header .box__header-center nav ul li a {
     font-size: 14px;
@@ -14848,5 +14937,40 @@ form .invalid-message {
     position: relative;
     margin: 0;
   }
+}
+.lazy > .swiper-lazy-preloader {
+  transition: 0.2s;
+}
+.lazy.loaded > .swiper-lazy-preloader,
+.lazy[data-bg=""] > .swiper-lazy-preloader {
+  opacity: 0;
+  visibility: hidden;
+}
+/*# sourceMappingURL=app.css.map */
+
+.tabs__content-item div {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.tabs__content-item div > div {
+    border-bottom: 2px solid silver;
+    color: silver;
+}
+
+.tabs__content-item div.active {
+    color: #6dac52;
+    border-bottom: 2px solid #6dac52;
+}
+.btn .add-to-cart-preorder.ifcart {
+    background: #A16C21!important;
+    color: #fff !important;
+}
+.wrapper-popup-center {
+    margin-top:45px;
 }
 /*# sourceMappingURL=app.css.map */

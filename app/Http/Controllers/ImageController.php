@@ -25,7 +25,7 @@
             $img = explode('?', $img)[0];
 
             try {
-				if (empty($img) || !file_exists($_SERVER['DOCUMENT_ROOT'].'/storage/'.str_replace('.', '/', $path).'/'.$img)) {
+                if (empty($img) || !file_exists(storage_path().'/app/public/'.str_replace('.', '/', $path).'/'.$img)) {
 					return $server->getImageResponse('public/logo.png', array_merge(request()->all(), ['bg' => 'white', 'fit' => 'fit']));
 				} else
 					return $server->getImageResponse('public/'.str_replace('.', '/', $path).'/'.$img, request()->all());

@@ -15,6 +15,7 @@ class CreatePreorderSheetsTable extends Migration
     {
         Schema::create('preorder_sheets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('preorder_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('sheet_title');
             $table->string('title');
             $table->unsignedInteger('start_at_row');

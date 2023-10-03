@@ -93,14 +93,14 @@ class GetDataFromExcelJob implements ShouldQueue
                     'preorder_table_sheet_id' => $this->preorderTableSheet->id
                 ]);
             }
-            $currentsubCategory = PreorderCategory::where('parent_id', $currentCategory->id)
+            $currentsubCategory = PreorderCategory::where('preorder_category_id', $currentCategory->id)
                 ->where('title', $sheet->getCell($markup->subcategory . $row)->getValue())
                 ->first();
             if (!$currentsubCategory) {
                 $currentsubCategory = PreorderCategory::create([
                     'title' => $sheet->getCell($markup->subcategory . $row)->getValue(),
                     'preorder_id' => $preorder->id,
-                     'parent_id' => $currentCategory->id,
+                     'preorder_category_id' => $currentCategory->id,
                     'preorder_table_sheet_id' => $this->preorderTableSheet->id
                 ]);
             }

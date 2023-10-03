@@ -22,7 +22,7 @@ class Preorder extends Model
 
     public function sheets(): HasMany
     {
-        return $this->hasMany(PreorderSheet::class, 'preorder_id', 'id');
+        return $this->hasMany(PreorderTableSheet::class, 'preorder_id', 'id');
     }
 
     public function categories(): HasMany

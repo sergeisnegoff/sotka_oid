@@ -19,7 +19,7 @@ class PreorderTableSheet extends Model
 
     public function markup(): HasOne
     {
-        return $this->hasOne(PreorderSheetMarkup::class, 'preorder_sheet_id', 'id');
+        return $this->hasOne(PreorderSheetMarkup::class, 'preorder_table_sheet_id', 'id');
     }
 
     public function preorder(): BelongsTo

@@ -208,11 +208,11 @@ class PreordersController extends VoyagerBaseController
             $preorderSheet->save();
 
             PreorderSheetMarkup::query()
-                ->where('preorder_sheet_id', $sheetId)
+                ->where('preorder_table_sheet_id', $sheetId)
                 ->delete();
 
             $preorderSheetMarkup = new PreorderSheetMarkup();
-            $preorderSheetMarkup->fill(array_merge($sheet, ['preorder_sheet_id' => $sheetId]));
+            $preorderSheetMarkup->fill(array_merge($sheet, ['preorder_table_sheet_id' => $sheetId]));
 
             $preorderSheetMarkup->save();
 
@@ -221,10 +221,10 @@ class PreordersController extends VoyagerBaseController
             ]);
             $preorder = Preorder::find($id);
             if (!$preorder->file_processed) {
-                $preorder->update(['file_processed' => true]);
                 Artisan::call('test:getdata ' . $preorderSheet->id);
             }
         }
+        $preorder->update(['file_processed' => true]);
 
         // Delete Images
         $this->deleteBreadImages($original_data, $to_remove);

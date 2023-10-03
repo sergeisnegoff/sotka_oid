@@ -9,7 +9,7 @@ class PreorderSheetMarkup extends Model
 {
 
     protected $fillable = [
-        'preorder_sheet_id',
+        'preorder_table_sheet_id',
         'title',
         'barcode',
         'price',
