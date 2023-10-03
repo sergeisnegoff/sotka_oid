@@ -149,6 +149,8 @@
                                                                    max="{{ $product['total'] }}"
                                                                    name="quantity[]" class="quantityUpdate{{$id}}"
                                                                    value="{{ $product['quantity'] }}"
+                                                                   data-type="order"
+                                                                   data-mode="cart"
                                                                    data-id="{{ $id }}">
                                                         </div>
                                                         @if ($productInfo[$id]->multiplicity <= $productInfo[$id]->total)
@@ -188,6 +190,15 @@
                                         <div class="btn btn-delete remove-from-cart" data-id="{{ $id }}"><a
                                                 href="javascript:;"></a></div>
                                     </div>
+                                        <script>
+                                            $("body").on('click', ".remove-from-cart", function () {
+                                                setTimeout(()=> {
+                                                    if ($('.wrapper__baskets-item').length === 0) {
+                                                        location.reload()
+                                                    }
+                                                }, 700)
+                                            })
+                                        </script>
                                     @php($totalAmount += ($productInfo[$id]->price - ($percent ? (($productInfo[$id]->price * $percent) / 100) : 0)) * $product['quantity'])
                                 @endforeach
                             </div>

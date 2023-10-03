@@ -32,6 +32,43 @@ import "../libs/swiper/swiper.css";
 
 import Swiper from 'swiper/dist/js/swiper.js';
 
+function updateQty(input_element) {
+    if (input_element.data('mode') === 'cart') {
+        let id = input_element.data('id')
+        let type = input_element.data('type')
+
+        let url = type === 'preorder' ? "/cart/preorder/update-count" : "/cart/update-count"
+        $.post(url, {
+            id: id,
+            qty: input_element.val()
+        }, function (result) {
+            console.log(result)
+            //input_element.val(result.totalAmount)
+            $(`.item-amount${id}`).each(function () {
+                $(this).html(result.totalAmount)
+            })
+            recalcTotal()
+        })
+    }
+}
+function recalcTotal() {
+    let total = 0
+    $(`.item-amounts`).each(function() {
+        total += Number($(this).text())
+    })
+    $('.total-amount').each(function() {
+        $(this).text(Math.round(total))
+    })
+}
+function getTotal() {
+    let total = 0
+    $(`.item-amounts`).each(function() {
+        total += Number($(this).text())
+    })
+    return Number(total)
+}
+window.recalcTotal = recalcTotal
+window.getTotal = getTotal
 global.seed = {
     /* init script */
     init: function init() {
@@ -388,18 +425,23 @@ global.seed = {
             let amount = (parseInt(el.val()) - parseInt(el.attr('step'))),
                 calc = amount - (amount % parseInt(el.attr('step')));
 
-            if (calc >= el.attr('min'))
-                el.val(calc);
+            if (calc >= el.attr('min')) {
+                el.val(calc).trigger('change');
+                updateQty(el)
+            }
         }).on('click', '.box__quality [data-next-quality]', function () {
             console.log('update +');
             var el = $(this).parents('.box__quality').find('input');
             let amount = (parseInt(el.val()) + parseInt(el.attr('step'))),
                 calc = amount - (amount % parseInt(el.attr('step')));
-            if (calc <= el.attr('max') || el.parents('.wrapper__baskets-quality').length === 0)
-                el.val(calc);
+            if (calc <= el.attr('max') || el.parents('.wrapper__baskets-quality').length === 0 || el.data('type') === 'preorder') {
+                el.val(calc).trigger('change');
+                updateQty(el)
+            }
         }).on('change', '.box__quality input', function () {
             let amount = ($(this).val());
-            $(this).val(Math.ceil(amount/parseInt($(this).attr('step')))*parseInt($(this).attr('step')));
+            $(this).val(Math.ceil(amount / parseInt($(this).attr('step'))) * parseInt($(this).attr('step')));
+            updateQty($(this))
         });
     },
     /* init function by button active/deactive password input[type="password"]  */

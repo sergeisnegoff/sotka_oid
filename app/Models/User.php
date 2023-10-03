@@ -73,4 +73,45 @@ class User extends \TCG\Voyager\Models\User {
     public function address() {
         return $this->hasMany(UserAddress::class);
     }
+
+    public function managerContact() {
+        return $this->hasOne(ContactsManagersModel::class);
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
+    }
+
+    //переписать
+    public function ordersTotal() {
+        $sum = 0;
+        foreach ($this->orders as $order) {
+            $sum += $order->total();
+        }
+        return $sum;
+    }
+
+    public function preordersTotal(?Preorder $preorder = null) {
+        $preorders = $this->preorderCheckouts;
+        if ($preorder) {
+            $preorders = $preorders->where('preorder_id', $preorder->id);
+        }
+        $total = 0;
+        foreach ($preorders as $preorder) {
+            $total += $preorder->total();
+        }
+        return $total;
+    }
+
+
+    public function preorderCheckouts() {
+        return $this->hasMany(PreorderCheckout::class);
+    }
+
+    public function preorderCheckoutsForCurrentManager() {
+        return PreorderCheckout::whereHas('user', function ($query) {
+            $query->where('manager_id', auth()->user()->managerContact->id);
+        });
+    }
+
 }

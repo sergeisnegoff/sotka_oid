@@ -453,7 +453,7 @@ class ProfileController extends Controller
 
     public function exportPdf(Order $order)
     {
-        if ($order->user_id !== Auth::id()) {
+        if ($order->user_id !== Auth::id()  && auth()->user()->role_id != 1) {
             abort(404);
         }
         $order->load(['products']);

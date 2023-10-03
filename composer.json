@@ -11,6 +11,7 @@
         "php": "^7.3|^8.0",
         "ext-dom": "*",
         "ext-json": "*",
+        "ext-xlswriter": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -21,6 +22,7 @@
         "phpoffice/phpspreadsheet": "^1.16",
         "shuchkin/simplexls": "^0.9.6",
         "spatie/array-to-xml": "^2.16",
+        "symfony/dom-crawler": "*",
         "tcg/voyager": "^1.4"
     },
     "require-dev": {

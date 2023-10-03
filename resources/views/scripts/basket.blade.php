@@ -1,101 +1,112 @@
 <script>
     $(function () {
-        $('body').on('change', 'input[name*=quantity]', function () {
+        //orders-tab
+        $('body').on('change', '#orders-tab input[name*=quantity]', function () {
             let _self = $(this);
             let id = $(this).data('id');
 
             $.post("{{ route('cart.updateQty') }}", {id: id, qty: $(this).val()}, function (result) {
-                _self.closest('.col-9').find('.box__price').text(result.itemAmount + ' ₽');
-
-                $('.box__popup-basket').find('.box__price').text(result.totalAmount + ' ₽')
 
                 $.get('/basket/load', function (html) {
-                    $('body').find('.box__popup-basket .wrapper-popup-center').html(html);
-
-                    $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
-                    let total = 0;
-                    $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
-                        let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
-                        //console.log(num);
-                        total += num;
-                    })
-                    //console.log(`total: ${total}`);
-
-                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
-                    _self.closest('.wrapper__baskets-item').find('.wrapper__baskets-cost').text(result.itemAmount + ' ₽');
-                    $('.wrapper__bascket-bottom .box__bascket-total').find('h4').find('b').text(result.totalAmount + ' ₽')
+                    $('body').find('#orders-tab').html(html);
+                    updateTotalPriceInHead();
                 });
             }, 'json')
 
-        }).on('click', '.box__basket-item .btn__quality-minus, .wrapper__baskets-item .btn__quality-minus', function () {
+        }).on('click', '#orders-tab  .box__basket-item .btn__quality-minus', function () {
             let _self = $(this);
             let id = $(this).closest('.box__basket-item').find('.remove-from-cart').data('id');
 
             if (typeof id == "undefined") {
                 id = $(this).data('id')
-                //console.log($(this).data('id'))
             }
             $.post("{{ route('cart.updateQty') }}", {
                 id: id,
                 qty: _self.closest('.box__quality').find('input[name*=quantity]').val()
             }, function (result) {
-                _self.closest('.box__basket-item').find('.box__price').text(result.itemAmount + ' ₽');
-                _self.closest('.wrapper__baskets-item').find('.wrapper__baskets-cost').text(result.itemAmount + ' ₽');
-
-                $('.box__popup-basket .wrapper-popup-bottom').find('.box__price').text(result.totalAmount + ' ₽')
-                $('.wrapper__bascket-bottom .box__bascket-total').find('h4').find('b').text(result.totalAmount + ' ₽')
-
-
                 $.get('/basket/load', function (html) {
-                    $('body').find('.box__popup-basket .wrapper-popup-center').html(html);
-
-                    $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
-                    let total = 0;
-                    $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
-                        let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
-                        //console.log(num);
-                        total += num;
-                    })
-                    //console.log(`total: ${total}`);
-
-                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
-                    $('#total-price').text(Number(total).toFixed(0) + ' ₽');
+                    $('body').find('#orders-tab').html(html);
+                    updateTotalPriceInHead();
                 });
             }, 'json')
-        }).on('click', '.box__basket-item .btn__quality-plus, .wrapper__baskets-item .btn__quality-plus', function () {
+        }).on('click', '#orders-tab .box__basket-item .btn__quality-plus', function () {
             let _self = $(this);
             let id = $(this).closest('.box__basket-item').find('.remove-from-cart').data('id');
 
             if (typeof id == "undefined")
                 id = $(this).data('id')
 
-            // //console.log(_self.closest('.box__quality').find('input[name*=quantity]').val());
             $.post("{{ route('cart.updateQty') }}", {
                 id: id,
                 qty: _self.closest('.box__quality').find('input[name*=quantity]').val()
             }, function (result) {
-                _self.closest('.box__basket-item').find('.box__price').text(result.itemAmount + ' ₽');
-                _self.closest('.wrapper__baskets-item').find('.wrapper__baskets-cost').text(result.itemAmount + ' ₽');
-
-                $('.box__popup-basket .wrapper-popup-bottom').find('.box__price').text(result.totalAmount + ' ₽')
-                $('.wrapper__bascket-bottom .box__bascket-total').find('h4').find('b').text(result.totalAmount + ' ₽')
 
                 $.get('/basket/load', function (html) {
-                    $('body').find('.box__popup-basket .wrapper-popup-center').html(html);
+                    $('body').find('#orders-tab').html(html);
+                    updateTotalPriceInHead();
+                });
+            }, 'json')
+        })
 
-                    $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center').find('.box__basket-item').length);
-                    let total = 0;
-                    $('.box__popup-basket').find('.wrapper-popup-center').find('.box__basket-item').each(function () {
-                        let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
-                        //console.log(num);
-                        total += num;
-                    })
-                    //console.log(`total: ${total}`);
+        //preorders-tab
+        $('body').on('change', '#preorders-tab input[name*=quantity]', function () {
+            let _self = $(this);
+            let id = $(this).data('id');
 
-                    $('[data-popup="basket"] .wrapper-popup-bottom .box__price').text(Number(total).toFixed(0) + ' ₽')
-                    $('#total-price').text(Number(total).toFixed(0) + ' ₽');
+            $.post("{{ route('cart.updatePreOrderQty') }}", {id: id, qty: $(this).val()}, function (result) {
+
+                $.get('/profile', function (html) {
+                    $('body').find('#preorders-tab').html($(html).find('#preorders-tab').html());
+                    updateTotalPriceInHead();
+                });
+            }, 'json')
+
+        }).on('click', '#preorders-tab  .box__basket-item .btn__quality-minus', function () {
+            let _self = $(this);
+            let id = $(this).closest('.box__basket-item').find('.remove-from-cart').data('id');
+
+            if (typeof id == "undefined") {
+                id = $(this).data('id')
+            }
+            $.post("{{ route('cart.updatePreOrderQty') }}", {
+                id: id,
+                qty: _self.closest('.box__quality').find('input[name*=quantity]').val()
+            }, function (result) {
+                $.get('/profile', function (html) {
+                    $('body').find('#preorders-tab').html($(html).find('#preorders-tab').html());
+                    updateTotalPriceInHead();
+                });
+            }, 'json')
+        }).on('click', '#preorders-tab .box__basket-item .btn__quality-plus', function () {
+            let _self = $(this);
+            let id = $(this).closest('.box__basket-item').find('.remove-from-cart').data('id');
+
+            if (typeof id == "undefined")
+                id = $(this).data('id')
+
+            $.post("{{ route('cart.updatePreOrderQty') }}", {
+                id: id,
+                qty: _self.closest('.box__quality').find('input[name*=quantity]').val()
+            }, function (result) {
+
+                $.get('/profile', function (html) {
+                    $('body').find('#preorders-tab').html($(html).find('#preorders-tab').html());
+                    updateTotalPriceInHead();
                 });
             }, 'json')
         })
     })
+
+    function updateTotalPriceInHead()
+    {
+        let totalPriceOrders = $('#totalPriceOrders').val();
+        totalPriceOrders = totalPriceOrders ? totalPriceOrders : 0;
+        let totalPricePreOrders = $('#totalPricePreOrders').val();
+        totalPricePreOrders = totalPricePreOrders ? totalPricePreOrders : 0;
+        console.log('totalPriceOrders', totalPriceOrders)
+        console.log('totalPricePreOrders', totalPricePreOrders)
+        let totalProductsPrice = Number(totalPriceOrders) + Number(totalPricePreOrders) + ' ₽';
+        $('#total-price').html(totalProductsPrice)
+    }
+
 </script>

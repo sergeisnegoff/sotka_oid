@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProfileAddress;
 use App\Models\User;
+use App\Services\Preorder\PreorderService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
@@ -20,8 +21,10 @@ use Illuminate\Support\Facades\Storage;
 // use Spatie\ArrayToXml\ArrayToXml;
 
 
-class CartController extends Controller {
-    public function index() {
+class CartController extends Controller
+{
+    public function index()
+    {
         $cart = session()->get('cart');
 
         if ($cart) {
@@ -99,11 +102,12 @@ class CartController extends Controller {
         }
     }
 
-    public function updateCount(Request $request) {
+    public function updateCount(Request $request)
+    {
         $post = $request->validate([
-                                       'id' => 'bail|required|int',
-                                       'qty' => 'bail|required|int',
-                                   ]);
+            'id' => 'bail|required|int',
+            'qty' => 'bail|required|int',
+        ]);
 
         session()->put('cart.' . $post['id'] . '.quantity', $post['qty']);
 
@@ -124,7 +128,7 @@ class CartController extends Controller {
 
                 $totalAmount += $item->price * $post['qty'];
             } else {
-                $totalAmount += $product['price'] * $product['quantity'];
+                $totalAmount += $item['price'] * $product['quantity'];
             }
         }
 
@@ -142,22 +146,73 @@ class CartController extends Controller {
         ];
     }
 
-    public function loadMini() {
+    public function updatePreOrderCount(Request $request)
+    {
+        $post = $request->validate([
+            'id' => 'bail|required|int',
+            'qty' => 'bail|required|int',
+        ]);
+
+        $cart = PreorderService::getFullCart();
+        $cart[$post['id']]["quantity"] = $post['qty'];
+        $cart[$post['id']]["total"] = $post['qty'] * $cart[$post['id']]['price'];
+
+        PreorderService::setLatestPreorder($cart[$post['id']]['preorder_id']);
+        PreorderService::updateCart($cart);
+
+        return [
+            'status' => 'success',
+            'itemAmount' => number_format($cart[$post['id']]["quantity"], 0, '.', ''),
+            'totalAmount' => number_format($cart[$post['id']]["total"], 0, '.', '')
+        ];
+    }
+
+    public function updatePreOrderCountForUser(User $user)
+    {
+        $post = \request()->validate([
+            'id' => 'bail|required|int',
+            'qty' => 'bail|required|int',
+        ]);
+
+        $cart = PreorderService::getFullUserCart($user->id);
+        $cart[$post['id']]["quantity"] = $post['qty'];
+        $cart[$post['id']]["total"] = $post['qty'] * $cart[$post['id']]['price'];
+
+        PreorderService::setUserLatestPreorder($cart[$post['id']]['preorder_id'], $user->id);
+        PreorderService::updateUserCart($cart, $user->id);
+
+        return [
+            'status' => 'success',
+            'itemAmount' => number_format($cart[$post['id']]["quantity"], 0, '.', ''),
+            'totalAmount' => number_format($cart[$post['id']]["total"], 0, '.', '')
+        ];
+    }
+
+
+    public function loadMini()
+    {
         $cart = session()->get('cart');
         return view('profile.components.mini-basket', compact('cart'));
     }
-    
-    public function resendMail() {
-    	foreach (Order::where('created_at', '>', Carbon::now()->subDay()->setTime(0, 0))->get() as $order) {
-	  $user = $order->user;
-	    	Mail::to(['sotkasaitzakaz@yandex.ru'])->send(
-			new SuccessOrder(
-			    $order,
-			    Order::getOrderProducts($order->id),
-			    ProfileAddress::getByID($order->address_id),
-			    $user
-			)
-		    );
+
+    public function loadPreorderMini()
+    {
+        $miniCartData = PreorderService::getCart();
+        return view('profile.components.mini-preorder-basket', compact('miniCartData'));
+    }
+
+    public function resendMail()
+    {
+        foreach (Order::where('created_at', '>', Carbon::now()->subDay()->setTime(0, 0))->get() as $order) {
+            $user = $order->user;
+            Mail::to(['sotkasaitzakaz@yandex.ru'])->send(
+                new SuccessOrder(
+                    $order,
+                    Order::getOrderProducts($order->id),
+                    ProfileAddress::getByID($order->address_id),
+                    $user
+                )
+            );
 
 
             $user_address = $user->address()->where('address_id', $order->address_id)->first();
@@ -217,70 +272,71 @@ class CartController extends Controller {
                 if ($disk->put($filename, $orderJson)) {
                 } else {
                 }
-           }
-	}    	
+            }
+        }
     }
 
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
 
         $user = Auth::user();
         $data = $request->validate([
-                                       'address_id' => 'required',
-                                       'comment' => 'nullable'
-                                   ]);
+            'address_id' => 'required',
+            'comment' => 'nullable'
+        ]);
         /** @var Logger $log */
         $log = Log::channel('orders')->withContext([
-                                                       'userId' => $user->id,
-                                                   ]);
+            'userId' => $user->id,
+        ]);
 
-            $data['user_id'] = $user->id;
+        $data['user_id'] = $user->id;
 
-            $cartItems = session()->get('cart');
-            if (is_null($cartItems)) {
-                $log->error('Cart items empty');
-                return back();
-            }
+        $cartItems = session()->get('cart');
+        if (is_null($cartItems)) {
+            $log->error('Cart items empty');
+            return back();
+        }
 
-            $order = Order::query()->create($data);
+        $order = Order::query()->create($data);
 
-            $log->withContext(
-                [
-                    'orderId' => $order->id,
-                ]
-            );
+        $log->withContext(
+            [
+                'orderId' => $order->id,
+            ]
+        );
 
-            $log->info('Cart items found');
+        $log->info('Cart items found');
 
-            foreach ($cartItems as $id => $product) {
-                Order::orderProducts($order->id, $id, $product['quantity'], $product['price'] * $product['quantity']);
-            }
+        foreach ($cartItems as $id => $product) {
+            Order::orderProducts($order->id, $id, $product['quantity'], $product['price'] * $product['quantity']);
+        }
 
-            $log->info('Filled cart items');
+        $log->info('Filled cart items');
 
-		/*
-	    try {
-            	Mail::to([$user, 'sotkasaitzakaz@yandex.ru'])->send(
-            	    new SuccessOrder(
-            	        $order,
-            	        Order::getOrderProducts($order->id),
-            	        ProfileAddress::getByID($order->address_id),
-               	    	$user
-               	     )
-            	);
-	    } catch (\Exception $e) {
-	    	Log::channel('orders')->error($e->getMessage(), [
-                	'exception' => $e,
-                	'data' => $data,
-            	]);
-	    }
-	    */
+        /*
+        try {
+                Mail::to([$user, 'sotkasaitzakaz@yandex.ru'])->send(
+                    new SuccessOrder(
+                        $order,
+                        Order::getOrderProducts($order->id),
+                        ProfileAddress::getByID($order->address_id),
+                           $user
+                        )
+                );
+        } catch (\Exception $e) {
+            Log::channel('orders')->error($e->getMessage(), [
+                    'exception' => $e,
+                    'data' => $data,
+                ]);
+        }
+        */
 
-            $log->info('Sent e-mail');
+        $log->info('Sent e-mail');
 
-            $this->empty();
+        $this->empty();
 
-            $log->info('Cart items clear');
+        $log->info('Cart items clear');
 
         $log->info('Start success');
 
@@ -374,15 +430,16 @@ class CartController extends Controller {
         return response()->redirectToRoute('profile.orders.success', ['order' => $order->id]);
     }
 
-    public function success(Request $request, Order $order) {
-
+    public function success(Request $request, Order $order)
+    {
         return view('profile.orders.success', compact('order'), [
             'page' => 'basket',
             'products' => Order::getOrderProducts($order->id),
         ]);
     }
 
-    public function delete(Request $request, $id = 0) {
+    public function delete(Request $request, $id = 0)
+    {
         session()->remove('cart.' . $id);
 
         if (DB::table('cart')->where('user_id', Auth::id())->first()) {
@@ -390,7 +447,8 @@ class CartController extends Controller {
         }
     }
 
-    public function empty() {
+    public function empty()
+    {
         session()->remove('cart');
         DB::table('cart')->where('user_id', Auth::id())->delete();
 

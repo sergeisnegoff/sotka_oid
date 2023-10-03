@@ -114,8 +114,7 @@
                                     <th class="actions text-right dt-not-orderable">{{ __('voyager::generic.actions') }}</th>
                                 </tr>
                                 </thead>
-                                <tbody id="raw-tree" style="display:none;"
-                                ">
+                                <tbody id="raw-tree" style="display:none;">
                                 @foreach($dataTypeContent as $data)
                                     <tr data-tt-id="{{ $data->id }}" data-tt-parent-id="{{ $data->parent_id }}">
                                         @if($showCheckboxColumn)

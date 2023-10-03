@@ -65,6 +65,19 @@ if (!function_exists('thumbImg')) {
     }
 }
 
+if (!function_exists('slideImg')) {
+    function slideImg($img, $width = 0, $height = 0, $crop = false): string
+    {
+        $img = str_replace(['\\'], '/', $img);
+
+        $urlBuilder = UrlBuilderFactory::create(
+            '/storage/' . pathinfo($img, PATHINFO_DIRNAME)
+        );
+
+        return $urlBuilder->getUrl(basename($img), ['w' => $width, 'h' => $height]);
+    }
+}
+
 if (!function_exists('rusDate')) {
     function rusDate($month = 1) {
         $month = (int)$month;

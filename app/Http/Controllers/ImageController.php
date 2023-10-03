@@ -21,7 +21,10 @@
 				'base_url' => '/img/'
 			]);
 
-			try {
+            // remove from image get parameters
+            $img = explode('?', $img)[0];
+
+            try {
 				if (empty($img) || !file_exists($_SERVER['DOCUMENT_ROOT'].'/storage/'.str_replace('.', '/', $path).'/'.$img)) {
 					return $server->getImageResponse('public/logo.png', array_merge(request()->all(), ['bg' => 'white', 'fit' => 'fit']));
 				} else

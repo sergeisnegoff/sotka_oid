@@ -97,9 +97,13 @@
                             // console.log(num);
                             total += num;
                         })
-                        // console.log(`total: ${total}`);
+                        $('[data-popup="basket"] #orders-tab .wrapper-popup-bottom .box__price').text(
+                            Number(total).toFixed(0) + ' ₽')
 
-                        $('[data-popup="basket"] .wrapper-popup-bottom .box__price, #total-price').text(Number(total).toFixed(0) + ' ₽')
+                        let totalPrice = parseFloat(total) +
+                            parseFloat($('#preorders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
+
+                        $('#total-price').text(Number(totalPrice).toFixed(0) + ' ₽')
                     });
                 }
             });
@@ -199,6 +203,53 @@
 
             $('.showMore').trigger('click');
         }
+    })
+    $('body').on('click', '.add-to-cart-preorder', function () {
+        let but = $(this).attr('value'),
+            _self = $(this);
+
+        let container = $('<span>', {class: 'loading'});
+        _self.hide();
+        for (let i = 0; i < 5; i++)
+            container.append($('<span>', {
+                class: 'dot'
+            }))
+
+
+        $(this).parent().append(container);
+        $(this).parent().parent().parent().find('.ifcart').text('Товар есть в корзине');
+        $(this).parent().parent().parent().find('.add-to-cart-preorder').css({"background": "#A16C21", "margin-right": "20px"}).text('Докупить');
+
+        $.ajax({
+            url: '/preorders/add-to-cart',
+            type: 'POST',
+            data: {
+                id: $(this).attr('value'),
+                quantity: $('.quantity' + $(this).attr('value')).val(),
+            },
+            success: function (data) {
+                _self.show().parent().find('.loading').remove();
+                $('.box__card').removeClass('d-none').addClass('d-block')
+                $.get('/profile', function (html) {
+                    $('body').find('.box__popup-basket .wrapper-popup-center #preorders-tab').html($(html).find('#preorders-tab').html());
+
+                    $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center #preorders-tab').find('.box__basket-item').length);
+                    let total = 0;
+                    $('.box__popup-basket').find('.wrapper-popup-center #preorders-tab').find('.box__basket-item').each(function () {
+                        let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
+                        total += num;
+                    })
+
+                    $('[data-popup="basket"] #preorders-tab .wrapper-popup-bottom .box__price').text(
+                        Number(total).toFixed(0) + ' ₽')
+
+                    let totalPrice = parseFloat(total) +
+                        parseFloat($('#orders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
+
+                    $('#total-price').text(Number(totalPrice).toFixed(0) + ' ₽')
+                });
+            }
+        })
     })
 </script>
 

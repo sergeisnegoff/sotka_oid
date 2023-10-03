@@ -55,9 +55,23 @@ class Order extends Model
             ->select(["$productTable.*"]);
     }
 
+    // переписать
+    public function total()
+    {
+        $res = 0;
+        $sums = DB::select("SELECT SUM(`price`) FROM `order_products` WHERE `order_id` = :orderId", ['orderId' => $this->id]);
+
+        return round(json_decode(json_encode($sums[0]), true)['SUM(`price`)']);
+    }
+
     public function address()
     {
         return $this->belongsTo(ProfileAddress::class);
+    }
+
+    public function deliveryAddress()
+    {
+        return $this->address->city.', '.$this->address->address. ', д.'. $this->address->house;
     }
 
     public function user()

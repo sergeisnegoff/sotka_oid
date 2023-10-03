@@ -25,6 +25,8 @@
     },
     "name": "semena",
     "dependencies": {
-        "swiper": "^4.4.2"
+        "intersection-observer": "^0.12.2",
+        "swiper": "^4.4.2",
+        "vanilla-lazyload": "^17.8.4"
     }
 }

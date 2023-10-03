@@ -1,4 +1,4 @@
-<ul class="d-block {{ !isset($is_child) || !$is_child ? 'd-xl-flex' : '' }}">
+<ul class="d-block main_menu {{ !isset($is_child) || !$is_child ? 'd-xl-flex' : '' }}">
     @php
         if (Voyager::translatable($items)) {
             $items = $items->load('translations');
@@ -48,4 +48,51 @@
         </li>
     @endforeach
 
+    <?php
+    if (!isset($is_child)) {
+        $preorders = \App\Models\Preorder::where('end_date', '>', date('Y-m-d'));
+
+    if ($preorders->count() > 0) {
+        ?>
+
+    <li>
+        <a href="/preorders/" style="position: relative;">
+            Предзаказы
+            <span class="d-none d-xl-inline-block"></span>
+        </a>
+        <ul class="d-block">
+                <?php
+
+            foreach ($preorders->whereDate('end_date', '>', now()->toDateString())->get() as $preorder) {
+                ?>
+            <li>
+                <a href="/preorders/{{ $preorder->id }}" style="position:relative;">
+                    {{ $preorder->title }}
+                </a>
+            </li>
+                <?php
+            }
+                ?>
+        </ul>
+    </li>
+        <?php
+    }
+    }
+    ?>
+
+
+    @if(auth()->user() && auth()->user()->role_id == 1)
+        <li>
+            <a href="{{route('manager.clients.orders')}}">ЛК менеджера</a>
+        </li>
+        <li>
+            <a href="{{route('merch.home')}}">ЛК товароведа</a>
+        </li>
+            <? //прячем первые три элемента в меню ?>
+        <style>
+            .main_menu > li:nth-child(-n+3) {
+                display: none;
+            }
+        </style>
+    @endif
 </ul>

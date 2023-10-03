@@ -41,3 +41,20 @@
         </div>
     </div>
 @endforeach
+<div class="wrapper-popup-bottom">
+    <div class="row">
+        <div class="col-6">
+            <div class="box__price-title">Итого:</div>
+        </div>
+        <div class="col-6 text-right">
+            <div class="box__price">{{ $miniCartTotal }} <span>₽</span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            @if ($miniCartTotal > 0)
+                <div class="btn"><a href="{{route('profile.orders.cart')}}">В корзину</a></div>
+            @endif
+        </div>
+    </div>
+</div>

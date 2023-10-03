@@ -67,7 +67,7 @@
                         {{ menu('header', 'layouts.headerMenu') }}
                     </div>
                 </div>
-                <div class="order-3 order-md-5 col-4 col-md-6 col-lg-6 col-xl-3">
+                <div class="order-3 order-md-5 col-4 col-md-6 col-lg-6 col-xl-4">
                     <div class="wrapper__header-right">
                         @guest
                             @if (Route::has('login'))
@@ -96,10 +96,10 @@
                                 </div>
                             </div>
                         @endguest
-                        @if(session('cart'))
+                        @if(session('cart', []))
                             <div class="box__card d-none">
                                 <button data-btn-popup="basket"><span class="head-icon"><span
-                                            class="box__card-quality">{{count(session('cart'))}}</span></span></button>
+                                            class="box__card-quality">{{count(session('cart', [])}}</span></span></button>
                             </div>
                         @endif
                     </div>

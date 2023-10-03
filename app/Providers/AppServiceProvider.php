@@ -2,11 +2,16 @@
 
 namespace App\Providers;
 
+use App\FormFields\TimeStampFormField;
 use App\Logging\Logger;
 use App\Models\Category;
+use App\Models\Preorder;
+use App\Services\Preorder\PreorderService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use TCG\Voyager\Facades\Voyager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Voyager::addFormField(TimeStampFormField::class);
     }
 
     /**
@@ -38,8 +43,20 @@ class AppServiceProvider extends ServiceProvider
             $view
                 ->with('categories', categoryTreeSort())
                 ->with('errors', optional($view['errors'] ?? null));
+            $view = $this->addPreorderMinimalCost($view);
         });
 
         Logger::register($this->app);
+    }
+    public function addPreorderMinimalCost($view) {
+        if (count(PreorderService::getCart())) {
+            $cart = PreorderService::getCart();
+            $preorder = Preorder::find(Arr::first($cart)['preorder_id']);
+            if ($preorder) {
+                return $view
+                    ->with('preorder_minimal', $preorder->min_order);
+            }
+        }
+        return $view;
     }
 }

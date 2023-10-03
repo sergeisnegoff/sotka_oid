@@ -24,7 +24,12 @@
 
     <script src="{{asset('js/jquery-3.5.1.js')}}"></script>
     <script src="{{asset('assets/js/jquery-ui.js')}}"></script>
+    <script>
+        window.preorder_minimal = {{$preorder_minimal ?? 0}}
+    </script>
     <script src="{{ asset('js/common.js') }}"></script>
+
+    @stack('styles')
 </head>
 <body>
 <script>
@@ -71,12 +76,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="order-5 order-md-4 col-12 d-none d-xl-block col-xl-3">
+                <div class="order-5 order-md-4 col-12 d-none d-xl-block col-xl-4">
                     <div class="box__nav-sub">
                         {{ menu('header', 'layouts.headerMenu') }}
                     </div>
                 </div>
-                <div class="order-3 order-md-5 col-7 col-md-6 col-lg-6 col-xl-3">
+                <div class="order-3 order-md-5 col-7 col-md-6 col-lg-6 col-xl-4">
                     <div class="wrapper__header-right" style="flex-wrap: wrap">
                         @guest
                             @if (Route::has('login'))
@@ -107,11 +112,15 @@
                                 class="box__card {{ !is_null(session('cart')) && count(session('cart')) ? '' : 'd-none' }}">
                                 <button class="d-flex" style="align-items:center;" data-btn-popup="basket">
                                     <span class="d-block" style="margin-right: 20px;" id="total-price">
-                                        {{ number_format($miniCartTotal, 0, ',', '') }} ₽
+                                           {{ number_format(collect(session('cart', []))->sum(function ($item) {
+                                            return $item['price'] ?? 0 * $item['quantity'];
+                                        }) + collect(\App\Services\Preorder\PreorderService::getCart())->sum(function ($item) {
+                                            return $item['price'] ?? 0 * $item['quantity'];
+                                        }), 0, ',', '') }} ₽
                                     </span>
                                     <span class="head-icon">
                                         <span
-                                            class="box__card-quality">{{ $miniCartCount }}</span>
+                                            class="box__card-quality">{{  count(session('cart', [])) || count(\App\Services\Preorder\PreorderService::getCart()) }}</span>
                                     </span>
                                 </button>
                             </div>
@@ -190,26 +199,157 @@
         <div class="wrapper-popup-top">
             <div class="row">
                 <div class="col-12">
-                    <h2>Корзина</h2>
+                    <h2 style="margin-bottom: -0px;border-bottom: 1px solid hsla(0, 0%, 78%, 0.7);">Корзина</h2>
+                    <div class="tabs__content-item row">
+                        <div class="col-6">
+                            <div data-target="orders-tab" class="cart-tab active">Заказы</div>
+                        </div>
+                        <div class="col-6">
+                            <div data-target="preorders-tab" class="cart-tab">Предзаказы</div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $('.cart-tab').on('click', function () {
+                            $('.cart-tab').each(function () {
+                                $('.cart-tab').removeClass('active');
+                                $('#' + $(this).data('target')).removeClass('d-block').addClass('d-none');
+                            })
+                            $(this).addClass('active');
+                            $('#' + $(this).data('target')).toggleClass('d-none d-block');
+                        })
+                    </script>
                 </div>
             </div>
         </div>
         <div class="wrapper-popup-center">
-            @include('profile.components.mini-basket')
-        </div>
-        <div class="wrapper-popup-bottom">
-            <div class="row">
+            <div class="tabs-content__data">
+                <div id="orders-tab">
+                    @if (!empty(session('cart', [])))
+                        @include('profile.components.mini-basket')
+                    @else
+                        <div
+                            style="display:flex;align-items:center;justify-content: center;min-height:10rem;color:silver;font-weight:bolder;">
+                            Корзина пуста
+                        </div>
+                    @endif
 
-                <div class="col-6">
-                    <div class="box__price-title">Итого:</div>
+                    <div class="wrapper-popup-bottom">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="box__price-title">Итого:</div>
+                            </div>
+                            <div class="col-6 text-right">
+                                <div class="box__price">{{ $miniCartTotal }} <span>₽</span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="btn"><a href="{{route('profile.orders.cart')}}">В корзину</a></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-6 text-right">
-                    <div class="box__price">{{ $miniCartTotal }} <span>₽</span></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="btn"><a href="{{route('profile.orders.cart')}}">В корзину</a></div>
+                <div id="preorders-tab" class="d-none">
+                    <?php $total = 0 ?>
+                    @foreach(\App\Services\Preorder\PreorderService::getCart() as $details)
+                        <div class="box__basket-item">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="box__image"><a href="#"><img
+                                                src="{{ thumbImg($details['image']) }}" alt=""></a></div>
+                                </div>
+                                <div class="col-9">
+                                    <a href="#" class="item_remove remove-from-preorder-cart"
+                                       data-id="{{ $details['id'] }}">x</a>
+                                    <div class="row">
+                                        <div class="col-12"><a href="/preorders/product/{{$details['id']}}">
+                                                <h3>{{ $details['name'] }}</h3>
+                                            </a>
+                                        </div>
+                                        <div class="col-5">
+                                            <div class="box__quality">
+                                                <div class="box__quality-value"><input type="number" data-number="0"
+                                                                                       step="{{ $details['multiplicity'] }}"
+                                                                                       min="{{ $details['multiplicity'] }}"
+                                                                                       name="quantity[]"
+                                                                                       class="quantityUpdate{{ $details['id'] }}"
+                                                                                       value="{{$details['quantity']}}"
+                                                                                       data-id="{{ $details['id'] }}">
+                                                </div>
+                                                <span class="btn__quality-nav">
+                                                    <span class="btn__quality-minus update-cart"
+                                                          data-id="{{ $details['id'] }}"
+                                                          data-prev-quality>-</span>
+                                                    <span class="btn__quality-plus update-cart"
+                                                          data-id="{{ $details['id'] }}"
+                                                          data-next-quality>+</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-7">
+                                            <div
+                                                class="box__price"> {{ $details['price'] * $details['quantity'] }}
+                                                <span>₽</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <?php
+                            $total += $details['price'] * $details['quantity'];
+                            ?>
+                    @endforeach
+
+                    <input type="number" value="{{count(\App\Services\Preorder\PreorderService::getCart())}}" id="preOrderBasketCount"
+                           disabled hidden>
+
+
+                    <script>
+                        $('.remove-from-preorder-cart').on('click', function () {
+                            let id = $(this).data('id'),
+                                self = $(this);
+                            $.ajax({
+                                url: '/preorders/product/' + id + '/remove',
+                                method: 'GET',
+                                success: function (data) {
+                                    $.get('/profile', function (result) {
+                                        $('#preorders-tab').html($(result).find('#preorders-tab').html())
+                                    })
+                                }
+                            })
+                        })
+                    </script>
+
+
+                    <div class="wrapper-popup-bottom">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="box__price-title">Итого:</div>
+                            </div>
+                            <div class="col-6 text-right">
+                                <div class="box__price">{{ $total ?? 0 }} <span>₽</span></div>
+                            </div>
+                            @if($total < ($preorder_minimal ?? 0))
+                                <div class="col-8">
+                                    <div class="box__price-title">
+                                        Минимальная сумма:
+                                    </div>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <b>{{$preorder_minimal ?? 0}} <span>₽</span></b>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                @if ($total >= ($preorder_minimal ?? 0) && $total != 0)
+                                    <div class="btn"><a href="/preorders/cart">В корзину</a></div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -295,7 +435,7 @@
         </div>
     @endif
 @endauth
-@if (!empty(session()->get('cart')))
+@if (!empty(session()->get('cart')) || !empty(\App\Services\Preorder\PreorderService::getCart()))
     @include('scripts.basket')
 @endif
 
@@ -427,6 +567,9 @@
         @endif
     })
 </script>
+
+@stack('scripts')
+
 </body>
 </html>
 
