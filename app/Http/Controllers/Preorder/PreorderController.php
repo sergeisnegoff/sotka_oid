@@ -68,7 +68,7 @@ class PreorderController extends Controller
             $subCategories = $category->childs()->pluck('id');
             $products = PreorderProduct::whereIn('preorder_category_id', $subCategories)->get();
         } else {
-            $parentCategory = $category->parent();
+            $parentCategory = $category->parent()->first();
         }
 
         $cartKeys = collect(array_keys(PreorderService::getCart()));
