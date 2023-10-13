@@ -32,6 +32,8 @@ class GetDataFromExcelJob implements ShouldQueue
      */
     public function handle()
     {
+        $emptyCategory = 'Без категории';
+        $emptySubcategory = 'Без подкатегории';
         $preorder = $this->preorderTableSheet->preorder()->first();
 
         $markup = $this->preorderTableSheet->markup;
@@ -80,25 +82,32 @@ class GetDataFromExcelJob implements ShouldQueue
             $barcode = $sheet->getCell($markup->barcode . $row)->getValue();
 
             $sku = $preorder->id . $barcode;
-
+            $categoryName = $sheet->getCell($markup->category . $row)->getValue();
+            if (!$categoryName) {
+                $categoryName = $emptyCategory;
+            }
             $currentCategory = PreorderCategory::query()
-                ->where('title', $sheet->getCell($markup->category . $row)->getValue())
+                ->where('title', $categoryName)
                 ->where('preorder_id', $preorder->id)
                 ->first();
 
             if (is_null($currentCategory)) {
                 $currentCategory = PreorderCategory::query()->create([
-                    'title' => $sheet->getCell($markup->category . $row)->getValue(),
+                    'title' => $categoryName,
                     'preorder_id' => $preorder->id,
                     'preorder_table_sheet_id' => $this->preorderTableSheet->id
                 ]);
             }
+            $subCategoryName = $sheet->getCell($markup->subcategory . $row)->getValue();
+            if (!$subCategoryName) {
+                $subCategoryName = $emptySubcategory;
+            }
             $currentsubCategory = PreorderCategory::where('preorder_category_id', $currentCategory->id)
-                ->where('title', $sheet->getCell($markup->subcategory . $row)->getValue())
+                ->where('title', $subCategoryName)
                 ->first();
             if (!$currentsubCategory) {
                 $currentsubCategory = PreorderCategory::create([
-                    'title' => $sheet->getCell($markup->subcategory . $row)->getValue(),
+                    'title' => $subCategoryName,
                     'preorder_id' => $preorder->id,
                      'preorder_category_id' => $currentCategory->id,
                     'preorder_table_sheet_id' => $this->preorderTableSheet->id
