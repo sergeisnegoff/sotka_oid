@@ -62,14 +62,19 @@ class PreorderController extends Controller
         $category = PreorderCategory::with(['products', 'preorder'])
             ->where('id', $id)
             ->first();
+        $parentCategory = null;
         $products = $category->products;
         if ($category->isRoot()) {
             $subCategories = $category->childs()->pluck('id');
             $products = PreorderProduct::whereIn('preorder_category_id', $subCategories)->get();
+        } else {
+            $parentCategory = $category->parent();
         }
+
         $cartKeys = collect(array_keys(PreorderService::getCart()));
 
         return view('preorder.products', compact('category',
+            'parentCategory',
             'products',
             'cartKeys'));
     }
