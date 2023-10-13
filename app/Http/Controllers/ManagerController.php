@@ -210,6 +210,7 @@ class ManagerController extends Controller
         $preorder_id = array_key_first(($controller->cart())["cart"]);
         request()->merge(["preorder_id" => $preorder_id]);
         $controller->create(request(), $user);
+        PreorderService::removePreorderFromCart($preorder_id, auth()->user()->id);
         return response()->json(PreorderCheckout::forUser($user)->orderByDesc('created_at')->with('preorder')->first());
     }
 
