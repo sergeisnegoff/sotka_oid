@@ -61,7 +61,7 @@
         </div>
         <div class="col-12 col-md-2">
             <div class="btn">
-                <button class="qty-append add-to-cart {{$product->getTotalQtyByType(true) ? 'ifcart' : ''}}" data-id="{{$product->id}}">Применить
+                <button class="qty-append push-to-cart {{$product->getTotalQtyByType(true) ? 'ifcart' : ''}}" data-id="{{$product->id}}">Применить
                 </button>
             </div>
         </div>

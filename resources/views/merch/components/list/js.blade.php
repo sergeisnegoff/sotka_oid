@@ -129,4 +129,8 @@
     ul.characteristics li {
         margin: 5px 0 !important;
     }
+    .push-to-cart.ifcart {
+        background: #A16C21;
+        color: #fff !important;
+    }
 </style>
