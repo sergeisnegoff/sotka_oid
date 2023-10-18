@@ -45,7 +45,7 @@ class MerchController extends Controller
     {
         $currentCategory = PreorderCategory::where('id', request()->get('category', $preorder->categories()->first()?->id))->first();
         $currentsubCategory = PreorderCategory::
-        where('parent_id', $currentCategory->id)
+        where('preorder_category_id', $currentCategory->id)
             ->where('id', request()->get('subcategory', $currentCategory->childs()->first()->id))
             ->first();
         $categories = PreorderCategory::root()->whereBelongsTo($preorder)->with('childs')->get();
