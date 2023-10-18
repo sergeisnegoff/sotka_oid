@@ -67,6 +67,8 @@
                     $.get(`/merch/preorder/${preorderId}/table`).then((resp) => {
                         table.html(resp.html())
                     })
+                    if (operation === 'increment')
+                        el.addClass('ifcart')
                 })
         })
         $('.wrapper__baskets-info').off('mouseenter')
