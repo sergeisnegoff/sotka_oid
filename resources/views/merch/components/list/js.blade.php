@@ -64,11 +64,12 @@
                     input.val(0)
                     $(`#merch-product-${productId} .wrapper__baskets-info`).html($(resp).find('.wrapper__baskets-info').html())
                     $(`#merch-product-${productId} .wrapper-total-quantity`).html($(resp).find('.wrapper-total-quantity').html())
-                    $.get(`/merch/preorder/${preorderId}/table`).then((resp) => {
-                        table.html(resp.html())
-                    })
                     if (operation === 'increment')
                         el.children('button').addClass('ifcart')
+                    $.get(`/merch/preorder/${preorderId}/table`).then((resp) => {
+                        table.html($(resp).html())
+                    })
+
                 })
         })
         $('.wrapper__baskets-info').off('mouseenter')
