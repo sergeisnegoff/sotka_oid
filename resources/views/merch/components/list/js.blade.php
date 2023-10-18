@@ -62,10 +62,10 @@
             $.post(`/merch/product/${productId}`, {operation, qty})
                 .then((resp) => {
                     input.val(0)
-                    $(`#merch-product-${productId} .wrapper__baskets-info`).replaceWith($(resp).find('.wrapper__baskets-info'))
-                    $(`#merch-product-${productId} .wrapper-total-quantity`).replaceWith($(resp).find('.wrapper-total-quantity'))
+                    $(`#merch-product-${productId} .wrapper__baskets-info`).html($(resp).find('.wrapper__baskets-info').html())
+                    $(`#merch-product-${productId} .wrapper-total-quantity`).html($(resp).find('.wrapper-total-quantity').html())
                     $.get(`/merch/preorder/${preorderId}/table`).then((resp) => {
-                        table.replaceWith(resp)
+                        table.html(resp.html())
                     })
                 })
         })

@@ -12,7 +12,11 @@ $showBuyButton = !(\Carbon\Carbon::parse($category->preorder->end_date))->isSame
                 <div class="col-12">
                     <ul>
                         <li><a href="/">{{setting('site.main_title_buttom')}}</a></li>
+
                         <li><a href="/preorders/{{ $category->preorder_id }}">Предзаказ {{ $category->preorder->title }}</a></li>
+                        @if($parentCategory)
+                            <li><a href="/preorders/category/{{$parentCategory->id}}/products">{{$parentCategory->title}}</a></li>
+                        @endif
                         <li>{{ $category->title }}</li>
                     </ul>
                 </div>
