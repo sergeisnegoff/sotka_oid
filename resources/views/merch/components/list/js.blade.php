@@ -68,7 +68,7 @@
                         table.html(resp.html())
                     })
                     if (operation === 'increment')
-                        el.addClass('ifcart')
+                        el.children('button').addClass('ifcart')
                 })
         })
         $('.wrapper__baskets-info').off('mouseenter')
