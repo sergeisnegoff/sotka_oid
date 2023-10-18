@@ -65,7 +65,7 @@
                     $(`#merch-product-${productId} .wrapper__baskets-info`).html($(resp).find('.wrapper__baskets-info').html())
                     $(`#merch-product-${productId} .wrapper-total-quantity`).html($(resp).find('.wrapper-total-quantity').html())
                     if (operation === 'increment')
-                        el.children('button').addClass('ifcart')
+                        el.addClass('ifcart')
                     $.get(`/merch/preorder/${preorderId}/table`).then((resp) => {
                         table.html($(resp).html())
                     })
