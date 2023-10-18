@@ -45,9 +45,9 @@ class MerchController extends Controller
     {
         $currentCategory = PreorderCategory::where('id', request()->get('category', $preorder->categories()->first()?->id))->first();
         $currentsubCategory = PreorderCategory::
-                                    where('parent_id', $currentCategory->id)
-                                    ->where('id', request()->get('subcategory', $currentCategory->childs()->first()->id))
-                                    ->first();
+        where('parent_id', $currentCategory->id)
+            ->where('id', request()->get('subcategory', $currentCategory->childs()->first()->id))
+            ->first();
         $categories = PreorderCategory::root()->whereBelongsTo($preorder)->with('childs')->get();
         $products = $currentsubCategory->products()
             //->whereHas('checkouts', function ($query) {
@@ -68,7 +68,7 @@ class MerchController extends Controller
         $qty = request()->input('qty');
         $op = request()->input('operation');
         $isIncrement = $op === 'increment';
-        DB::transaction(function() use ($isIncrement, $qty, $product) {
+        DB::transaction(function () use ($isIncrement, $qty, $product) {
             while ($qty > 0) {
                 if ($isIncrement) {
                     $qty = $this->_incrementQty($qty, $product);
@@ -77,32 +77,36 @@ class MerchController extends Controller
                 }
             }
         });
-        return response()->view('merch.components.list.element', ['product'=>$product, 'preorder' => $product->preorder]);
+        return response()->view('merch.components.list.element', ['product' => $product, 'preorder' => $product->preorder]);
     }
 
-    private function _incrementQty(int $qty, PreorderProduct $product): int {
-        $existingCheckout = PreorderCheckoutProduct::where('preorder_product_id', $product->id)->whereHas('preorderCheckout', function ($query) {
+    private function _incrementQty(int $qty, PreorderProduct $product): int
+    {
+        $existingCheckout = PreorderCheckout::where('user_id', auth()->user()->id)->where('preorder_id', $product->preorder_id)->first();
+        $existingCheckoutProduct = PreorderCheckoutProduct::where('preorder_product_id', $product->id)->whereHas('preorderCheckout', function ($query) {
             $query->where('is_internal', true);
         })->first();
-        if ($existingCheckout) {
-            $existingCheckout->qty += $qty;
-            $existingCheckout->save();
+        if ($existingCheckoutProduct) {
+            $existingCheckoutProduct->qty += $qty;
+            $existingCheckoutProduct->save();
         } else {
-            $newInternalCheckout = PreorderCheckout::create([
-                'preorder_id' => $product->preorder->id,
-                'is_internal' => true,
-                'user_id' => auth()->user()->id
-            ]);
+            if (!$existingCheckout)
+                $existingCheckout = PreorderCheckout::create([
+                    'preorder_id' => $product->preorder->id,
+                    'is_internal' => true,
+                    'user_id' => auth()->user()->id
+                ]);
             $newProductCheckout = PreorderCheckoutProduct::create([
                 'preorder_product_id' => $product->id,
                 'qty' => $qty,
-                'preorder_checkout_id' => $newInternalCheckout->id
+                'preorder_checkout_id' => $existingCheckout->id
             ]);
         }
         return 0;
     }
 
-    private function _decrementQty(int $qty, PreorderProduct $product): int {
+    private function _decrementQty(int $qty, PreorderProduct $product): int
+    {
         //пробуем найти заказ на сотку
         $existingSotkaCheckout = PreorderCheckoutProduct::where('preorder_product_id', $product->id)->whereHas('preorderCheckout', function ($query) {
             $query->where('is_internal', true);
@@ -116,7 +120,8 @@ class MerchController extends Controller
         }
     }
 
-    private function _decreaseProductQty(int $qty, ?PreorderCheckoutProduct $product): int {
+    private function _decreaseProductQty(int $qty, ?PreorderCheckoutProduct $product): int
+    {
         if (!$product) return 0;
         switch (true) {
             case $product->qty > $qty:
@@ -165,7 +170,7 @@ class MerchController extends Controller
             $preorder->save();
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xlsx"');
-            $writer =IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
             $writer->save('php://output');
         } catch (\Exception $exception) {
             \Log::error($exception->getMessage());
@@ -174,19 +179,22 @@ class MerchController extends Controller
         }
     }
 
-    public function unclose(Preorder $preorder) {
+    public function unclose(Preorder $preorder)
+    {
         $preorder->is_finished = false;
         $preorder->save();
         return redirect()->route('merch.home');
     }
 
-    public function getTable(Preorder $preorder) {
+    public function getTable(Preorder $preorder)
+    {
         return response()->view('merch.components.preorder-main-info', compact('preorder'));
     }
 
-    public function lazyPages(Preorder $preorder) {
+    public function lazyPages(Preorder $preorder)
+    {
         \Debugbar::disable();
-        $currentCategory =  PreorderCategory::where('id', request()->get('subcategory'))->with('products')->first();
+        $currentCategory = PreorderCategory::where('id', request()->get('subcategory'))->with('products')->first();
         $products = $currentCategory->products()
             //->whereHas('checkouts', function ($query) {
             //$query->havingRaw('COUNT(*) > 1');})
