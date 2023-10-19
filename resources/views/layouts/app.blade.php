@@ -113,9 +113,9 @@
                                 <button class="d-flex" style="align-items:center;" data-btn-popup="basket">
                                     <span class="d-block" style="margin-right: 20px;" id="total-price">
                                            {{ number_format(collect(session('cart', []))->sum(function ($item) {
-                                            return $item['price'] ?? 0 * $item['quantity'];
+                                            return ($item['price'] ?? 0) * $item['quantity'];
                                         }) + collect(\App\Services\Preorder\PreorderService::getCart())->sum(function ($item) {
-                                            return $item['price'] ?? 0 * $item['quantity'];
+                                            return ($item['price'] ?? 0) * $item['quantity'];
                                         }), 0, ',', '') }} ₽
                                     </span>
                                     <span class="head-icon">
