@@ -103,7 +103,9 @@
                         let totalPrice = parseFloat(total) +
                            parseFloat($('#preorders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
 
-                        $('#total-price').text(Number(totalPrice).toFixed(0) + ' ₽')
+                        $.get('/profile/total', function(response) {
+                            $('#total-price').text(response + ' ₽')
+                        })
                     });
                 }
             });
@@ -235,6 +237,7 @@
                     $('body').find('.box__popup-basket .wrapper-popup-center #preorders-tab').html($(html).find('#preorders-tab').html());
 
                     $('.box__card-quality').text($('body').find('.box__popup-basket .wrapper-popup-center #preorders-tab').find('.box__basket-item').length);
+
                     let total = 0;
                     $('.box__popup-basket').find('.wrapper-popup-center #preorders-tab').find('.box__basket-item').each(function () {
                         let num = parseFloat($(this).find('.box__price').text().replace(/[^\d.-]/g, ''));
@@ -244,10 +247,11 @@
                     $('[data-popup="basket"] #preorders-tab .wrapper-popup-bottom .box__price').text(
                         Number(total).toFixed(0) + ' ₽')
 
-                    let totalPrice = parseFloat(total) +
-                        parseFloat($('#orders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
+                   // let totalPrice =  parseFloat(total) +parseFloat($('#orders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
+                    $.get('/profile/total', function(response) {
+                        $('#total-price').text(response + ' ₽')
+                    })
 
-                    $('#total-price').text(Number(totalPrice).toFixed(0) + ' ₽')
                 });
             }
         })

@@ -13,6 +13,7 @@ use App\Models\ProfileAddress;
 use App\Models\User;
 use App\Models\UserBrandSaleSystem;
 use App\Models\UserSaleSystem;
+use App\Services\TotalsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -490,5 +491,13 @@ class ProfileController extends Controller
     public function exportPreorderXls(PreorderCheckout $preorder) {
         if (auth()->id() !== $preorder->user_id && auth()->user()->role_id != 1) abort(404);
         return Excel::download(new ExportPreorderXlsx($preorder), 'preorder.xlsx');
+    }
+
+    public function getGeneralTotal() {
+        return response(TotalsService::getTotalByUser());
+    }
+
+    public function getPreorderTotal() {
+
     }
 }
