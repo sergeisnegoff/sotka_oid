@@ -39,13 +39,16 @@ $diff = $endDate->diff($now);
                     заказа {{ number_format($preorder->min_order, 0, 2, ' ') }} рублей</p>
                 <p style="font-size:18px;margin-bottom:0;font-weight:bolder;">Предварительная оплата составляет
                     {{ $preorder->prepay_percent }}% от суммы заказа</p>
-                <p style="font-size:18px;margin-botton:0; font-weight:bolder;">С информацией по данному заказу можно
+                <p style="font-size:18px;margin-bottom:0; font-weight:bolder;">С информацией по данному заказу можно
                     ознакомиться на
                     <a href="/preorders/info/{{$preorder->id}}/" style="display:inline;" class="btn">
                             <button>
                                 странице заказа
                             </button>
                     </a>
+                </p>
+                <p  style="font-size:18px;margin-bottom:0; font-weight:bolder;">
+                   Сумма по данному предзаказу в Вашей корзине составляет <span id="concrete-preorder-price">{{\App\Services\TotalsService::getUserTotalByPreorder($preorder)}}</span> ₽
                 </p>
                 <p></p>
 
