@@ -103,8 +103,8 @@
                         let totalPrice = parseFloat(total) +
                            parseFloat($('#preorders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
 
-                        $.get('/profile/total', function(response) {
-                            $('#total-price').text(response + ' ₽')
+                        $.get('/profile/total/orders', function(response) {
+                            $('#orders-price').text(response + ' ₽')
                         })
                     });
                 }
@@ -248,8 +248,9 @@
                         Number(total).toFixed(0) + ' ₽')
 
                    // let totalPrice =  parseFloat(total) +parseFloat($('#orders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
-                    $.get('/profile/total', function(response) {
-                        $('#total-price').text(response + ' ₽')
+                    $.get('/profile/total/preorders', function(response) {
+                        $('#preorders-price').text(response + ' ₽')
+
                     })
 
                 });

@@ -70,8 +70,8 @@ Route::get('update-catalog/{filename?}', [\App\Http\Controllers\ImportController
 
 Route::prefix('/profile')->name('profile.')->group(function () {
     Route::prefix('total')->group(function() {
-        Route::get('/', [ProfileController::class, 'getGeneralTotal']);
-        Route::get('/preorder', [ProfileController::class, 'getPreorderTotal']);
+        Route::get('/orders', [ProfileController::class, 'getGeneralTotal']);
+        Route::get('/preorders', [ProfileController::class, 'getPreorderTotal']);
     });
     Route::get('/', [\App\Http\Controllers\ProfileController::class, 'index'])->name('index');
 

@@ -494,10 +494,10 @@ class ProfileController extends Controller
     }
 
     public function getGeneralTotal() {
-        return response(TotalsService::getTotalByUser());
+        return response(TotalsService::getUserTotalByOrders());
     }
 
     public function getPreorderTotal() {
-
+        return response(TotalsService::getUserTotalByPreorders());
     }
 }

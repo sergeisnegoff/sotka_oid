@@ -111,13 +111,15 @@
                             <div
                                 class="box__card {{ count(session('cart', [])) || count(\App\Services\Preorder\PreorderService::getCart())  ? '' : 'd-none' }}">
                                 <button class="d-flex" style="align-items:center;" data-btn-popup="basket">
-                                    <span class="d-block" style="margin-right: 20px;" id="total-price">
-                                           {{ number_format(collect(session('cart', []))->sum(function ($item) {
-                                            return ($item['price'] ?? 0) * $item['quantity'];
-                                        }) + collect(\App\Services\Preorder\PreorderService::getCart())->sum(function ($item) {
-                                            return ($item['price'] ?? 0) * $item['quantity'];
-                                        }), 0, ',', '') }} ₽
+                                    <div class="d-flex" style="margin-right: 20px; flex-flow: column; align-items:end">
+                                                                            <span class="d-block"><span style="font-size:70%">Заказы:</span> <span  id="orders-price">
+                                           {{ \App\Services\TotalsService::getUserTotalByOrders() }}
+                                                                                    </span> ₽
                                     </span>
+                                        <span id="preorders-price-wrapper" @if(!\App\Services\TotalsService::getUserTotalByPreorders())class="d-none"@endif
+                                        ><span style="font-size:70%">Предзаказы:</span> <span id="preorders-price">{{\App\Services\TotalsService::getUserTotalByPreorders()}} </span>₽</span>
+                                    </div>
+
                                     <span class="head-icon">
                                         <span
                                             class="box__card-quality">{{ count(session('cart', [])) || count(\App\Services\Preorder\PreorderService::getCart()) }}</span>

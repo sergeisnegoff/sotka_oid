@@ -106,7 +106,12 @@
         console.log('totalPriceOrders', totalPriceOrders)
         console.log('totalPricePreOrders', totalPricePreOrders)
         let totalProductsPrice = Number(totalPriceOrders) + Number(totalPricePreOrders) + ' ₽';
-        $('#total-price').html(totalProductsPrice)
+        $.get('/profile/total/orders', function(response) {
+            $('#orders-price').text(response)
+        })
+        $.get('/profile/total/preorders', function(response) {
+            $('#preorders-price').text(response)
+        })
     }
 
 </script>
