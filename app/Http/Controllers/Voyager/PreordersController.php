@@ -59,7 +59,7 @@ class PreordersController extends VoyagerBaseController
             }
 
             return $redirect->with([
-                'message'    => __(
+                'message' => __(
                         'voyager::generic.successfully_added_new'
                     ) . " {$dataType->getTranslatedAttribute('display_name_singular')}",
                 'alert-type' => 'success',
@@ -129,18 +129,12 @@ class PreordersController extends VoyagerBaseController
 
     public function update(Request $request, $id)
     {
+        $preorder = Preorder::find($id);
         $slug = $this->getSlug($request);
 
         $code = [
             'code' => Str::slug($request->title),
         ];
-
-        \Validator::make($code, [
-            'code' => Rule::unique('preorders', 'code')->ignore($id)
-        ], [
-            'unique' => 'Поля название уже существует',
-        ])->validate();
-
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         // Compatibility with Model binding.
@@ -173,55 +167,59 @@ class PreordersController extends VoyagerBaseController
         $original_data = clone($data);
 
         $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
+        if (!$preorder->file_processed) {
+            foreach ($request->get('sheets') as $sheetId => $sheet) {
+                if (!isset($sheet['active'])) {
+                    continue;
+                }
+                if (!$preorder->is_internal)
+                    \Validator::make($sheet, [
+                        'category' => 'required',
+                        'title' => 'required',
+                        'barcode' => 'required',
+                        'price' => 'required',
+                    ], [
+                        'required' => 'Поле :attribute обязательно.',
+                    ], [
+                        'category' => 'Категория',
+                        'title' => 'Наименование продукта',
+                        'barcode' => 'Штрихкод',
+                        'price' => 'Цена',
+                    ])->validateWithBag('sheets');
 
-        foreach ($request->get('sheets') as $sheetId => $sheet) {
-            if (!isset($sheet['active'])) {
-                continue;
-            }
+                $preorderSheet = PreorderTableSheet::query()
+                    ->where('id', $sheetId)
+                    ->first();
 
-            \Validator::make($sheet, [
-                'category' => 'required',
-                'title'    => 'required',
-                'barcode'  => 'required',
-                'price'    => 'required',
-            ], [
-                'required' => 'Поле :attribute обязательно.',
-            ], [
-                'category' => 'Категория',
-                'title'    => 'Наименование продукта',
-                'barcode'  => 'Штрихкод',
-                'price'    => 'Цена',
-            ])->validateWithBag('sheets');
+                if (!$preorderSheet) {
+                    continue;
+                }
+                if (!$preorder->is_internal) {
+                $preorderSheet->fill([
+                    'hard_limit' => $sheet['hard_limit'],
+                    'soft_limit' => $sheet['soft_limit'],
+                ]);
+                $preorderSheet->save();
+                }
+                PreorderSheetMarkup::query()
+                    ->where('preorder_table_sheet_id', $sheetId)
+                    ->delete();
 
-            $preorderSheet = PreorderTableSheet::query()
-                ->where('id', $sheetId)
-                ->first();
+                $preorderSheetMarkup = new PreorderSheetMarkup();
+                $preorderSheetMarkup->fill(array_merge($sheet, ['preorder_table_sheet_id' => $sheetId]));
 
-            if (!$preorderSheet) {
-                continue;
-            }
+                $preorderSheetMarkup->save();
 
-            $preorderSheet->fill([
-                'hard_limit' => $sheet['hard_limit'],
-                'soft_limit' => $sheet['soft_limit'],
-            ]);
-            $preorderSheet->save();
+                $preorderSheet->update([
+                    'active' => $sheet['active']
+                ]);
 
-            PreorderSheetMarkup::query()
-                ->where('preorder_table_sheet_id', $sheetId)
-                ->delete();
 
-            $preorderSheetMarkup = new PreorderSheetMarkup();
-            $preorderSheetMarkup->fill(array_merge($sheet, ['preorder_table_sheet_id' => $sheetId]));
+                if (!$preorder->is_internal)
+                    Artisan::call('test:getdata ' . $preorderSheet->id);
+                else
+                    Artisan::call('test:getinternaldata ' . $preorderSheet->id);
 
-            $preorderSheetMarkup->save();
-
-            $preorderSheet->update([
-                'active' => $sheet['active']
-            ]);
-            $preorder = Preorder::find($id);
-            if (!$preorder->file_processed) {
-                Artisan::call('test:getdata ' . $preorderSheet->id);
             }
         }
         $preorder->update(['file_processed' => true]);
@@ -238,7 +236,7 @@ class PreordersController extends VoyagerBaseController
         }
 
         return $redirect->with([
-            'message'    => __(
+            'message' => __(
                     'voyager::generic.successfully_updated'
                 ) . " {$dataType->getTranslatedAttribute('display_name_singular')}",
             'alert-type' => 'success',

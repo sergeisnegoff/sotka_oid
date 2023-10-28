@@ -28,7 +28,8 @@ class Product extends Model
         'video_link',
         'multiplicity',
         'total',
-        'main_page'
+        'main_page',
+        'barcode'
     ];
 
 

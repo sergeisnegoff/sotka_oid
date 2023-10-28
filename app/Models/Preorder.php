@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Preorder extends Model
 {
-    protected $fillable = ['file_processed', 'is_finished'];
+    protected $fillable = ['file_processed', 'is_finished', 'is_internal'];
 
     public static function boot()
     {

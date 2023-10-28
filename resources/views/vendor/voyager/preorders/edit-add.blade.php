@@ -2,7 +2,6 @@
     $edit = !is_null($dataTypeContent->getKey());
     $add  = is_null($dataTypeContent->getKey());
 @endphp
-
 @extends('voyager::master')
 
 @section('css')
@@ -125,6 +124,7 @@
                                     <thead class="table-vertical-heading">
                                     <tr>
                                         <th>Название</th>
+                                        @if(!$dataTypeContent->is_internal)
                                         <th><span>Активен</span></th>
                                         <th><span>Штрихкод*</span></th>
                                         <th><span>Категория*</span></th>
@@ -155,7 +155,7 @@
                                         <th><span>Доп. 2</span></th>
                                         <th><span>Доп. 3</span></th>
                                         <th><span>Доп. 4</span></th>
-
+                                            @endif
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -167,6 +167,7 @@
                                                        {{ old("sheets.{$sheet->id}.active", $sheet->active) == '1' ? 'checked' : '' }}
                                                        name="sheets[{{ $sheet->id }}][active]">
                                             </td>
+                                            @if(!$dataTypeContent->is_internal)
                                             <td><input type="text" name="sheets[{{ $sheet->id }}][barcode]"
                                                        value="{{ $sheet->markup !== null ? $sheet->markup->barcode : '' }}"
                                                        class="form-control"></td>
@@ -258,6 +259,7 @@
                                             <td><input type="text" name="sheets[{{ $sheet->id }}][additional_4]"
                                                        value="{{ $sheet->markup !== null ? $sheet->markup->additional_4 : '' }}"
                                                        class="form-control"></td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                     </tbody>
