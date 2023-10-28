@@ -38,6 +38,7 @@ class ProcessUpdateJob implements ShouldQueue {
                     'oneC_7' => $item['xml_id']
                 ], [
                     'title' => $item['name'],
+                    'barcode' => $item['barcode'] ?? null,
                     'category_id' => $subcategory->id,
                     'price' => $item['cost'],
                     'total' => $item['total'],

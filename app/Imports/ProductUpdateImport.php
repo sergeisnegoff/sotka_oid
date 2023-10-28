@@ -52,6 +52,7 @@ class ProductUpdateImport implements ToCollection {
                     $data[$key]['items'][] = [
                         'xml_id' => $row[7],
                         'name' => $row[0],
+                        'barcode' => $row[1],
                         'cost' => $row[2],
                         'total' => $row[5],
                         'multiplicity' => $row[6],
