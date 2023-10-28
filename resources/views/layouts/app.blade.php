@@ -113,11 +113,10 @@
                                 <button class="d-flex" style="align-items:center;" data-btn-popup="basket">
                                     <div class="d-flex" style="margin-right: 20px; flex-flow: column; align-items:end">
                                                                             <span class="d-block"><span style="font-size:70%">Заказы:</span> <span  id="orders-price">
-                                           {{ \App\Services\TotalsService::getUserTotalByOrders() }}
-                                                                                    </span> ₽
+                                           {{ \App\Services\TotalsService::getUserTotalByOrders() }}</span> ₽
                                     </span>
                                         <span id="preorders-price-wrapper" @if(!\App\Services\TotalsService::getUserTotalByPreorders())class="d-none"@endif
-                                        ><span style="font-size:70%">Предзаказы:</span> <span id="preorders-price">{{\App\Services\TotalsService::getUserTotalByPreorders()}} </span>₽</span>
+                                        ><span style="font-size:70%">Предзаказы:</span> <span id="preorders-price">{{\App\Services\TotalsService::getUserTotalByPreorders()}}</span> ₽</span>
                                     </div>
 
                                     <span class="head-icon">
@@ -318,6 +317,7 @@
                                 success: function (data) {
                                     $.get('/profile', function (result) {
                                         $('#preorders-tab').html($(result).find('#preorders-tab').html())
+                                        updatePreordersCartInHead()
                                     })
                                 }
                             })

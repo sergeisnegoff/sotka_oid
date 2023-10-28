@@ -4,7 +4,18 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    function updateOrdersCartInHead() {
+        $.get('/profile/total/orders', function(response) {
+            $('#orders-price').text(response + ' ₽')
+        })
+    }
+    function updatePreordersCartInHead() {
+        $.get('/profile/total/preorders', function(response) {
+            $('#preorders-price-wrapper').removeClass('d-none')
+            $('#preorders-price').text(response)
 
+        })
+    }
     let loaded = 0;
     $(document).ready(function () {
         let timeoutSearch;
@@ -103,9 +114,7 @@
                         let totalPrice = parseFloat(total) +
                            parseFloat($('#preorders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
 
-                        $.get('/profile/total/orders', function(response) {
-                            $('#orders-price').text(response + ' ₽')
-                        })
+                        updateOrdersCartInHead()
                     });
                 }
             });
@@ -151,6 +160,7 @@
                             location.reload();
                         }
                         ele.closest('.wrapper__baskets-item').remove();
+                        updateOrdersCartInHead()
                     }, 'html');
                 }
             });
@@ -248,14 +258,13 @@
                         Number(total).toFixed(0) + ' ₽')
 
                    // let totalPrice =  parseFloat(total) +parseFloat($('#orders-tab').find('.wrapper-popup-bottom .box__price').text().replace(/[^\d.-]/g, ''));
-                    $.get('/profile/total/preorders', function(response) {
-                        $('#preorders-price').text(response + ' ₽')
-
-                    })
+                    updatePreordersCartInHead()
 
                 });
             }
         })
+
     })
+
 </script>
 
