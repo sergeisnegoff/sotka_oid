@@ -43,19 +43,23 @@ class MerchController extends Controller
 
     public function showPreorder(Preorder $preorder)
     {
+        $onlyOrdered = \request()->get('with_checkouts', false);
         $currentCategory = PreorderCategory::where('id', request()->get('category', $preorder->categories()->first()?->id))->first();
         $currentsubCategory = PreorderCategory::
         where('preorder_category_id', $currentCategory->id)
             ->where('id', request()->get('subcategory', $currentCategory->childs()->first()->id))
             ->first();
         $categories = PreorderCategory::root()->whereBelongsTo($preorder)->with('childs')->get();
-        $products = $currentsubCategory->products()
-            //->whereHas('checkouts', function ($query) {
-            //$query->havingRaw('COUNT(*) > 1');})
-            ->paginate(15);
+        $products = $currentsubCategory->products();
+        if ($onlyOrdered) {
+            $products = $products->whereHas('checkouts', function ($query) {
+                $query->havingRaw('COUNT(*) > 0');});
+        }
+        $products = $products->paginate(15);
         $paginator = $products;
         return response()->view('merch.preorder',
             compact('currentCategory',
+                'onlyOrdered',
                 'currentsubCategory',
                 'categories',
                 'preorder',
@@ -193,12 +197,14 @@ class MerchController extends Controller
 
     public function lazyPages(Preorder $preorder)
     {
+        $onlyOrdered = \request()->get('with_checkouts', false);
         \Debugbar::disable();
         $currentCategory = PreorderCategory::where('id', request()->get('subcategory'))->with('products')->first();
-        $products = $currentCategory->products()
-            //->whereHas('checkouts', function ($query) {
-            //$query->havingRaw('COUNT(*) > 1');})
-            ->paginate(15);
+        $products = $currentCategory->products();
+        if ($onlyOrdered)
+            $products = $products->whereHas('checkouts', function ($query) {
+                $query->havingRaw('COUNT(*) > 0');});
+        $products = $products->paginate(15);
         return response()->view('merch.components.list.lazy', compact('preorder', 'products'));
     }
 }

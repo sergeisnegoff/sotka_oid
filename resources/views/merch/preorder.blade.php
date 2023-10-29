@@ -10,7 +10,9 @@
             @include('merch.components.preorder-tabs')
             <div class="row">
                 <div class="col-12">
+                    <div class="col-12"  style="display: flex; flex-flow: row; margin-top:25px;">
                     @include('merch.components.subcategory')
+                    </div>
                     <div class="wrapper__currentorder-info">
 
                         <div class="box__basketpage">

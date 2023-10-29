@@ -1,5 +1,5 @@
 <div class="col-12 col-md-4">
-    <div class="box__catalog-sorting" style="margin-top:25px;">
+    <div class="box__catalog-sorting" >
 
         <div class="wrapper-sorting-title d-none d-xl-block">Подкатегория:</div>
         <div>
@@ -12,6 +12,13 @@
         </div>
     </div>
 </div>
+<div class="col-12 col-md-4">
+    <div class="wrapper-sorting-title d-none d-xl-block">Фильтр заказов:</div>
+    <div>
+        <input name="only-ordered" id="only-ordered-checkbox" type="checkbox" @if($onlyOrdered) checked @endif>
+        <label for="only-ordered">Только с заказами</label>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         $('#subcategorySelect').change(function () {
@@ -20,5 +27,16 @@
                 url.searchParams.set('subcategory', value);
             window.location.href = url.href;
         })
+        $('#only-ordered-checkbox').change(function () {
+            const el = $(this)
+            let url = new URL(window.location.href)
+            if (el.prop('checked')) {
+                url.searchParams.set('with_checkouts', 1)
+            } else {
+                url.searchParams.delete('with_checkouts')
+            }
+            window.location.href = url.href
+        })
+
     })
 </script>
