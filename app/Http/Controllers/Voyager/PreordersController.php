@@ -199,8 +199,13 @@ class PreordersController extends VoyagerBaseController
                     'hard_limit' => $sheet['hard_limit'],
                     'soft_limit' => $sheet['soft_limit'],
                 ]);
-                $preorderSheet->save();
+                } else {
+                    $preorderSheet->fill([
+                        'soft_limit' => 'C',
+                        'hard_limit' => 'D'
+                    ]);
                 }
+                $preorderSheet->save();
                 PreorderSheetMarkup::query()
                     ->where('preorder_table_sheet_id', $sheetId)
                     ->delete();

@@ -91,6 +91,12 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 ]);
 
             $image = null;
+            $soft_limit = null;
+            $hard_limit = null;
+            if ($sl = $sheet->getCell($markup->soft_limit.$row)->getValue())
+                $soft_limit = $sl;
+            if ($hl = $sheet->getCell($markup->hard_limit.$row)->getValue())
+                $hard_limit = $hl;
             if ($product->images) {
                 try {
                     $currentImagePath = storage_path('app/public/' . $product->image);
@@ -118,7 +124,9 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 'merch_price' => $shouldParseMerchPrices ?
                     $merchSheet->getCell("B$row")->getValue() :
                     null,
-                'cell_number' => $row
+                'cell_number' => $row,
+                'soft_limit' => $soft_limit,
+                'hard_limit' => $hard_limit
             ]);
             $row++;
         }
