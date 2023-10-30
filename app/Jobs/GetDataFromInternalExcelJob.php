@@ -121,9 +121,6 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 'image' => $image,
                 'price' => $product->price,
                 'preorder_category_id' => $currentSubCategory->id,
-                'merch_price' => $shouldParseMerchPrices ?
-                    $merchSheet->getCell("B$row")->getValue() :
-                    null,
                 'cell_number' => $row,
                 'soft_limit' => $soft_limit,
                 'hard_limit' => $hard_limit
