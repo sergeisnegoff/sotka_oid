@@ -68,8 +68,10 @@ class GetDataFromInternalExcelJob implements ShouldQueue
             }
             $barcode = $sheet->getCell("A$row")->getValue();
             $product = Product::where('barcode', $barcode)->first();
-            if (!$product)
+            if (!$product) {
+                $row++;
                 continue;
+            }
             $productCategory = $product->category;
             $rootProductCategory = Category::find($productCategory->parent_id);
             $currentCategory = PreorderCategory::firstOrCreate(
@@ -110,6 +112,7 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                     \Log::log(LOG_WARNING, $e->getMessage());
                 }
             }
+            $price = $sheet->getCell($markup->price.$row)->getValue() ?? $product->price;
             $preorderProduct = PreorderProduct::updateOrCreate([
                 'title' => $product->title,
                 'preorder_category_id' => $currentSubCategory->id,
@@ -121,7 +124,7 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 'multiplicity' => $product->multiplicity,
                 'description' => $product->description,
                 'image' => $image,
-                'price' => $product->price,
+                'price' => $price,
                 'preorder_category_id' => $currentSubCategory->id,
                 'cell_number' => $row,
                 'soft_limit' => $soft_limit,
