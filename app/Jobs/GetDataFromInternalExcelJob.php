@@ -62,11 +62,16 @@ class GetDataFromInternalExcelJob implements ShouldQueue
         $row = 1;
 
         while ($row < $sheet->getHighestRow()) {
-            if (is_null($sheet->getCell("A$row")->getValue())) {
+            $barcode = $sheet->getCell("A$row")->getValue();
+            if (is_null($barcode)) {
                 $row++;
                 continue;
             }
-            $barcode = $sheet->getCell("A$row")->getValue();
+            $barcode = str_replace(' ', '', $barcode);
+            if (!$barcode) {
+                $row++;
+                continue;
+            }
             $product = Product::where('barcode', $barcode)->first();
             if (!$product) {
                 $row++;
