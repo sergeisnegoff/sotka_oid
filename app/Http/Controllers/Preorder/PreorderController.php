@@ -21,7 +21,7 @@ class PreorderController extends Controller
 {
     public function index()
     {
-        $preorders = Preorder::whereDate('end_date', '>', now()->toDateString())->get();
+        $preorders = Preorder::whereDate('end_date', '>', now()->toDateString())->whereHas('categories')->get();
         $info = Page::where('slug', 'preorders')->first();
 
         return view('preorder.index', compact('preorders', 'info'));

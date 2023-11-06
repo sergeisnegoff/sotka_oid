@@ -63,7 +63,7 @@
         <ul class="d-block">
                 <?php
 
-            foreach ($preorders->whereDate('end_date', '>', now()->toDateString())->get() as $preorder) {
+            foreach ($preorders->whereDate('end_date', '>', now()->toDateString())->whereHas('categories')->get() as $preorder) {
                 ?>
             <li>
                 <a href="/preorders/{{ $preorder->id }}" style="position:relative;">
