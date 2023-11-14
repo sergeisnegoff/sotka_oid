@@ -149,18 +149,18 @@ class MerchController extends Controller
                 $concreteSheet = $spreadsheet->getSheetByName($sheet->title);
                 $row = 1;
                 while ($row < $concreteSheet->getHighestRow()) {
-                    $notExistBarcode = (is_null($concreteSheet->getCell($sheet->markup->barcode . $row)->getValue())
-                        || (int)$concreteSheet->getCell($sheet->markup->barcode . $row)->getValue() === 0);
+                    $barcodeLetter = $preorder->is_internal ? 'A' : $sheet->markup->barcode;
+                    $notExistBarcode = (is_null($concreteSheet->getCell($barcodeLetter . $row)->getValue())
+                        || (int)$concreteSheet->getCell($barcodeLetter . $row)->getValue() === 0);
 
                     if (
                         $notExistBarcode
-                        || (is_null($concreteSheet->getCell($sheet->markup->title . $row)->getValue())
-                            && is_null($concreteSheet->getCell($sheet->markup->price . $row)->getValue()))
+                        || is_null($concreteSheet->getCell($sheet->markup->price . $row)->getValue())
                     ) {
                         $row++;
                         continue;
                     }
-                    $barcode = $concreteSheet->getCell($sheet->markup->barcode . $row)->getValue();
+                    $barcode = $concreteSheet->getCell($barcodeLetter . $row)->getValue();
                     $product = PreorderProduct::where('barcode', $barcode)->first();
                     $row++;
                     if (!$product) {
