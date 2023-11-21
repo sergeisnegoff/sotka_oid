@@ -124,13 +124,16 @@
                                     <thead class="table-vertical-heading">
                                     <tr>
                                         <th>Название</th>
-                                        @if(!$dataTypeContent->is_internal)
                                         <th><span>Активен</span></th>
+                                        @if(!$dataTypeContent->is_internal)
+
                                         <th><span>Штрихкод*</span></th>
                                         <th><span>Категория*</span></th>
                                         <th><span>Подкатегория*</span></th>
                                         <th><span>Наименование*</span></th>
+                                        @endif
                                         <th><span>Кратность*</span></th>
+                                        @if(!$dataTypeContent->is_internal)
                                         <th><span>Цена*</span></th>
                                         <th><span>Описание</span></th>
                                         <th><span>Фотография</span></th>
@@ -184,9 +187,11 @@
                                             <td><input type="text" name="sheets[{{ $sheet->id }}][title]"
                                                        value="{{ $sheet->markup !== null ? $sheet->markup->title : '' }}"
                                                        class="form-control"></td>
+                                            @endif
                                             <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity]"
                                                        value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity : '' }}"
                                                        class="form-control"></td>
+                                            @if(!$dataTypeContent->is_internal)
                                             <td><input type="text" name="sheets[{{ $sheet->id }}][price]"
                                                        value="{{ $sheet->markup !== null ? $sheet->markup->price : '' }}"
                                                        class="form-control"></td>

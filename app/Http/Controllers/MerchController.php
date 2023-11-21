@@ -172,9 +172,9 @@ class MerchController extends Controller
             }
             $preorder->is_finished = true;
             $preorder->save();
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xlsx"');
-            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xls"');
+            $writer = IOFactory::createWriter($spreadsheet, 'Xls');
             $writer->save('php://output');
         } catch (\Exception $exception) {
             \Log::error($exception->getMessage());

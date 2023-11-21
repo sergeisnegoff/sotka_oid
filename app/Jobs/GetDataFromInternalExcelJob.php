@@ -118,6 +118,8 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 }
             }
             $price = $sheet->getCell($markup->price.$row)->getValue() ?? $product->price;
+
+            $multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;
             $preorderProduct = PreorderProduct::updateOrCreate([
                 'title' => $product->title,
                 'preorder_category_id' => $currentSubCategory->id,
@@ -126,7 +128,7 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 'preorder_id' => $preorder->id,
                 'title' => $product->title,
                 'barcode' => $product->barcode,
-                'multiplicity' => $product->multiplicity,
+                'multiplicity' => $multiplicity,
                 'description' => $product->description,
                 'image' => $image,
                 'price' => $price,
