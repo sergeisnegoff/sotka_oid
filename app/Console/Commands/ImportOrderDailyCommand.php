@@ -29,9 +29,11 @@ class ImportOrderDailyCommand extends Command
     public function handle()
     {
         $betweenTime = match ($this->argument('time')) {
-            "8" => [Carbon::now()->subDay()->setTimeFromTimeString(setting('admin.THIRD_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.FIRST_EXPORT'))],
-            "12" => [Carbon::now()->setTimeFromTimeString(setting('admin.FIRST_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.SECOND_EXPORT'))],
-            "16" => [Carbon::now()->setTimeFromTimeString(setting('admin.SECOND_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.THIRD_EXPORT'))],
+            "8" => [Carbon::now()->subDay()->setTimeFromTimeString(setting('admin.FIFTH_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.FIRST_EXPORT'))],
+            "10" => [Carbon::now()->subDay()->setTimeFromTimeString(setting('admin.FIRST_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.SECOND_EXPORT'))],
+            "12" => [Carbon::now()->setTimeFromTimeString(setting('admin.SECOND_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.THIRD_EXPORT'))],
+            "14" => [Carbon::now()->setTimeFromTimeString(setting('admin.THIRD_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.FOURTH_EXPORT'))],
+            "16" => [Carbon::now()->setTimeFromTimeString(setting('admin.FOURTH_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.FIFTH_EXPORT'))],
             default => [Carbon::today(), Carbon::tomorrow()],
         };
 

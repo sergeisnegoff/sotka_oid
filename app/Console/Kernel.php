@@ -47,11 +47,17 @@ class Kernel extends ConsoleKernel
         $schedule->command('export:orders 8')
             ->dailyAt(setting('admin.FIRST_EXPORT'));
 
-        $schedule->command('export:orders 12')
+        $schedule->command('export:orders 10')
             ->dailyAt(setting('admin.SECOND_EXPORT'));
 
-        $schedule->command('export:orders 16')
+        $schedule->command('export:orders 12')
             ->dailyAt(setting('admin.THIRD_EXPORT'));
+
+        $schedule->command('export:orders 14')
+            ->dailyAt(setting('admin.FOURTH_EXPORT'));
+
+        $schedule->command('export:orders 16')
+            ->dailyAt(setting('admin.FIFTH_EXPORT'));
 
         $schedule->command('queue:restart')->daily()->runInBackground();
 
