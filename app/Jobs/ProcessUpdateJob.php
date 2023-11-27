@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Mail\WrongImportProducts;
 use App\Models\Brands;
 use App\Models\Category;
 use App\Models\Product;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ProcessUpdateJob implements ShouldQueue {
@@ -32,19 +34,50 @@ class ProcessUpdateJob implements ShouldQueue {
         /** @var Category $subcategory */
         $subcategory = Category::query()->firstOrCreate(['title' => $this->category, 'parent_id' => $category->id]);
 
+        $wrongProducts = [];
+
         foreach ($this->items as $item) {
-            $product = Product::query()->updateOrCreate(
-                [
-                    'oneC_7' => $item['xml_id']
-                ], [
-                    'title' => $item['name'],
-                    'barcode' => $item['barcode'] ?? null,
-                    'category_id' => $subcategory->id,
-                    'price' => $item['cost'],
-                    'total' => $item['total'],
-                    'multiplicity' => $item['multiplicity'],
-                ]
-            );
+
+            $product = Product::where('oneC_7', $item['xml_id'])->first();
+            if ($product) {
+                if ($product->title == $item['name'] && $product->barcode == $item['barcode']) {
+                    $product->category_id = $subcategory->id;
+                    $product->price = $item['cost'];
+                    $product->total = $item['total'];
+                    $product->multiplicity = $item['multiplicity'];
+                    $product->save();
+                }
+                else {
+                    $wrongProducts[] = [
+                        'row' => $item['row'],
+                        'name' => $item['name'],
+                        'barcode' => $item['barcode'],
+                    ];
+                }
+            }
+            else {
+                $product = new Product();
+                $product->oneC_7 = $item['xml_id'];
+                $product->title = $item['name'];
+                $product->barcode = $item['barcode'];
+                $product->category_id = $subcategory->id;
+                $product->price = $item['cost'];
+                $product->total = $item['total'];
+                $product->multiplicity = $item['multiplicity'];
+                $product->save();
+            }
+//            $product = Product::query()->updateOrCreate(
+//                [
+//                    'oneC_7' => $item['xml_id']
+//                ], [
+//                    'title' => $item['name'],
+//                    'barcode' => $item['barcode'] ?? null,
+//                    'category_id' => $subcategory->id,
+//                    'price' => $item['cost'],
+//                    'total' => $item['total'],
+//                    'multiplicity' => $item['multiplicity'],
+//                ]
+//            );
 
             if (!is_null($image = $item['image'])) {
                 $ext = pathinfo($image, PATHINFO_EXTENSION);
@@ -161,6 +194,13 @@ class ProcessUpdateJob implements ShouldQueue {
                 }
             }
 
+        }
+        if (count($wrongProducts) > 0) {
+            $recipient = "sotkasaitzakaz@yandex.ru"; // Replace with the recipient email address
+            //$recipient = "magzip23@gmail.com";
+            $subject = "Отчет по импорту"; // Replace with your desired subject line
+
+            Mail::to($recipient)->send(new WrongImportProducts($wrongProducts, $subject));
         }
     }
 }

@@ -38,6 +38,8 @@ class ProductUpdateImport implements ToCollection {
                     return;
                 }
 
+                $xlsRow = $key;
+
                 if (is_null($row[7] ?? null)) {
                     if ($last_category_index + 1 === $key) {
                         $main_category = $category;
@@ -59,6 +61,7 @@ class ProductUpdateImport implements ToCollection {
                         'manufacturer' => $row[8] ?? null,
                         'image' => $row[9] ?? null,
                         'filters' => $row[10] ?? null,
+                        'row' => (int)$xlsRow + 1,
                     ];
                 }
             }
