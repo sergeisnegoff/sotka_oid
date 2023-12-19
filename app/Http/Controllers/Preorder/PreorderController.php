@@ -118,7 +118,7 @@ class PreorderController extends Controller
             'price' => $product->price,
             'quantity' => $quantity,
             'multiplicity' => $product->multiplicity,
-            'image' => $product->image,
+            'image' => $product->image ?? $product->preorder->default_image,
             'preorder_id' => $product->category->preorder_id,
         ];
 
@@ -142,7 +142,7 @@ class PreorderController extends Controller
             'price' => $product->price,
             'quantity' => $quantity,
             'multiplicity' => $product->multiplicity,
-            'image' => $product->image,
+            'image' => $product->image ?? $product->preorder->default_image,
             'preorder_id' => $product->category->preorder_id,
         ];
 

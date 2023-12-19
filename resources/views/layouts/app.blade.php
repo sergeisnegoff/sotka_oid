@@ -258,7 +258,7 @@
                             <div class="row">
                                 <div class="col-3">
                                     <div class="box__image"><a href="#"><img
-                                                src="{{ thumbImg($details['image']) }}" alt=""></a></div>
+                                                src="{{ thumbImg($details['image'] ?? $product->preorder->default_image) }}" alt=""></a></div>
                                 </div>
                                 <div class="col-9">
                                     <a href="#" class="item_remove remove-from-preorder-cart"

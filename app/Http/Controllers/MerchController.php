@@ -145,11 +145,14 @@ class MerchController extends Controller
         try {
             $spreadsheet = IOFactory::load(storage_path() . '/app/public/' . json_decode($preorder->merch_file)[0]->download_link);
             $sheets = PreorderTableSheet::where('preorder_id', $preorder->id)->where('active', true)->with('markup')->get();
+
             foreach ($sheets as $sheet) {
                 $concreteSheet = $spreadsheet->getSheetByName($sheet->title);
+
                 $row = 1;
                 while ($row < $concreteSheet->getHighestRow()) {
-                    $barcodeLetter = $preorder->is_internal ? 'A' : $sheet->markup->barcode;
+                    $barcodeLetter = $preorder->is_internal ? ($preorder->merch_barcode_field ?? 'A') : $sheet->markup->barcode;
+                    //dd($preorder->is_internal, $sheet->markup->barcode);
                     $notExistBarcode = (is_null($concreteSheet->getCell($barcodeLetter . $row)->getValue())
                         || (int)$concreteSheet->getCell($barcodeLetter . $row)->getValue() === 0);
 
@@ -162,12 +165,14 @@ class MerchController extends Controller
                     }
                     $barcode = $concreteSheet->getCell($barcodeLetter . $row)->getValue();
                     $product = PreorderProduct::where('barcode', $barcode)->first();
-                    $row++;
+
                     if (!$product) {
+                        $row++;
                         continue;
                     }
-                    $concreteSheet->setCellValue($preorder->merch_qty_field . $row, $product->getTotalQty() ?? '');
 
+                    $concreteSheet->setCellValue($preorder->merch_qty_field . $row, $product->getTotalQty() ?? '');
+                    $row++;
                 }
             }
             $preorder->is_finished = true;

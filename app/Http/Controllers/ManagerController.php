@@ -18,7 +18,8 @@ class ManagerController extends Controller
 {
     public function clients()
     {
-        $managerClients = UserService::usersPinnedOnManager(auth()->user())->with('ordersTotal');
+        //$managerClients1 = UserService::usersPinnedOnManager(auth()->user())->with('ordersTotal');
+        $managerClients = UserService::usersPinnedOnManager(auth()->user());
         $filterSorting = \request()->sorting;
         $filterName = \request()->name;
         if ($filterSorting)

@@ -83,8 +83,10 @@
                                                                 <div class="row">
                                                                     <div class="col-12 col-xl-3">
                                                                         <div class="wrapper__baskets-info">
-                                                                            <div class="box__image"><span
-                                                                                    style="background-image: url( {{ thumbImg($product['image'], 50, 70) }} );"></span>
+                                                                            <div class="box__image">
+                                                                                <span
+                                                                                    style="background-image: url( {{ thumbImg($product['image'] ?? $product->preorder_product->preorder->default_image, 50, 70) }} );">
+                                                                                </span>
                                                                             </div>
                                                                             <a href="/preorders/product/{{ $product->preorder_product->id }}">
                                                                                 <h3>{{ $product->preorder_product->title }}</h3></a>
