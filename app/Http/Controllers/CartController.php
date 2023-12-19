@@ -307,10 +307,18 @@ class CartController extends Controller
         );
 
         $log->info('Cart items found');
-
+        $sum = 0;
         foreach ($cartItems as $id => $product) {
             Order::orderProducts($order->id, $id, $product['quantity'], $product['price'] * $product['quantity']);
+            $sum = $sum + $product['price'] * $product['quantity'];
         }
+
+        $order->amount = $sum;
+        $order->save();
+
+        $total = $user->orders_total_amount + $sum;
+        $user->orders_total_amount = $total;
+        $user->save();
 
         $log->info('Filled cart items');
 

@@ -101,7 +101,21 @@ class ImportController extends Controller
                         Log::channel('import')->info('two '.$row['O']);
                     }
                 }
+                if (!empty($order)) {
+                    $orderAmount = $order->total();
+                    $oldOrderAmount = $order->amount;
 
+                    if (floatval($orderAmount) != floatval($oldOrderAmount)) {
+                        $order->amount = $orderAmount;
+                        $order->save();
+                        if(!is_null($order->user_id)) {
+                            $user = User::find($order->user_id);
+                            $oldOrdersTotalAmount = $user->orders_total_amount;
+                            $user->orders_total_amount = $oldOrdersTotalAmount - $oldOrderAmount + $orderAmount;
+                            $user->save();
+                        }
+                    }
+                }
                 $product = [];
             }
         }

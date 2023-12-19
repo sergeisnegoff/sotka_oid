@@ -41,11 +41,13 @@ class OrdersTotalAmount extends Command
     {
         $orders = Order::all();
         foreach ($orders as $order){
+            dump('Обработка заказа ID=' . $order->id);
             $order->amount = $order->total();
             $order->save();
         }
         $users = User::all();
         foreach ($users as $user){
+            dump('Обработка пользователя ID=' . $order->id);
             $sum = 0;
             foreach ($user->orders as $order) {
                 $sum += $order->amount;
