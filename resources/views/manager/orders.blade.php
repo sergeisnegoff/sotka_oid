@@ -23,7 +23,7 @@
                                         <div class="col-12 col-xl-4">
                                         </div>
                                         <div class="col-12 col-xl-2">
-                                            <b>{{$order->total()}}₽</b>
+                                            <b>{{$order->amount}}₽</b>
                                         </div>
                                         <div class="col-12 col-xl-2">
                                             {{$order->status}}

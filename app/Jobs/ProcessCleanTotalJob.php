@@ -18,7 +18,9 @@ class ProcessCleanTotalJob implements ShouldQueue {
         $this->ids = $ids;
     }
 
-    public function handle() {
+    public function handle()
+    {
+
         Product::query()
             ->whereNotIn('oneC_7', $this->ids)
             ->update(

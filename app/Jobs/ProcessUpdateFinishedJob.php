@@ -20,7 +20,7 @@ class ProcessUpdateFinishedJob implements ShouldQueue {
 
 
     public function handle() {
-        dd($this->uuid);
+        //dd($this->uuid);
         Log::channel('import')->info('finish', ['uuid' => $this->uuid]);
     }
 

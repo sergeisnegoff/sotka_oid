@@ -128,6 +128,7 @@ class ManagerController extends Controller
                 $orders = $orders->whereDate('created_at', '<=', \request()->to_date);
         }
         $orders = $orders->paginate(15);
+        //dd($orders);
         $paginator = $orders;
         $page = 'orders';
         return view('manager.orders', compact('orders', 'page', 'paginator'));

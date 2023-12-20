@@ -9,6 +9,6 @@ class OrderService
     public static function getOrdersForCurrentManager() {
         return Order::whereHas('user', function ($query) {
             $query->where('manager_id', auth()->user()->managerContact->id);
-        })->orderByDesc('id');
+        })->orderByDesc('id')->with('products');
     }
 }

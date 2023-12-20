@@ -30,13 +30,9 @@
                                         </div>
                                         <div class="col-12 col-xl-2">
                                             <div class="btn">
-
-                                                <button type="submit" >
-                                                    <a href="/manager/clients/{{$client->id}}/upload_xlsx/">
-                                                        Профиль пользователя
-                                                    </a>
-                                                </button>
-
+                                                <a href="/manager/clients/{{$client->id}}/upload_xlsx/">
+                                                    Профиль пользователя
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

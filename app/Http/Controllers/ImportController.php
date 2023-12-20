@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProductUpdateDirectImport;
 use App\Imports\ProductUpdateImport;
 use App\Mail\UpdateOrder;
 use App\Models\cronSettings;
@@ -20,7 +21,7 @@ class ImportController extends Controller
     public function products()
     {
         $time = microtime(true);
-        ProductUpdateImport::make()->import(storage_path('app/1c/Price/obshii.xls'));
+        ProductUpdateDirectImport::make()->import(storage_path('app/1c/Price/obshii.xls'));
         return \response(microtime(true) - $time);
     }
 

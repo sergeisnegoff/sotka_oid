@@ -6,6 +6,7 @@ use App\Console\Kernel;
 use App\Jobs\ProcessCleanTotalJob;
 use App\Jobs\ProcessUpdateFinishedJob;
 use App\Jobs\ProcessUpdateJob;
+use App\Jobs\SendImportReport;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -38,6 +39,8 @@ class ProductUpdateDirectImport implements ToCollection {
                     return;
                 }
 
+                $xlsRow = $key;
+
                 if (is_null($row[7] ?? null)) {
                     if ($last_category_index + 1 === $key) {
                         $main_category = $category;
@@ -59,9 +62,11 @@ class ProductUpdateDirectImport implements ToCollection {
                         'manufacturer' => $row[8] ?? null,
                         'image' => $row[9] ?? null,
                         'filters' => $row[10] ?? null,
+                        'row' => (int)$xlsRow + 1,
                     ];
                 }
             }
+
         );
 
         if (count($data) && count($ids)) {
@@ -70,13 +75,15 @@ class ProductUpdateDirectImport implements ToCollection {
 
             ProcessCleanTotalJob::dispatch($ids)
                 ->onConnection('sync');
-            $prev = null;
+
             foreach ($data as $item) {
                 if (isset($item['category'])) {
-                    ProcessUpdateJob::dispatch($item['main_category'], $item['category'], $item['items'])
-                        ->onConnection('sync');
+                    ProcessUpdateJob::dispatch($item['main_category'], $item['category'], $item['items'])->afterCommit();
+                        //->onConnection('sync');
                 }
             }
+
+            SendImportReport::dispatch();
 
             ProcessUpdateFinishedJob::dispatch($uuid)
                 ->onConnection('sync');

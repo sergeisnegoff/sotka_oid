@@ -79,7 +79,7 @@ Route::prefix('/profile')->name('profile.')->group(function () {
         Route::get('/current', [\App\Http\Controllers\ProfileController::class, 'orders'])->name('current');
         Route::get('/order-history', [\App\Http\Controllers\ProfileController::class, 'orders'])->name('history');
         Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart');
-        Route::get('/success/{random}', [\App\Http\Controllers\CartController::class, 'success'])->name('success');
+        Route::get('/success/{order}', [\App\Http\Controllers\CartController::class, 'success'])->name('success');
         Route::get('/export-pdf/{order}', [ProfileController::class, 'exportPdf'])->name('export-pdf');
         Route::get('/export-xls/{order}', [ProfileController::class, 'exportXls'])->name('export-xls');
     });

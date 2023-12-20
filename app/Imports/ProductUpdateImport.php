@@ -6,6 +6,7 @@ use App\Console\Kernel;
 use App\Jobs\ProcessCleanTotalJob;
 use App\Jobs\ProcessUpdateFinishedJob;
 use App\Jobs\ProcessUpdateJob;
+use App\Jobs\SendImportReport;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -74,7 +75,7 @@ class ProductUpdateImport implements ToCollection {
             ProcessCleanTotalJob::dispatch($ids)
                 ->onConnection(Kernel::CONNECTION_DB)
                 ->onQueue(Kernel::QUEUE_IMPORT);
-            $prev = null;
+
             foreach ($data as $item) {
                 if (isset($item['category'])) {
                     ProcessUpdateJob::dispatch($item['main_category'], $item['category'], $item['items'])
@@ -82,6 +83,9 @@ class ProductUpdateImport implements ToCollection {
                         ->onQueue(Kernel::QUEUE_IMPORT);
                 }
             }
+
+            SendImportReport::dispatch()->onConnection(Kernel::CONNECTION_DB)
+                ->onQueue(Kernel::QUEUE_IMPORT);
 
             ProcessUpdateFinishedJob::dispatch($uuid)
                 ->onConnection(Kernel::CONNECTION_DB)

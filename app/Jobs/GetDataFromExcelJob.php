@@ -38,6 +38,7 @@ class GetDataFromExcelJob implements ShouldQueue
         $preorder = $this->preorderTableSheet->preorder()->first();
 
         $markup = $this->preorderTableSheet->markup;
+        //dd($this->preorderTableSheet->markup);
 
         $file = storage_path() . '/app/public/' . json_decode($preorder->file)[0]->download_link;
 
@@ -101,10 +102,12 @@ class GetDataFromExcelJob implements ShouldQueue
                     'preorder_table_sheet_id' => $this->preorderTableSheet->id
                 ]);
             }
-            $subCategoryName = $sheet->getCell($markup->subcategory . $row)->getValue();
-            if (!$subCategoryName) {
+            if(!is_null($markup->subcategory)) {
+                $subCategoryName = $sheet->getCell($markup->subcategory . $row)->getValue();
+            } else {
                 $subCategoryName = $emptySubcategory;
             }
+
             $currentsubCategory = PreorderCategory::where('preorder_category_id', $currentCategory->id)
                 ->where('title', $subCategoryName)
                 ->first();
@@ -197,7 +200,7 @@ class GetDataFromExcelJob implements ShouldQueue
                     'sku' => $sku,
 
                     'title' => $markup->title != null
-                        ? $sheet->getCell($markup->title . $row)->getValue()
+                        ? ($sheet->getCell($markup->title . $row)->getValue() ?? '')
                         : '',
 
                     'barcode' => $markup->barcode != null

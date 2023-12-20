@@ -164,10 +164,10 @@
             </div>
             <div class="col-12 col-md-4 col-xl-5">
                 <div class="box__footer-link"><a
-                        href="tel:8(3852)463620">{{setting('site.CONTACTS_SUPERVISOR_PHONE')}}</a><span>{{setting('site.CONTACTS_SUPERVISOR_PHONE')}}</span>
+                        href="tel:8(3852)463620">{{setting('site.CONTACTS_SUPERVISOR_PHONE')}}</a>
                 </div>
                 <div class="box__footer-link"><a
-                        href="tel:8(3852)504098">{{setting('site.CONTACTS_MANAGERS_PHONE')}}</a><span>{{setting('site.CONTACTS_MANAGERS_PHONE')}}</span>
+                        href="tel:8(3852)504098">{{setting('site.CONTACTS_MANAGERS_PHONE')}}</a>
                 </div>
                 <div class="box__footer-info">{{setting('site.ADDRESS_TEXT')}}</div>
                 <div class="box__footer-link"><a href="mailto:info@sotka-sem.ru">{{setting('site.CONTACTS_EMAIL')}}</a>
@@ -258,7 +258,7 @@
                             <div class="row">
                                 <div class="col-3">
                                     <div class="box__image"><a href="#"><img
-                                                src="{{ thumbImg($details['image'] ?? $product->preorder->default_image) }}" alt=""></a></div>
+                                                src="{{ thumbImg($details['image']) }}" alt=""></a></div>
                                 </div>
                                 <div class="col-9">
                                     <a href="#" class="item_remove remove-from-preorder-cart"

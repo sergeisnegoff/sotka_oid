@@ -11,7 +11,8 @@ class WrongImportProducts extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $products;
+    public $wrongProducts;
+    public $newProducts;
     public $subject;
 
     /**
@@ -19,9 +20,11 @@ class WrongImportProducts extends Mailable
      *
      * @return void
      */
-    public function __construct(array $wrongProducts, string $subject)
+    public function __construct(array $wrongProducts, array $newProducts, string $subject)
     {
-        $this->products = $wrongProducts;
+        $this->wrongProducts = $wrongProducts;
+        $this->subject = $subject;
+        $this->newProducts = $newProducts;
     }
 
     /**
@@ -31,6 +34,9 @@ class WrongImportProducts extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->subject)->markdown('email.wrongImportProducts', ['products' => $this->products]);
+        return $this->subject($this->subject)->markdown('email.wrongImportProducts', [
+            'wrongProducts' => $this->wrongProducts,
+            'newProducts' => $this->newProducts
+        ]);
     }
 }
