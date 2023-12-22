@@ -18,6 +18,7 @@ class ManagerMiddleware
     {
         $roleId = auth()->user()->role_id;
         if ($roleId == 2 || !$roleId || !auth()->user()->managerContact) abort(404);
+        //if ($roleId == 2 || !$roleId) abort(404);
         return $next($request);
     }
 }
