@@ -30,11 +30,11 @@
                           action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
                           method="POST" enctype="multipart/form-data">
                         <!-- PUT Method if we are editing -->
-                        @if($edit)
-                            {{ method_field("PUT") }}
-                        @endif
+                    @if($edit)
+                        {{ method_field("PUT") }}
+                    @endif
 
-                        <!-- CSRF TOKEN -->
+                    <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
                         <div class="panel-body">
@@ -57,7 +57,7 @@
                                 </div>
                             @endif
 
-                            <!-- Adding / Editing -->
+                        <!-- Adding / Editing -->
                             @php
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                             @endphp
@@ -66,7 +66,7 @@
                                 @if ($row->field == 'parent_id')
                                     @continue
                                 @endif
-                                <!-- GET THE DISPLAY OPTIONS -->
+                            <!-- GET THE DISPLAY OPTIONS -->
                                 @php
                                     $display_options = $row->details->display ?? null;
                                     if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
@@ -110,9 +110,11 @@
                                     .table-vertical-heading th {
                                         white-space: nowrap;
                                     }
+
                                     .table-vertical-heading th {
                                         position: relative;
                                     }
+
                                     .table-vertical-heading th span {
                                         writing-mode: vertical-lr;
                                         text-orientation: mixed;
@@ -125,40 +127,41 @@
                                     <tr>
                                         <th>Название</th>
                                         <th><span>Активен</span></th>
-                                        @if(!$dataTypeContent->is_internal)
 
-                                        <th><span>Штрихкод*</span></th>
-                                        <th><span>Категория*</span></th>
-                                        <th><span>Подкатегория*</span></th>
-                                        <th><span>Наименование*</span></th>
+                                        @if(!$dataTypeContent->is_internal)
+                                            <th><span>Штрихкод*</span></th>
+                                            <th><span>Категория*</span></th>
+                                            <th><span>Подкатегория*</span></th>
+                                            <th><span>Наименование*</span></th>
+                                            <th><span>Кратность*</span></th>
                                         @endif
-                                        <th><span>Кратность*</span></th>
-                                        @if(!$dataTypeContent->is_internal)
-                                        <th><span>Цена*</span></th>
-                                        <th><span>Описание</span></th>
-                                        <th><span>Фотография</span></th>
-                                        <th><span>Мягкий лимит</span></th>
-                                        <th><span>Жесткий лимит</span></th>
-                                        <th><span>Кратность ТУ</span></th>
-                                        <th><span>Контейнер</span></th>
-                                        <th><span>Страна</span></th>
-                                        <th><span>Фасовка</span></th>
-                                        <th><span>Тип пакета</span></th>
-                                        <th><span>Вес</span></th>
-                                        <th><span>Сезон</span></th>
-                                        <th><span>Р,И</span></th>
-                                        <th><span>Сезонность</span></th>
-                                        <th><span>Высота растения</span></th>
-                                        <th><span>Вид упаковки</span></th>
-                                        <th><span>Кол-во в упаковке</span></th>
-                                        <th><span>Вид культуры</span></th>
 
-                                        <th><span>Морозостойкость</span></th>
-                                        <th><span>Доп. 1</span></th>
-                                        <th><span>Доп. 2</span></th>
-                                        <th><span>Доп. 3</span></th>
-                                        <th><span>Доп. 4</span></th>
-                                            @endif
+                                        @if(!$dataTypeContent->is_internal)
+                                            <th><span>Цена*</span></th>
+                                            <th><span>Описание</span></th>
+                                            <th><span>Фотография</span></th>
+                                            <th><span>Мягкий лимит</span></th>
+                                            <th><span>Жесткий лимит</span></th>
+                                            <th><span>Кратность ТУ</span></th>
+                                            <th><span>Контейнер</span></th>
+                                            <th><span>Страна</span></th>
+                                            <th><span>Фасовка</span></th>
+                                            <th><span>Тип пакета</span></th>
+                                            <th><span>Вес</span></th>
+                                            <th><span>Сезон</span></th>
+                                            <th><span>Р,И</span></th>
+                                            <th><span>Сезонность</span></th>
+                                            <th><span>Высота растения</span></th>
+                                            <th><span>Вид упаковки</span></th>
+                                            <th><span>Кол-во в упаковке</span></th>
+                                            <th><span>Вид культуры</span></th>
+
+                                            <th><span>Морозостойкость</span></th>
+                                            <th><span>Доп. 1</span></th>
+                                            <th><span>Доп. 2</span></th>
+                                            <th><span>Доп. 3</span></th>
+                                            <th><span>Доп. 4</span></th>
+                                        @endif
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -171,99 +174,100 @@
                                                        name="sheets[{{ $sheet->id }}][active]">
                                             </td>
                                             @if(!$dataTypeContent->is_internal)
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][barcode]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->barcode : '' }}"
-                                                       class="form-control"></td>
-                                            <td>
-                                                <input type="text" name="sheets[{{ $sheet->id }}][category]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->category : '' }}"
-                                                       class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" name="sheets[{{ $sheet->id }}][subcategory]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->subcategory : '' }}"
-                                                       class="form-control">
-                                            </td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][title]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->title : '' }}"
-                                                       class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][barcode]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->barcode : '' }}"
+                                                           class="form-control"></td>
+                                                <td>
+                                                    <input type="text" name="sheets[{{ $sheet->id }}][category]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->category : '' }}"
+                                                           class="form-control">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="sheets[{{ $sheet->id }}][subcategory]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->subcategory : '' }}"
+                                                           class="form-control">
+                                                </td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][title]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->title : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity : '' }}"
+                                                           class="form-control"></td>
                                             @endif
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity : '' }}"
-                                                       class="form-control"></td>
+
                                             @if(!$dataTypeContent->is_internal)
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][price]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->price : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][description]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->description : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][image]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->image : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][soft_limit]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->soft_limit : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][hard_limit]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->hard_limit : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity_tu]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity_tu : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][container]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->container : '' }}"
-                                                       class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][price]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->price : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][description]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->description : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][image]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->image : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][soft_limit]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->soft_limit : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][hard_limit]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->hard_limit : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity_tu]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity_tu : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][container]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->container : '' }}"
+                                                           class="form-control"></td>
 
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][country]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->country : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][packaging]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->packaging : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][package_type]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->package_type : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][weight]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->weight : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][season]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->season : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][r_i]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->r_i : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][seasonality]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->seasonality : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][plant_height]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->plant_height : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][packaging_type]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->packaging_type : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][package_amount]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->package_amount : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][culture_type]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->culture_type : '' }}"
-                                                       class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][country]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->country : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][packaging]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->packaging : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][package_type]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->package_type : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][weight]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->weight : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][season]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->season : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][r_i]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->r_i : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][seasonality]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->seasonality : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][plant_height]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->plant_height : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][packaging_type]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->packaging_type : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][package_amount]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->package_amount : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][culture_type]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->culture_type : '' }}"
+                                                           class="form-control"></td>
 
 
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][frost_resistance]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->frost_resistance : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][additional_1]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->additional_1 : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][additional_2]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->additional_2 : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][additional_3]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->additional_3 : '' }}"
-                                                       class="form-control"></td>
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][additional_4]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->additional_4 : '' }}"
-                                                       class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][frost_resistance]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->frost_resistance : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][additional_1]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->additional_1 : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][additional_2]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->additional_2 : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][additional_3]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->additional_3 : '' }}"
+                                                           class="form-control"></td>
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][additional_4]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->additional_4 : '' }}"
+                                                           class="form-control"></td>
                                             @endif
                                         </tr>
                                     @endforeach

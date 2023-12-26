@@ -107,19 +107,24 @@ class GetDataFromInternalExcelJob implements ShouldQueue
             if ($hl = $sheet->getCell($markup->hard_limit.$row)->getValue())
                 $hard_limit = $hl;
             if ($product->images) {
-                try {
-                    $currentImagePath = storage_path('app/public/' . $product->image);
-                    $newImagePath = storage_path('app/public/preorder/' . $preorder->id . '/' . basename($product->image));
-                    if (\Storage::exists($currentImagePath))
-                        if (\Storage::copy($currentImagePath, $newImagePath))
-                            $image = $newImagePath;
-                } catch (\Exception $e) {
-                    \Log::log(LOG_WARNING, $e->getMessage());
-                }
+//                try {
+//                    $currentImagePath = storage_path('app/public/' . $product->images);
+//                    $newImagePath = storage_path('app/public/preorder/' . $preorder->id . '/' . basename($product->images));
+//                    if (\Storage::exists($currentImagePath))
+//                        if (\Storage::copy($currentImagePath, $newImagePath))
+//                            $image = $newImagePath;
+//                } catch (\Exception $e) {
+//                    \Log::log(LOG_WARNING, $e->getMessage());
+//                }
+                $image = $product->images;
             }
-            $price = $sheet->getCell($markup->price.$row)->getValue() ?? $product->price;
+            //$price = $sheet->getCell($markup->price.$row)->getValue() ?? $product->price;
+            $price = $product->price;
 
-            $multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;
+
+            //$multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;
+            $multiplicity = $product->multiplicity;
+
             $preorderProduct = PreorderProduct::updateOrCreate([
                 'title' => $product->title,
                 'preorder_category_id' => $currentSubCategory->id,
@@ -132,6 +137,7 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 'description' => $product->description,
                 'image' => $image,
                 'price' => $price,
+                'merch_price' => $price,
                 'preorder_category_id' => $currentSubCategory->id,
                 'cell_number' => $row,
                 'soft_limit' => $soft_limit,
