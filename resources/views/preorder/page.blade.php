@@ -167,7 +167,7 @@
             <div class="container">
                 <div class="row">
                     @foreach ($preorders as $item)
-                        <div class="col-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                             <div class="box__life-item"
                                  style="border: 1px solid silver;border-radius: 5px;overflow:hidden;">
                                 <div class="box__image">

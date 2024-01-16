@@ -1,10 +1,11 @@
 <script>
     $(function () {
+
         //orders-tab
-        $('body').on('change', '#orders-tab input[name*=quantity]', function () {
+        $(document).on('change', '#orders-tab input[name*=quantity]', function () {
             let _self = $(this);
             let id = $(this).data('id');
-
+            console.log('onchange' + $(this).val());
             $.post("{{ route('cart.updateQty') }}", {id: id, qty: $(this).val()}, function (result) {
 
                 $.get('/basket/load', function (html) {
@@ -20,6 +21,7 @@
             if (typeof id == "undefined") {
                 id = $(this).data('id')
             }
+            console.log('onclick-, val :' + _self.closest('.box__quality').find('input[name*=quantity]').val());
             $.post("{{ route('cart.updateQty') }}", {
                 id: id,
                 qty: _self.closest('.box__quality').find('input[name*=quantity]').val()
@@ -30,12 +32,13 @@
                 });
             }, 'json')
         }).on('click', '#orders-tab .box__basket-item .btn__quality-plus', function () {
+            console.log('click+')
             let _self = $(this);
             let id = $(this).closest('.box__basket-item').find('.remove-from-cart').data('id');
 
             if (typeof id == "undefined")
                 id = $(this).data('id')
-
+            console.log('onclick+, val :' + _self.closest('.box__quality').find('input[name*=quantity]').val());
             $.post("{{ route('cart.updateQty') }}", {
                 id: id,
                 qty: _self.closest('.box__quality').find('input[name*=quantity]').val()
@@ -47,6 +50,7 @@
                 });
             }, 'json')
         })
+
 
         //preorders-tab
         $('body').on('change', '#preorders-tab input[name*=quantity]', function () {

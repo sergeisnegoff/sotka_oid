@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12">
-        <div class="box__pagination text-center">
+        <div class="box__pagination text-center" style="min-width: 30px">
             @if ($paginator->lastPage() > 1)
                 <ul>
                     <li class="{{ ($paginator->currentPage() == 1) ? ' disabled' : '' }} prev">

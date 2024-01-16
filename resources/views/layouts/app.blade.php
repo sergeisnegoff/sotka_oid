@@ -437,10 +437,10 @@
         </div>
     @endif
 @endauth
-@if (!empty(session()->get('cart')) || !empty(\App\Services\Preorder\PreorderService::getCart()))
-    @include('scripts.basket')
-@endif
-
+{{--@if (!empty(session()->get('cart')) || !empty(\App\Services\Preorder\PreorderService::getCart()))--}}
+{{--    @include('scripts.basket')--}}
+{{--@endif--}}
+@include('scripts.basket')
 @include('scripts.ajax')
 @yield('script')
 

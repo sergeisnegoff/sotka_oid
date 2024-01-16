@@ -60,20 +60,25 @@ class GetDataFromInternalExcelJob implements ShouldQueue
         }
         $sheet = $spreadsheet->getActiveSheet();
         $row = 1;
+        $notFoundProductBarcodes = [];
+        $emptyBarcodeRows = [];
 
         while ($row < $sheet->getHighestRow()) {
             $barcode = $sheet->getCell("A$row")->getValue();
             if (is_null($barcode)) {
+                $emptyBarcodeRows[] = $row;
                 $row++;
                 continue;
             }
             $barcode = str_replace(' ', '', $barcode);
             if (!$barcode) {
+                $emptyBarcodeRows[] = $row;
                 $row++;
                 continue;
             }
             $product = Product::where('barcode', $barcode)->first();
             if (!$product) {
+                $notFoundProductBarcodes[] = $barcode;
                 $row++;
                 continue;
             }
@@ -122,8 +127,8 @@ class GetDataFromInternalExcelJob implements ShouldQueue
             $price = $product->price;
 
 
-            //$multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;
-            $multiplicity = $product->multiplicity;
+            $multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;
+            //$multiplicity = $product->multiplicity;
 
             $preorderProduct = PreorderProduct::updateOrCreate([
                 'title' => $product->title,
@@ -144,6 +149,9 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 'hard_limit' => $hard_limit
             ]);
             $row++;
+        }
+        if (count($emptyBarcodeRows) || count($notFoundProductBarcodes)){
+            dd($emptyBarcodeRows, $notFoundProductBarcodes);
         }
     }
 }

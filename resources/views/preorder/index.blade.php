@@ -24,7 +24,7 @@
                 </div>
                 <div class="row">
                     @foreach ($preorders as $item)
-                        <div class="col-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                             <div class="box__life-item" style="border: 1px solid silver;border-radius: 5px;overflow:hidden;">
                                 <div class="box__image">
                                     <a href="/preorders/{{ $item->id }}">
@@ -35,7 +35,7 @@
                                 <div class="box__description" style="background-color:white;padding:10px 0;">
                                     <p style="font-size: 1.5rem;text-align:center;font-weight:bolder;margin-bottom:10px;">{{ $item->title }}</p>
                                     <p style="text-align:center;font-size: 0.85rem;">Окончание приёма заявок {{ \Carbon\Carbon::parse($item->end_date)->format('d.m.Y') }}</p>
-                                    <a href="/preorders/{{ $item->id }}" style="border:2px solid #6dac52;border-radius:48px;padding:10px 15px;color:black;display:block;width:max-content;margin:0 auto 10px;text-decoration:none">Оформить предзаказ</a>
+                                    <a href="/preorders/{{ $item->id }}/category" style="border:2px solid #6dac52;border-radius:48px;padding:10px 15px;color:black;display:block;width:max-content;margin:0 auto 10px;text-decoration:none">Оформить предзаказ</a>
                                     <div class="box__link"><a style="text-align:center;display:block;width:max-content;margin:0 auto;" href="/preorders/info/{{ $item->id }}">Подробнее</a></div>
                                 </div>
                             </div>

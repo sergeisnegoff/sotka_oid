@@ -187,10 +187,11 @@ class PreorderController extends Controller
         foreach ($sheets as $sheet) {
             $clientSheet = $spreadsheet->getSheetByName($sheet->title);
             $markup = PreorderSheetMarkup::where('preorder_table_sheet_id', $sheet->id)->first();
-            $row = 0;
+            $row = 1;
             while ($row < $clientSheet->getHighestRow()) {
-                $barcode = $clientSheet->getCell($markup->barcode . $row)->getValue();
-                $qty = $clientSheet->getCell($qtyField . $row)->getValue();
+                $barcode = $clientSheet->getCell($markup->barcode ?? 'A' . $row)->getValue();
+                (int)$qty = $clientSheet->getCell($qtyField . $row)->getValue();
+
                 if (!$barcode || !$qty || !is_numeric($qty)) {
                     $row++;
                     continue;
@@ -219,7 +220,7 @@ class PreorderController extends Controller
                 $row++;
             }
         }
-        if (!count($out)) return response('Обработка завершена. Выгружено 0 позиций', 200);
+        if (!count($out)) return response()->json(['result' => "Обработка завершена. Выгружено 0 позиций"], 200);
 
         /*$preorderCheckout = PreorderCheckout::create([
             'user_id' => auth()->id(),

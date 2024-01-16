@@ -112,12 +112,13 @@ Route::group(['prefix' => 'preorders'], function () {
     Route::post('/cart', [PreorderCartController::class, 'create'])->name('preorder_create');
     Route::post('/cart/{user}', [PreorderCartController::class, 'create'])->name('preorder_create_for_user');
     Route::get('/history', [PreorderController::class, 'history']);
+
     Route::post('/upload_file', [PreorderController::class, 'clientUploadPost'])->name('preorder.client-upload-post');
     Route::get('/upload', [PreorderController::class, 'clientUpload']);
     Route::get('/table/{preorder}', [PreorderController::class, 'managerSummaryTable'])->name('preorder.summaryTable');
-    Route::get('/{id}', [PreorderController::class, 'category'])->name('preorder_category_page');
     Route::get('/info/{id}', [PreorderController::class, 'page']);
     Route::get('/category/{id}/products', [PreorderController::class, 'products']);
+    Route::get('/{id}/category/', [PreorderController::class, 'category'])->name('preorder_category_page');
     Route::get('/product/{id}', [PreorderController::class, 'product']);
     Route::get('/product/{id}/remove', [PreorderController::class, 'removeFromCart']);
 
@@ -125,6 +126,7 @@ Route::group(['prefix' => 'preorders'], function () {
 
     Route::get('/export-pdf/{preorder}', [ProfileController::class, 'exportPreorderPdf']);
     Route::get('/export-xls/{preorder}', [ProfileController::class, 'exportPreorderXls']);
+
 
 });
 

@@ -133,9 +133,9 @@
                                             <th><span>Категория*</span></th>
                                             <th><span>Подкатегория*</span></th>
                                             <th><span>Наименование*</span></th>
-                                            <th><span>Кратность*</span></th>
-                                        @endif
 
+                                        @endif
+                                            <th><span>Кратность*</span></th>
                                         @if(!$dataTypeContent->is_internal)
                                             <th><span>Цена*</span></th>
                                             <th><span>Описание</span></th>
@@ -190,11 +190,11 @@
                                                 <td><input type="text" name="sheets[{{ $sheet->id }}][title]"
                                                            value="{{ $sheet->markup !== null ? $sheet->markup->title : '' }}"
                                                            class="form-control"></td>
-                                                <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity]"
-                                                           value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity : '' }}"
-                                                           class="form-control"></td>
-                                            @endif
 
+                                            @endif
+                                            <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity]"
+                                                       value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity : '' }}"
+                                                       class="form-control"></td>
                                             @if(!$dataTypeContent->is_internal)
                                                 <td><input type="text" name="sheets[{{ $sheet->id }}][price]"
                                                            value="{{ $sheet->markup !== null ? $sheet->markup->price : '' }}"

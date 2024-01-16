@@ -16,7 +16,7 @@
                                                                 class="wrapper__baskets-titlequality">Количество:</span>
                 <div class="box__quality">
                     <div class="box__quality-value text-center">
-                        {{$product->multiplicity}}
+                        {{$product->multiplicity_tu}}
                     </div>
                 </div>
             </div>

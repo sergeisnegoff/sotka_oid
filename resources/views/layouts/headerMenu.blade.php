@@ -66,7 +66,7 @@
             foreach ($preorders->whereDate('end_date', '>', now()->toDateString())->whereHas('categories')->get() as $preorder) {
                 ?>
             <li>
-                <a href="/preorders/{{ $preorder->id }}" style="position:relative;">
+                <a href="/preorders/{{ $preorder->id }}/category" style="position:relative;">
                     {{ $preorder->title }}
                 </a>
             </li>

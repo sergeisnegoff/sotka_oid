@@ -64,7 +64,7 @@ class GetDataFromExcelJob implements ShouldQueue
             $merchSheet = $merchSpreadsheet->getActiveSheet();
         }
 
-        while ($row < $sheet->getHighestRow()) {
+        while ($row <= $sheet->getHighestRow()) {
 //            if ($row == 100){
 //                break;
 //            }

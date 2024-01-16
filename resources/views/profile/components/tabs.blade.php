@@ -21,7 +21,7 @@
                     <li class="{{ $page == 'basket' ? 'active' : '' }}"><a href="{{ route('profile.orders.cart') }}">Корзина</a></li>
                     <li class="{{ $page == 'preorder' ? 'active' : '' }}"><a href="/preorders/cart">Предзаказ</a></li>
                     <li class="{{ $page == 'preorder_history' ? 'active' : '' }}"><a href="/preorders/history">История предзаказов</a></li>
-                    <li class="{{ $page == 'preorder_upload' ? 'active' : '' }}"><a href="/preorders/upload">Загрузка предзаказов</a></li>
+                    <li class="{{ $page == 'preorder_upload' ? 'active' : '' }} d-none d-md-inline-block"><a href="/preorders/upload">Загрузка предзаказов</a></li>
                 </ul>
             </div>
         </div>
