@@ -133,15 +133,14 @@
                                             <th><span>Категория*</span></th>
                                             <th><span>Подкатегория*</span></th>
                                             <th><span>Наименование*</span></th>
-
-                                        @endif
-                                            <th><span>Кратность*</span></th>
-                                        @if(!$dataTypeContent->is_internal)
-                                            <th><span>Цена*</span></th>
                                             <th><span>Описание</span></th>
                                             <th><span>Фотография</span></th>
+                                        @endif
+                                            <th><span>Кратность*</span></th>
+                                            <th><span>Цена*</span></th>
                                             <th><span>Мягкий лимит</span></th>
                                             <th><span>Жесткий лимит</span></th>
+                                        @if(!$dataTypeContent->is_internal)
                                             <th><span>Кратность ТУ</span></th>
                                             <th><span>Контейнер</span></th>
                                             <th><span>Страна</span></th>
@@ -190,27 +189,27 @@
                                                 <td><input type="text" name="sheets[{{ $sheet->id }}][title]"
                                                            value="{{ $sheet->markup !== null ? $sheet->markup->title : '' }}"
                                                            class="form-control"></td>
-
-                                            @endif
-                                            <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity]"
-                                                       value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity : '' }}"
-                                                       class="form-control"></td>
-                                            @if(!$dataTypeContent->is_internal)
-                                                <td><input type="text" name="sheets[{{ $sheet->id }}][price]"
-                                                           value="{{ $sheet->markup !== null ? $sheet->markup->price : '' }}"
-                                                           class="form-control"></td>
                                                 <td><input type="text" name="sheets[{{ $sheet->id }}][description]"
                                                            value="{{ $sheet->markup !== null ? $sheet->markup->description : '' }}"
                                                            class="form-control"></td>
                                                 <td><input type="text" name="sheets[{{ $sheet->id }}][image]"
                                                            value="{{ $sheet->markup !== null ? $sheet->markup->image : '' }}"
                                                            class="form-control"></td>
-                                                <td><input type="text" name="sheets[{{ $sheet->id }}][soft_limit]"
-                                                           value="{{ $sheet->markup !== null ? $sheet->markup->soft_limit : '' }}"
-                                                           class="form-control"></td>
-                                                <td><input type="text" name="sheets[{{ $sheet->id }}][hard_limit]"
-                                                           value="{{ $sheet->markup !== null ? $sheet->markup->hard_limit : '' }}"
-                                                           class="form-control"></td>
+
+                                            @endif
+                                            <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity]"
+                                                       value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity : '' }}"
+                                                       class="form-control"></td>
+                                            <td><input type="text" name="sheets[{{ $sheet->id }}][price]"
+                                                       value="{{ $sheet->markup !== null ? $sheet->markup->price : '' }}"
+                                                       class="form-control"></td>
+                                            <td><input type="text" name="sheets[{{ $sheet->id }}][soft_limit]"
+                                                       value="{{ $sheet->markup !== null ? $sheet->markup->soft_limit : '' }}"
+                                                       class="form-control"></td>
+                                            <td><input type="text" name="sheets[{{ $sheet->id }}][hard_limit]"
+                                                       value="{{ $sheet->markup !== null ? $sheet->markup->hard_limit : '' }}"
+                                                       class="form-control"></td>
+                                            @if(!$dataTypeContent->is_internal)
                                                 <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity_tu]"
                                                            value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity_tu : '' }}"
                                                            class="form-control"></td>

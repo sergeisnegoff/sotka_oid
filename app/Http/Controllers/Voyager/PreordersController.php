@@ -165,9 +165,8 @@ class PreordersController extends VoyagerBaseController
                 return $request->hasFile($item->field);
             });
         $original_data = clone($data);
-
         $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
-        if (!$preorder->file_processed) {
+        if (true) {
             foreach ($request->get('sheets') as $sheetId => $sheet) {
                 if (!isset($sheet['active'])) {
                     continue;
@@ -199,17 +198,13 @@ class PreordersController extends VoyagerBaseController
                     'hard_limit' => $sheet['hard_limit'],
                     'soft_limit' => $sheet['soft_limit'],
                 ]);
-                } else {
-                    $sheet['price'] = 'B';
-                    $sheet['soft_limit'] = 'C';
-                    $sheet['hard_limit'] = 'D';
                 }
                 $preorderSheet->save();
-                PreorderSheetMarkup::query()
+                $preorderSheetMarkup = PreorderSheetMarkup::query()
                     ->where('preorder_table_sheet_id', $sheetId)
-                    ->delete();
+                    ->first();
+                if (empty($preorderSheetMarkup)) $preorderSheetMarkup = new PreorderSheetMarkup();
 
-                $preorderSheetMarkup = new PreorderSheetMarkup();
                 $preorderSheetMarkup->fill(array_merge($sheet, ['preorder_table_sheet_id' => $sheetId]));
 
                 $preorderSheetMarkup->save();

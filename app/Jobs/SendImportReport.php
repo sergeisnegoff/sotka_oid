@@ -34,23 +34,47 @@ class SendImportReport implements ShouldQueue
     public function handle()
     {
         $importReport = cache('import_report');
-        $wrongProducts = array_key_exists('wrong_rows', $importReport) ? $importReport['wrong_rows'] : [];
-        $newProducts = array_key_exists('new_rows', $importReport) ? $importReport['new_rows'] : [];
-        if (!empty($wrongProducts) || !empty($newProducts)) {
-            Log::channel('import')->info('started email send', compact('importReport'));
+        if (!empty($importReport)) {
+            $wrongProducts = array_key_exists('wrong_rows', $importReport) ? $importReport['wrong_rows'] : [];
+            $newProducts = array_key_exists('new_rows', $importReport) ? $importReport['new_rows'] : [];
+            if (!empty($wrongProducts) || !empty($newProducts)) {
+                Log::channel('import')->info('started email send', compact('importReport'));
 
-            $recipient = "sotkasaitzakaz@yandex.ru"; // Replace with the recipient email address
-            //$recipient = "magzip23@gmail.com";
-            $subject = "Загрузка заказов"; // Replace with your desired subject line
+                $recipient = "sotkasaitzakaz@yandex.ru"; // Replace with the recipient email address
+                //$recipient = "magzip23@gmail.com";
+                $subject = "Загрузка заказов"; // Replace with your desired subject line
 
-            Mail::to($recipient)->send(new WrongImportProducts($wrongProducts, $newProducts, $subject));
-            Log::channel('import')->info('end email send', compact('importReport'));
+                Mail::to($recipient)->send(new WrongImportProducts($wrongProducts, $newProducts, $subject));
+                Log::channel('import')->info('end email send', compact('importReport'));
+            }
+            else {
+                Log::channel('import')->info('no changes found', compact('importReport'));
+            }
+
+            cache(['import_report' => []]);
         }
-        else {
-            Log::channel('import')->info('no changes found', compact('importReport'));
+
+
+        $updatePreorder = cache('update_preorder');
+
+        if (!empty($updatePreorder)) {
+            $noBarcodeRows = array_key_exists('no_barcode_rows', $updatePreorder) ? $updatePreorder['no_barcode_rows'] : [];
+            $noProductsRows = array_key_exists('no_products_rows', $updatePreorder) ? $updatePreorder['no_products_rows'] : [];
+            if (!empty($noBarcodeRows) || !empty($noProductsRows)) {
+                Log::channel('import')->info('started email send for updated Preorder', compact('updatePreorder'));
+
+                //$recipient = "sotkasaitzakaz@yandex.ru"; // Replace with the recipient email address
+                $recipient = "magzip23@gmail.com";
+                $subject = "Обновление предзаказа"; // Replace with your desired subject line
+
+                Mail::to($recipient)->send(new WrongImportProducts($noBarcodeRows, $noProductsRows, $subject));
+                Log::channel('import')->info('end email send for updated Preorder', compact('updatePreorder'));
+            }
+            else {
+                Log::channel('import')->info('no changes found for updated Preorder', compact('updatePreorder'));
+            }
+
+            cache(['update_preorder' => []]);
         }
-
-        cache(['import_report' => []]);
-
     }
 }

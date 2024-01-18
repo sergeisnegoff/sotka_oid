@@ -20782,7 +20782,7 @@ window.$ = window.jQuery = jQuery;
 
 
 function updateQty(input_element) {
-  //console.log(input_element.data('mode'));
+  console.log('updateQty');
   if (input_element.data('mode') === 'cart') {
       //console.log('update + updateQty');
     var id = input_element.data('id');
@@ -20795,18 +20795,21 @@ function updateQty(input_element) {
       //console.log(result);
       //input_element.val(result.totalAmount)
       $(".item-amount".concat(id)).each(function () {
-        $(this).html(result.totalAmount);
+          //console.log(result);
+        $(this).html(result.itemAmount);
       });
       recalcTotal();
     });
   }
 }
 function recalcTotal() {
+
   var total = 0;
   $(".item-amounts").each(function () {
     total += Number($(this).text());
+    console.log(total);
   });
-  $('.total-amount').each(function () {
+  $('#total-amount').each(function () {
     $(this).text(Math.round(total));
   });
 }
@@ -21143,19 +21146,20 @@ global.seed = {
         calc = amount - amount % parseInt(el.attr('step'));
       if (calc >= el.attr('min')) {
         el.val(calc).trigger('change');
-        updateQty(el);
+        //updateQty(el);
       }
     }).on('click', '.box__quality [data-next-quality]', function () {
-      //console.log('update +');
+      console.log('update +');
       var el = $(this).parents('.box__quality').find('input');
       var amount = parseInt(el.val()) + parseInt(el.attr('step')),
         calc = amount - amount % parseInt(el.attr('step'));
       if (calc <= el.attr('max') || el.parents('.wrapper__baskets-quality').length === 0 || el.data('type') === 'preorder') {
         el.val(calc).trigger('change');
-        updateQty(el);
+        //updateQty(el);
 
       }
     }).on('change', '.box__quality input', function () {
+        console.log('change')
       var amount = $(this).val();
       $(this).val(Math.ceil(amount / parseInt($(this).attr('step'))) * parseInt($(this).attr('step')));
       updateQty($(this));

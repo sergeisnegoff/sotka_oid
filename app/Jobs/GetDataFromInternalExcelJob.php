@@ -43,7 +43,7 @@ class GetDataFromInternalExcelJob implements ShouldQueue
         $preorder = $this->preorderTableSheet->preorder;
         $markup = $this->preorderTableSheet->markup;
 
-        $file = storage_path().'/app/public/'.json_decode($preorder->file)[0]->download_link;
+        $file = storage_path().'/app/public/'.json_decode($preorder->file)[count(json_decode($preorder->file)) - 1]->download_link;
 
         $reader = IOFactory::createReaderForFile($file);
 
@@ -78,7 +78,10 @@ class GetDataFromInternalExcelJob implements ShouldQueue
             }
             $product = Product::where('barcode', $barcode)->first();
             if (!$product) {
-                $notFoundProductBarcodes[] = $barcode;
+                $notFoundProductBarcodes[] = [
+                        'row' => $row,
+                        'barcode' => $barcode,
+                    ];
                 $row++;
                 continue;
             }
@@ -123,8 +126,9 @@ class GetDataFromInternalExcelJob implements ShouldQueue
 //                }
                 $image = $product->images;
             }
-            //$price = $sheet->getCell($markup->price.$row)->getValue() ?? $product->price;
-            $price = $product->price;
+
+            $price = $sheet->getCell($markup->price.$row)->getValue() ?? $product->price;
+            //$price = $product->price;
 
 
             $multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;
@@ -150,8 +154,36 @@ class GetDataFromInternalExcelJob implements ShouldQueue
             ]);
             $row++;
         }
+
         if (count($emptyBarcodeRows) || count($notFoundProductBarcodes)){
-            dd($emptyBarcodeRows, $notFoundProductBarcodes);
+
+            $updatePreorder = cache('update_preorder');
+            if (empty($updatePreorder)) {
+                if (count($emptyBarcodeRows) > 0) $updatePreorder['no_barcode_rows'] = $emptyBarcodeRows;
+                if (count($notFoundProductBarcodes) > 0) $updatePreorder['no_products_rows'] = $notFoundProductBarcodes;
+            }
+            else {
+                if (count($emptyBarcodeRows) > 0) {
+                    if (array_key_exists('no_barcode_rows', $updatePreorder)) {
+                        $updatePreorder['no_barcode_rows'] = array_merge($updatePreorder['no_barcode_rows'], $emptyBarcodeRows);
+                    }
+                    else {
+                        $updatePreorder['no_barcode_rows'] = $emptyBarcodeRows;
+                    }
+                }
+
+                if (count($notFoundProductBarcodes) > 0) {
+                    if (array_key_exists('no_products_rows', $updatePreorder)) {
+                        $updatePreorder['no_products_rows'] = array_merge($updatePreorder['no_products_rows'], $notFoundProductBarcodes);
+                    }
+                    else {
+                        if (count($notFoundProductBarcodes) > 0) $updatePreorder['no_products_rows'] = $notFoundProductBarcodes;
+                    }
+                }
+            }
+            cache(['update_preorder' => $updatePreorder]);
+
+            SendImportReport::dispatch();
         }
     }
 }

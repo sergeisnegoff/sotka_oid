@@ -34,9 +34,18 @@ class WrongImportProducts extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->subject)->markdown('email.wrongImportProducts', [
-            'wrongProducts' => $this->wrongProducts,
-            'newProducts' => $this->newProducts
-        ]);
+        if ($this->subject == "Загрузка заказов") {
+            return $this->subject($this->subject)->markdown('email.wrongImportProducts', [
+                'wrongProducts' => $this->wrongProducts,
+                'newProducts' => $this->newProducts
+            ]);
+        }
+        if ($this->subject == "Обновление предзаказа") {
+            return $this->subject($this->subject)->markdown('email.updatePreorderReport', [
+                'noBarcodeRows' => $this->wrongProducts,
+                'noProductsRows' => $this->newProducts
+            ]);
+        }
+
     }
 }

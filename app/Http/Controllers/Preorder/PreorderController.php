@@ -207,6 +207,10 @@ class PreorderController extends Controller
                     $qty = ceil($qty / $product->multiplicity) * $product->multiplicity;
                 }
 
+                if (!empty($product->hard_limit)) {
+                    $qty = $qty > $product->hard_limit ? $product->hard_limit : $qty;
+                }
+
                 $result['id'] = $product->id;
                 $result['qty'] = $qty;
                 $req = \request();
