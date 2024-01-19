@@ -125,10 +125,21 @@ class PreorderCartController extends Controller
                 'preorder_product_id' => $product['id'],
                 'qty' => $product['quantity']
             ]);
+
+            $reorderProduct = PreorderProduct::find($product['id']);
+            if (!is_null($reorderProduct->hard_limit)) {
+                $hardLimit = $reorderProduct->hard_limit - $product['quantity'];
+                if ($hardLimit < 0) $hardLimit = 0;
+                $reorderProduct->hard_limit = $hardLimit;
+                $reorderProduct->save();
+            }
         }
 
         try {
-            \Mail::to('sotkapredzakaz@mail.ru')->send(
+            //$to = 'sotkapredzakaz@mail.ru';
+            //$to = 'magzip23@gmail.com';
+            $to = 'sotkapredzakaz2@yandex.ru';
+            \Mail::to($to)->send(
                 new SuccessPreorder($checkoutedPreorder, true)
             );
             \Mail::to($checkoutedPreorder->user)->send(

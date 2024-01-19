@@ -112,6 +112,10 @@ class PreorderController extends Controller
             $quantity = $request->quantity;
         }
 
+        if (!is_null($product->hard_limit)) {
+            $quantity = $quantity > $product->hard_limit ? $product->hard_limit : $quantity;
+        }
+
         $cart[$product->id] = [
             'id' => $product->id,
             'name' => $product->title,
@@ -134,6 +138,10 @@ class PreorderController extends Controller
             $quantity = $cart[$product->id]['quantity'] + $request->quantity;
         } else {
             $quantity = $request->quantity;
+        }
+
+        if (!is_null($product->hard_limit)) {
+            $quantity = $quantity > $product->hard_limit ? $product->hard_limit : $quantity;
         }
 
         $cart[$product->id] = [
@@ -201,14 +209,16 @@ class PreorderController extends Controller
                     $row++;
                     continue;
                 }
+
+                if ($product->hard_limit === 0) {
+                    $row++;
+                    continue;
+                }
+
                 if ($qty < $product->multiplicity) {
                     $qty = $product->multiplicity;
                 } elseif ($qty % $product->multiplicity != 0) {
                     $qty = ceil($qty / $product->multiplicity) * $product->multiplicity;
-                }
-
-                if (!empty($product->hard_limit)) {
-                    $qty = $qty > $product->hard_limit ? $product->hard_limit : $qty;
                 }
 
                 $result['id'] = $product->id;

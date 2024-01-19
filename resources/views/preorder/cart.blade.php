@@ -244,7 +244,9 @@
                 let prepay_amount = box.find('.prepay_amount');
                 let total_amount = box.find('.total_amount');
                 let step = input.attr('step')
+                let min = input.attr('step')
                 let qty = parseInt(input.val()) - parseInt(step);
+                if (qty < min) qty = min;
                 input.val(qty);
 
                 $.post("{{ route('cart.updatePreOrderQty') }}", {id: product_id, qty: qty}, function (result) {

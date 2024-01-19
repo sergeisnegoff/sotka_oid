@@ -142,8 +142,8 @@
                 let item_amounts = block.find('.item-amounts');
                 let prepay_amount = box.find('.prepay_amount');
                 let total_amount = box.find('.total_amount');
-
-                let qty = parseInt(input.val()) - 1;
+                let step = input.attr('step')
+                let qty = parseInt(input.val()) - parseInt(step);
                 input.val(qty);
 
                 $.post("{{ route('cart.updatePreOrderQty') }}", {id: product_id, qty: qty}, function (result) {
@@ -171,8 +171,8 @@
                 let item_amounts = block.find('.item-amounts');
                 let prepay_amount = box.find('.prepay_amount');
                 let total_amount = box.find('.total_amount');
-
-                let qty = parseInt(input.val()) + 1;
+                let step = input.attr('step')
+                let qty = parseInt(input.val()) + parseInt(step);
                 input.val(qty);
 
                 $.post("{{ route('cart.updatePreOrderQty') }}", {id: product_id, qty: qty}, function (result) {

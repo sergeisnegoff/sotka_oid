@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\SuccessOrder;
 use App\Models\Order;
+use App\Models\PreorderProduct;
 use App\Models\Product;
 use App\Models\ProfileAddress;
 use App\Models\User;
@@ -153,9 +154,19 @@ class CartController extends Controller
             'qty' => 'bail|required|int',
         ]);
 
+        $quantity = $post['qty'];
+
+        $product = PreorderProduct::find($post['id']);
+
+        if ($product) {
+            if (!is_null($product->hard_limit)) {
+                $quantity = $quantity > $product->hard_limit ? $product->hard_limit : $quantity;
+            }
+        }
+
         $cart = PreorderService::getFullCart();
-        $cart[$post['id']]["quantity"] = $post['qty'];
-        $cart[$post['id']]["total"] = $post['qty'] * $cart[$post['id']]['price'];
+        $cart[$post['id']]["quantity"] = $quantity;
+        $cart[$post['id']]["total"] = $quantity * $cart[$post['id']]['price'];
 
         PreorderService::setLatestPreorder($cart[$post['id']]['preorder_id']);
         PreorderService::updateCart($cart);
@@ -174,9 +185,19 @@ class CartController extends Controller
             'qty' => 'bail|required|int',
         ]);
 
+        $quantity = $post['qty'];
+
+        $product = PreorderProduct::find($post['id']);
+
+        if ($product) {
+            if (!is_null($product->hard_limit)) {
+                $quantity = $quantity > $product->hard_limit ? $product->hard_limit : $quantity;
+            }
+        }
+
         $cart = PreorderService::getFullUserCart($user->id);
-        $cart[$post['id']]["quantity"] = $post['qty'];
-        $cart[$post['id']]["total"] = $post['qty'] * $cart[$post['id']]['price'];
+        $cart[$post['id']]["quantity"] = $quantity;
+        $cart[$post['id']]["total"] = $quantity * $cart[$post['id']]['price'];
 
         PreorderService::setUserLatestPreorder($cart[$post['id']]['preorder_id'], $user->id);
         PreorderService::updateUserCart($cart, $user->id);

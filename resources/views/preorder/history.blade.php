@@ -85,7 +85,7 @@
                                                                         <div class="wrapper__baskets-info">
                                                                             <div class="box__image">
                                                                                 <span
-                                                                                    style="background-image: url( {{ thumbImg($product['image'] ?? $product->preorder_product->preorder->default_image, 50, 70) }} );">
+                                                                                    style="background-image: url( {{ thumbImg($product->preorder_product->image ?? $product->preorder_product->preorder->default_image, 50, 70) }} );">
                                                                                 </span>
                                                                             </div>
                                                                             <a href="/preorders/product/{{ $product->preorder_product->id }}">

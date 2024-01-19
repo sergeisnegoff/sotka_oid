@@ -799,10 +799,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -816,10 +816,10 @@
                             <!--[if (mso)|(IE)]>
                             <table role="presentation" width="624" border="0" cellspacing="0" cellpadding="0"
                                    align="center" style="vertical-align:top;Margin:0 auto;">
-                                <tbody>
-                                <tr>
-                                    <td width="208" align="center"
-                                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+                            <tbody>
+                            <tr>
+                                <td width="208" align="center"
+                                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
                             <![endif]-->
                             <div class="col_1"
                                  style="vertical-align: top;display: inline-block;width: 100%;max-width: 208px;">
@@ -832,9 +832,9 @@
                                             style="vertical-align: top;color: #ffffff;text-align: left;padding-top: 8px;padding-bottom: 8px;padding-left: 16px;padding-right: 16px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
                                             <p class="img_inline"
                                                style="color: inherit;font-family: Arial, Helvetica, sans-serif;text-align:center;margin-top: 0px;margin-bottom: 0px;word-break: break-word;font-size: 16px;line-height: 100%;clear: both;">
-                                                <a href="{{ env('APP_URL') }}"
+                                                <a href="https://sotka-sem.ru"
                                                    style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;text-decoration: none;color: #ffffff;font-family: Arial, Helvetica, sans-serif;margin-top: 0px;margin-bottom: 0px;word-break: break-word;"><img
-                                                        src="{{ env('APP_URL') }}/img/image/logo.png" width="110"
+                                                        src="https://sotka-sem.ru/img/image/logo.png" width="110"
                                                         height="" alt="BlauMail website"
                                                         style="max-width: 110px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;"></a>
                                             </p>
@@ -878,10 +878,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -914,10 +914,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -931,10 +931,10 @@
                             <!--[if (mso)|(IE)]>
                             <table role="presentation" width="624" border="0" cellspacing="0" cellpadding="0"
                                    align="center" style="vertical-align:top;Margin:0 auto;">
-                                <tbody>
-                                <tr>
-                                    <td align="center"
-                                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+                            <tbody>
+                            <tr>
+                                <td align="center"
+                                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
                             <![endif]-->
                             <table class="column" role="presentation" align="center" width="100%" cellspacing="0"
                                    cellpadding="0" border="0"
@@ -979,10 +979,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -996,10 +996,10 @@
                             <!--[if (mso)|(IE)]>
                             <table role="presentation" width="624" border="0" cellspacing="0" cellpadding="0"
                                    align="center" style="vertical-align:top;Margin:0 auto;">
-                                <tbody>
-                                <tr>
-                                    <td align="center"
-                                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+                            <tbody>
+                            <tr>
+                                <td align="center"
+                                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
                             <![endif]-->
                             <table class="column" role="presentation" align="center" width="100%" cellspacing="0"
                                    cellpadding="0" border="0"
@@ -1044,10 +1044,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -1061,10 +1061,10 @@
                             <!--[if (mso)|(IE)]>
                             <table role="presentation" width="416" border="0" cellspacing="0" cellpadding="0"
                                    align="center" style="vertical-align:top;Margin:0 auto;">
-                                <tbody>
-                                <tr>
-                                    <td align="center"
-                                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+                            <tbody>
+                            <tr>
+                                <td align="center"
+                                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
                             <![endif]-->
                             <div class="col_3"
                                  style="vertical-align: top;display: inline-block;width: 100%;max-width: 416px;">
@@ -1085,7 +1085,8 @@
                                                             style="vertical-align: top;color: #333333;border-bottom: 1px solid #dee0e1;text-align: left;padding-top: 16px;padding-bottom: 16px;padding-left: 16px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
                                                             <h5 class="mb_xs"
                                                                 style="color: inherit;font-family: Arial, Helvetica, sans-serif;margin-top: 0px;margin-bottom: 8px;word-break: break-word;font-size: 16px;line-height: 21px;font-weight: bold;">
-                                                                {{ $product->preorder_product->title ?? "Неизвестное название" }} x {{ $product->qty }} шт.</h5>
+                                                                {{ $product->preorder_product->title ?? "Неизвестное название" }}
+                                                                x {{ $product->qty }} шт.</h5>
                                                         </td>
                                                         <td width="72"
                                                             class="column_cell pr py bb_light text_dark text_right"
@@ -1132,10 +1133,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -1168,10 +1169,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -1185,10 +1186,10 @@
                             <!--[if (mso)|(IE)]>
                             <table role="presentation" width="624" border="0" cellspacing="0" cellpadding="0"
                                    align="center" style="vertical-align:top;Margin:0 auto;">
-                                <tbody>
-                                <tr>
-                                    <td align="center"
-                                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+                            <tbody>
+                            <tr>
+                                <td align="center"
+                                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
                             <![endif]-->
                             <table class="column" role="presentation" align="center" width="100%" cellspacing="0"
                                    cellpadding="0" border="0"
@@ -1208,7 +1209,8 @@
                                         <p class="text_link"
                                            style="color: inherit;font-family: Arial, Helvetica, sans-serif;margin-top: 0px;margin-bottom: 0px;word-break: break-word;font-size: 16px;line-height: 26px;">
                                             @if ($showPreorderLink)
-                                            <a href="{{route('preorder.summaryTable', $checkout->preorder)}}">Сводная таблица по предзаказу</a>
+                                                <a href="{{route('preorder.summaryTable', $checkout->preorder)}}">Сводная
+                                                    таблица по предзаказу</a>
                                             @endif
                                         </p>
                                     </td>
@@ -1245,10 +1247,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <table class="content_section" role="presentation" align="center" width="100%" cellspacing="0"
                    cellpadding="0" border="0"
@@ -1281,10 +1283,10 @@
             <!--[if (mso)|(IE)]>
             <table role="presentation" width="800" border="0" cellspacing="0" cellpadding="0" align="center"
                    style="vertical-align:top;Margin:0 auto;">
-                <tbody>
-                <tr>
-                    <td align="center"
-                        style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
+            <tbody>
+            <tr>
+                <td align="center"
+                    style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;vertical-align:top;">
             <![endif]-->
             <!--[if (mso)|(IE)]>
             </td>
