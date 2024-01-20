@@ -254,6 +254,7 @@
                 <div id="preorders-tab" class="d-none">
                     <?php $total = 0 ?>
                     @foreach(\App\Services\Preorder\PreorderService::getCart() as $details)
+
                         <div class="box__basket-item">
                             <div class="row">
                                 <div class="col-3">
@@ -290,7 +291,7 @@
                                         </div>
                                         <div class="col-7">
                                             <div
-                                                class="box__price"> {{ $details['price'] * $details['quantity'] }}
+                                                class="box__price"> {{ intval($details['price'] ?? 0) * intval($details['quantity'] ?? 0) }}
                                                 <span>₽</span></div>
                                         </div>
                                     </div>
@@ -299,7 +300,7 @@
                         </div>
 
                             <?php
-                            $total += $details['price'] * $details['quantity'];
+                            $total += intval($details['price'] ?? 0) * intval($details['quantity'] ?? 0);
                             ?>
                     @endforeach
 

@@ -128,7 +128,8 @@ class GetDataFromInternalExcelJob implements ShouldQueue
             }
 
             $price = $sheet->getCell($markup->price.$row)->getValue() ?? $product->price;
-            //$price = $product->price;
+            $price = trim($price);
+            $price = trim($price, '=');
 
 
             $multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;

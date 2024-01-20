@@ -186,6 +186,21 @@ class PreordersController extends VoyagerBaseController
                         'price' => 'Цена',
                     ])->validateWithBag('sheets');
 
+                if ($preorder->is_internal)
+                    \Validator::make($sheet, [
+                        'multiplicity' => 'required',
+                        'price' => 'required',
+                        'soft_limit' => 'required',
+                        'hard_limit' => 'required',
+                    ], [
+                        'required' => 'Поле :attribute обязательно.',
+                    ], [
+                        'multiplicity' => 'Кратность',
+                        'soft_limit' => 'Мягкий лимит',
+                        'hard_limit' => 'Жесткий лимит',
+                        'price' => 'Цена',
+                    ])->validateWithBag('sheets');
+
                 $preorderSheet = PreorderTableSheet::query()
                     ->where('id', $sheetId)
                     ->first();

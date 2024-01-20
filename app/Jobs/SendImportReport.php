@@ -63,8 +63,7 @@ class SendImportReport implements ShouldQueue
             if (!empty($noBarcodeRows) || !empty($noProductsRows)) {
                 Log::channel('import')->info('started email send for updated Preorder', compact('updatePreorder'));
 
-                //$recipient = "sotkasaitzakaz@yandex.ru"; // Replace with the recipient email address
-                $recipient = "magzip23@gmail.com";
+                $recipient = "sotkapredzakaz2@yandex.ru";
                 $subject = "Обновление предзаказа"; // Replace with your desired subject line
 
                 Mail::to($recipient)->send(new WrongImportProducts($noBarcodeRows, $noProductsRows, $subject));

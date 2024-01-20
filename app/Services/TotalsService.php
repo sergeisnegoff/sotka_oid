@@ -14,7 +14,7 @@ class TotalsService
 
     public static function getUserTotalByPreorders() {
         return floor(collect(\App\Services\Preorder\PreorderService::getCart())->sum(function ($item) {
-            return ($item['price'] ?? 0) * $item['quantity'];
+            return intval($item['price'] ?? 0) * intval($item['quantity'] ?? 0);
         }));
     }
 
