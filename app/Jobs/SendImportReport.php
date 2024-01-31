@@ -66,7 +66,7 @@ class SendImportReport implements ShouldQueue
                 $recipient = "sotkapredzakaz2@yandex.ru";
                 $subject = "Обновление предзаказа"; // Replace with your desired subject line
 
-                Mail::to($recipient)->send(new WrongImportProducts($noBarcodeRows, $noProductsRows, $subject));
+                Mail::to($recipient)->cc('Groznikova-1309@yandex.ru')->send(new WrongImportProducts($noBarcodeRows, $noProductsRows, $subject));
                 Log::channel('import')->info('end email send for updated Preorder', compact('updatePreorder'));
             }
             else {

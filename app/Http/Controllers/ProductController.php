@@ -47,63 +47,115 @@ class ProductController extends Controller {
 
         $limitProductsPerCategory = 4;
 
-        $cats = Cache::remember(
-            __CLASS__ . '::' . __FUNCTION__ . '@' . json_encode(compact('limitProductsPerCategory', 'filters', 'sort')),
-            60,
-            function () use ($limitProductsPerCategory, $cat, $filters, $sort) {
-                $subPipeMain = function ($query) use ($filters, $sort) {
-                    return $query
-                        ->where('total', '!=', 0)
-                        ->scopes(['filter' => [$filters]])
-                        ->orderBy(!empty($sort[1]) ? $sort[1] : 'title', !empty($sort[0]) ? $sort[0] : 'ASC');
-                };
-                $subPipeWith = function ($query) {
-                    return $query
-                        ->with(['category', 'subSpecification', 'subFilter']);
-                };
+//        $cats = Cache::remember(
+//            __CLASS__ . '::' . __FUNCTION__ . '@' . json_encode(compact('limitProductsPerCategory', 'filters', 'sort')),
+//            60,
+//            function () use ($limitProductsPerCategory, $cat, $filters, $sort) {
+//                $subPipeMain = function ($query) use ($filters, $sort) {
+//                    return $query
+//                        ->where('total', '!=', 0)
+//                        ->scopes(['filter' => [$filters]])
+//                        ->orderBy(!empty($sort[1]) ? $sort[1] : 'title', !empty($sort[0]) ? $sort[0] : 'ASC');
+//                };
+//                $subPipeWith = function ($query) {
+//                    return $query
+//                        ->with(['category', 'subSpecification', 'subFilter']);
+//                };
+//
+//                $pipe = function ($query) use ($subPipeMain, $subPipeWith) {
+//                    $subPipeMain($query);
+//                    return $subPipeWith($query);
+//                };
+//
+//                return optional(
+//                    Category::query()->where('title', $cat)
+//                        ->whereHas('category.product', $pipe)
+//                        ->with(
+//                            [
+//                                'category.product' => function ($query) use ($subPipeWith, $subPipeMain, $limitProductsPerCategory) {
+//                                    /** @var Builder $query */
+//                                    $table = $query->getModel()->getTable();
+//                                    $sub = Product::query()
+//                                        ->when(true, $subPipeMain)
+//                                        ->toBase();
+//
+//                                    $orders = collect($sub->orders)->map(function($item) {
+//                                        return "`{$item['column']}` " . strtoupper($item['direction']);
+//                                    })->join(', ');
+//                                    if($orders) {
+//                                        $orders = " ORDER BY $orders";
+//                                    }
+//                                    $sub->orders = null;
+//                                    $sub->selectRaw("CONCAT(';', REGEXP_SUBSTR(GROUP_CONCAT(`id`$orders SEPARATOR ';'), '^\\\\d+(;\\\\d+)?(;\\\\d+)?(;\\\\d+)?'), ';') as ids");
+//                                    $sub->groupBy('category_id');
+//
+//                                    $query
+//                                        ->joinSub($sub,
+//                                            'prod_relations',
+//                                            'prod_relations.ids',
+//                                            'LIKE',
+//                                            DB::raw("CONCAT('%;', `$table`.`id`, ';%')")
+//                                        )
+//                                        ->when(true, $subPipeWith);
+//                                },
+//                            ]
+//                        )
+//                        ->first()
+//                )->category;
+//            }
+//        );
 
-                $pipe = function ($query) use ($subPipeMain, $subPipeWith) {
-                    $subPipeMain($query);
-                    return $subPipeWith($query);
-                };
+        $subPipeMain = function ($query) use ($filters, $sort) {
+            return $query
+                ->where('total', '!=', 0)
+                ->scopes(['filter' => [$filters]])
+                ->orderBy(!empty($sort[1]) ? $sort[1] : 'title', !empty($sort[0]) ? $sort[0] : 'ASC');
+        };
+        $subPipeWith = function ($query) {
+            return $query
+                ->with(['category', 'subSpecification', 'subFilter']);
+        };
 
-                return optional(
-                    Category::query()->where('title', $cat)
-                        ->whereHas('category.product', $pipe)
-                        ->with(
-                            [
-                                'category.product' => function ($query) use ($subPipeWith, $subPipeMain, $limitProductsPerCategory) {
-                                    /** @var Builder $query */
-                                    $table = $query->getModel()->getTable();
-                                    $sub = Product::query()
-                                        ->when(true, $subPipeMain)
-                                        ->toBase();
+        $pipe = function ($query) use ($subPipeMain, $subPipeWith) {
+            $subPipeMain($query);
+            return $subPipeWith($query);
+        };
 
-                                    $orders = collect($sub->orders)->map(function($item) {
-                                        return "`{$item['column']}` " . strtoupper($item['direction']);
-                                    })->join(', ');
-                                    if($orders) {
-                                        $orders = " ORDER BY $orders";
-                                    }
-                                    $sub->orders = null;
-                                    $sub->selectRaw("CONCAT(';', REGEXP_SUBSTR(GROUP_CONCAT(`id`$orders SEPARATOR ';'), '^\\\\d+(;\\\\d+)?(;\\\\d+)?(;\\\\d+)?'), ';') as ids");
-                                    $sub->groupBy('category_id');
+        $cats = optional(
+            Category::query()->where('title', $cat)
+                ->whereHas('category.product', $pipe)
+                ->with(
+                    [
+                        'category.product' => function ($query) use ($subPipeWith, $subPipeMain, $limitProductsPerCategory) {
+                            /** @var Builder $query */
+                            $table = $query->getModel()->getTable();
+                            $sub = Product::query()
+                                ->when(true, $subPipeMain)
+                                ->toBase();
 
-                                    $query
-                                        ->joinSub($sub,
-                                            'prod_relations',
-                                            'prod_relations.ids',
-                                            'LIKE',
-                                            DB::raw("CONCAT('%;', `$table`.`id`, ';%')")
-                                        )
-                                        ->when(true, $subPipeWith);
-                                },
-                            ]
-                        )
-                        ->first()
-                )->category;
-            }
-        );
+                            $orders = collect($sub->orders)->map(function($item) {
+                                return "`{$item['column']}` " . strtoupper($item['direction']);
+                            })->join(', ');
+                            if($orders) {
+                                $orders = " ORDER BY $orders";
+                            }
+                            $sub->orders = null;
+                            $sub->selectRaw("CONCAT(';', REGEXP_SUBSTR(GROUP_CONCAT(`id`$orders SEPARATOR ';'), '^\\\\d+(;\\\\d+)?(;\\\\d+)?(;\\\\d+)?'), ';') as ids");
+                            $sub->groupBy('category_id');
+
+                            $query
+                                ->joinSub($sub,
+                                    'prod_relations',
+                                    'prod_relations.ids',
+                                    'LIKE',
+                                    DB::raw("CONCAT('%;', `$table`.`id`, ';%')")
+                                )
+                                ->when(true, $subPipeWith);
+                        },
+                    ]
+                )
+                ->first()
+        )->category;
 
         if (is_null($cats))
             abort(404);
