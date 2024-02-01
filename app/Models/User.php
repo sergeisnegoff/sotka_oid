@@ -75,7 +75,7 @@ class User extends \TCG\Voyager\Models\User {
     }
 
     public function managerContact() {
-        return $this->hasOne(ContactsManagersModel::class);
+        return $this->hasOne(ContactsManagersModel::class, 'id', 'manager_id');
     }
 
     public function orders() {

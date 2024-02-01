@@ -139,6 +139,13 @@ class PreorderCartController extends Controller
             //$to = 'sotkapredzakaz@mail.ru';
             //$to = 'magzip23@gmail.com';
             $to = 'sotkapredzakaz2@yandex.ru';
+            if ($checkoutedPreorder->user->manager_id) {
+                $managerEmail = $checkoutedPreorder->user->managerContact->email;
+                \Mail::to($managerEmail)->send(
+                    new SuccessPreorder($checkoutedPreorder, true)
+                );
+            }
+
             \Mail::to($to)->send(
                 new SuccessPreorder($checkoutedPreorder, true)
             );

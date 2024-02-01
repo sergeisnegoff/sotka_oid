@@ -27,7 +27,7 @@
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="box__life-item" style="border: 1px solid silver;border-radius: 5px;overflow:hidden;">
                                 <div class="box__image">
-                                    <a href="/preorders/{{ $item->id }}">
+                                    <a href="/preorders/{{ $item->id }}/category">
 										<span style="background-image: url( /storage/{{ $item->image }} );">
 										</span>
                                     </a>
