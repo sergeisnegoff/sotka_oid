@@ -336,11 +336,11 @@
                             </div>
                             @if($total < ($preorder_minimal ?? 0))
                                 <div class="col-8">
-                                    <div class="box__price-title">
+                                    <div class="box__price-title" style="color: #f63a39">
                                         Минимальная сумма:
                                     </div>
                                 </div>
-                                <div class="col-4 text-right">
+                                <div class="col-4 text-right" style="color: #f63a39">
                                     <b>{{$preorder_minimal ?? 0}} <span>₽</span></b>
                                 </div>
                             @endif

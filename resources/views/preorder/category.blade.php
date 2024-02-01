@@ -72,13 +72,6 @@ $diff = $endDate->diff($now);
             </style>
             <div id="productFind">
                 @include('preorder.components.category-tabs')
-                <div style="margin-top:20px;">
-                <a href="/preorders/category/{{$currentCategory->id}}/products" style="display:inline;" class="btn">
-                    <button>
-                        Все товары категории
-                    </button>
-                </a>
-                </div>
                 <div id="productData">
                     @foreach ($currentCategory->childs as $cat)
                         @if ($cat->products()->limit(4)->count() > 0)
