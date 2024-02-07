@@ -45,6 +45,13 @@
                                                 <span>₽</span>
                                             </div>
                                         </div>
+                                        <div class="col-12 col-xl-4 text-right d-md-none">
+                                            <div class="btn">
+                                                <button type="submit">
+                                                    Заказать &rang;
+                                                </button>
+                                            </div>
+                                        </div>
                                         <div class="col-6 col-xl-2">
                                             <div class="box__currentorder-status">
 
@@ -90,6 +97,7 @@
                                                                 <div class="col-12 col-xl-2"><h4>Стоимость</h4></div>
                                                             </div>
                                                         </div>
+
                                                         @foreach ($order['products'] as $key => $product)
                                                             @php
                                                                 $id = $product['id'];
@@ -145,6 +153,7 @@
                                                                             ₽
                                                                         </div>
                                                                     </div>
+
                                                                 </div>
                                                                 <div class="btn btn-delete remove-from-preorder-cart" data-id="{{ $id }}"><a
                                                                         href="javascript:;"></a></div>

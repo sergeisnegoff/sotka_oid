@@ -154,79 +154,79 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="col-12 col-xl-6 offset-xxl-1 col-xxl-6">
-                                <div class="box__profile-address">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h2>Адреса магазинов</h2>
-                                        </div>
-                                    </div>
-                                    <div class="wrapper-profile-radioaddress">
-                                        <div class="row">
-                                            @foreach ($address as $item)
-                                                <div class="col-12">
-                                                    <div class="box__radiobox">
-                                                        <div class="wrapper-radiobox">
-                                                            <label>
-                                                                <input type="radio"
-                                                                       {{ $item->id == $user->address ? 'checked' : '' }} name="current_address"
-                                                                       data-id="{{ $item->id }}">
-                                                                <span>
-                                                                    <span class="box__radiobox-icon"></span>
-                                                                    <span class="box__radiobox-text">
-                                                                        <span class="box__profile-itemaddress"><span>Город: </span>{{ $item->city }}</span>
-                                                                        <span class="box__profile-itemaddress"><span>Адрес: </span>{{ $item->address }}</span>
-                                                                    </span>
-                                                                </span>
-                                                            </label>
-                                                            <div class="wrapper-address">
-                                                                <button class="box__profile-editaddress"
-                                                                        data-btn-popup="address"
-                                                                        data-id="{{ $item->id }}"></button>
-                                                                <button class="box__profile-deleteaddress"
-                                                                        data-id="{{ $item->id }}"></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                            <div class="col-12">
-                                                <div class="box__radiobox">
-                                                    <div class="wrapper-radiobox">
-                                                        <label>
-                                                            <input type="radio"
-                                                                   {{ 99 == $user->address ? 'checked' : '' }} name="current_address"
-                                                                   data-id="99">
-                                                            <span>
-                                                                    <span class="box__radiobox-icon"
-                                                                          style="margin-top: 5px"></span>
-                                                                    <span class="box__radiobox-text">
-                                                                        <span class="box__profile-itemaddress"><strong>Самовывоз</strong></span>
-                                                                    </span>
-                                                                </span>
-                                                        </label>
-                                                        <div class="wrapper-address">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="btn">
-                                                <button data-btn-popup="address">Добавление адреса</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+{{--                            <div class="col-12 col-xl-6 offset-xxl-1 col-xxl-6">--}}
+{{--                                <div class="box__profile-address">--}}
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col-12">--}}
+{{--                                            <h2>Адреса магазинов</h2>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="wrapper-profile-radioaddress">--}}
+{{--                                        <div class="row">--}}
+{{--                                            @foreach ($address as $item)--}}
+{{--                                                <div class="col-12">--}}
+{{--                                                    <div class="box__radiobox">--}}
+{{--                                                        <div class="wrapper-radiobox">--}}
+{{--                                                            <label>--}}
+{{--                                                                <input type="radio"--}}
+{{--                                                                       {{ $item->id == $user->address ? 'checked' : '' }} name="current_address"--}}
+{{--                                                                       data-id="{{ $item->id }}">--}}
+{{--                                                                <span>--}}
+{{--                                                                    <span class="box__radiobox-icon"></span>--}}
+{{--                                                                    <span class="box__radiobox-text">--}}
+{{--                                                                        <span class="box__profile-itemaddress"><span>Город: </span>{{ $item->city }}</span>--}}
+{{--                                                                        <span class="box__profile-itemaddress"><span>Адрес: </span>{{ $item->address }}</span>--}}
+{{--                                                                    </span>--}}
+{{--                                                                </span>--}}
+{{--                                                            </label>--}}
+{{--                                                            <div class="wrapper-address">--}}
+{{--                                                                <button class="box__profile-editaddress"--}}
+{{--                                                                        data-btn-popup="address"--}}
+{{--                                                                        data-id="{{ $item->id }}"></button>--}}
+{{--                                                                <button class="box__profile-deleteaddress"--}}
+{{--                                                                        data-id="{{ $item->id }}"></button>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            @endforeach--}}
+{{--                                            <div class="col-12">--}}
+{{--                                                <div class="box__radiobox">--}}
+{{--                                                    <div class="wrapper-radiobox">--}}
+{{--                                                        <label>--}}
+{{--                                                            <input type="radio"--}}
+{{--                                                                   {{ 99 == $user->address ? 'checked' : '' }} name="current_address"--}}
+{{--                                                                   data-id="99">--}}
+{{--                                                            <span>--}}
+{{--                                                                    <span class="box__radiobox-icon"--}}
+{{--                                                                          style="margin-top: 5px"></span>--}}
+{{--                                                                    <span class="box__radiobox-text">--}}
+{{--                                                                        <span class="box__profile-itemaddress"><strong>Самовывоз</strong></span>--}}
+{{--                                                                    </span>--}}
+{{--                                                                </span>--}}
+{{--                                                        </label>--}}
+{{--                                                        <div class="wrapper-address">--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col-12">--}}
+{{--                                            <div class="btn">--}}
+{{--                                                <button data-btn-popup="address">Добавление адреса</button>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <div class="col-12 col-xl-6 col-xxl-5">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <hr/>
-                                    </div>
-                                </div>
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-12">--}}
+{{--                                        <hr/>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="row">
                                     <div class="col-12">
                                         <h2>Изменение пароля</h2>
