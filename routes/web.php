@@ -155,6 +155,7 @@ Route::group(['prefix' => 'merch', 'middleware' => 'manager'], function () {
         Route::get('/{preorder}/lazy', [\App\Http\Controllers\MerchController::class, 'lazyPages'])->name('merch.lazy-pages');
         Route::get('/{preorder}/table', [\App\Http\Controllers\MerchController::class, 'getTable']);
         Route::get('/{preorder}/close', [\App\Http\Controllers\MerchController::class, 'close'])->name('merch.close-preorder');
+        Route::post('/{preorder}/close_from_file', [\App\Http\Controllers\MerchController::class, 'closeFromFile'])->name('merch.close-preorder-from-file');
         Route::get('/{preorder}/unclose', [\App\Http\Controllers\MerchController::class, 'unclose'])->name('merch.unclose-preorder');
     });
 

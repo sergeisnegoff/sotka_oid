@@ -177,8 +177,75 @@ class MerchController extends Controller
                     $row++;
                 }
             }
-            //$preorder->is_finished = true;
-            //$preorder->save();
+            $preorder->is_finished = true;
+            $preorder->save();
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xls"');
+            $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+            $writer->save('php://output');
+        } catch (\Exception $exception) {
+            \Log::error($exception->getMessage());
+            $preorder->is_finished = false;
+            $preorder->save();
+        }
+    }
+
+    public function closeFromFile(Preorder $preorder, Request $request)
+    {
+        //dd($request->table);
+        $results = [];
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->table);
+        foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+            $results[$worksheet->getTitle()] = $worksheet->toArray();
+        }
+        // save memory
+        $spreadsheet->__destruct();
+        $spreadsheet = NULL;
+        unset($spreadsheet);
+        $data=[];
+        if (array_key_exists('Пакет', $results)) {
+            foreach ($results['Пакет'] as $fileRow) {
+                if (empty($fileRow[1]) || $fileRow[1]== 'Штрихкод' || empty($fileRow[3])) continue;
+                $data[$fileRow[1]] = $fileRow[3];
+            }
+        }
+        try {
+            $countFiles = count(json_decode($preorder->merch_file));
+            $spreadsheet = IOFactory::load(storage_path() . '/app/public/' . json_decode($preorder->merch_file)[$countFiles-1]->download_link);
+            $sheets = PreorderTableSheet::where('preorder_id', $preorder->id)->where('active', true)->with('markup')->get();
+
+            foreach ($sheets as $sheet) {
+                $concreteSheet = $spreadsheet->getSheetByName($sheet->title);
+
+                $row = 1;
+                while ($row < $concreteSheet->getHighestRow()) {
+                    $barcodeLetter = $preorder->is_internal ? ($preorder->merch_barcode_field ?? 'A') : $sheet->markup->barcode;
+                    //dd($preorder->is_internal, $sheet->markup->barcode, $barcodeLetter);
+                    $notExistBarcode = (is_null($concreteSheet->getCell($barcodeLetter . $row)->getValue())
+                        || (int)$concreteSheet->getCell($barcodeLetter . $row)->getValue() === 0);
+
+                    if (
+                        $notExistBarcode
+                        || is_null($concreteSheet->getCell($sheet->markup->price . $row)->getValue())
+                    ) {
+                        $row++;
+                        continue;
+                    }
+
+                    $barcode = $concreteSheet->getCell($barcodeLetter . $row)->getValue();
+                    $qty = $data[$barcode] ?? false;
+
+                    if (!$qty) {
+                        $row++;
+                        continue;
+                    }
+
+                    $concreteSheet->setCellValue($preorder->merch_qty_field . $row, $qty ?? '');
+                    $row++;
+                }
+            }
+            $preorder->is_finished = true;
+            $preorder->save();
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xls"');
             $writer = IOFactory::createWriter($spreadsheet, 'Xls');

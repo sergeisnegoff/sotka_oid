@@ -101,16 +101,16 @@ class PreorderCartController extends Controller
         return back();
     }
 
-    public function create(Request $request, User $user = null)
+    public function create(Request $request, User $user = null, $asUser=false)
     {
-        if (!$user) $user = auth()->user();
+        $authUser = auth()->user();
+        if (!$user) $user = $authUser;
         $history = cache()->get('preorder_history_' . $user->id) ?? [];
-        $cart = $this->cart()['cart'];
+        $cart = $this->cart($asUser ? $authUser : $user)['cart'];
         if (!isset($cart[$request->get('preorder_id')]))
             return redirect()->back();
         $order = $cart[$request->get('preorder_id')];
 
-        //$history[] = $order;
         $props = [
             'user_id' => $user->id,
             'preorder_id' => $order['id']
@@ -118,7 +118,9 @@ class PreorderCartController extends Controller
         if (auth()->user()->role_id === 1 && auth()->user()->id == $user->id) {
             $props['is_internal'] = true;
         }
+
         $checkoutedPreorder = PreorderCheckout::create($props);
+        //dd($checkoutedPreorder);
         foreach ($order['products'] as $product) {
             PreorderCheckoutProduct::create([
                 'preorder_checkout_id' => $checkoutedPreorder->id,
@@ -162,7 +164,9 @@ class PreorderCartController extends Controller
 
         //cache()->put('preorder_history_' . auth()->id(), $history);
 
-        PreorderService::removePreorderFromCart($request->get('preorder_id'), $user->id);
+        $userId = $asUser ? $authUser->id : $user->id;
+
+        PreorderService::removePreorderFromCart($request->get('preorder_id'), $userId);
 
         return redirect()->back();
     }
