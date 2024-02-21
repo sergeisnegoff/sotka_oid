@@ -25,6 +25,7 @@ class PreorderCheckout extends Model
     public function total(bool $asMerch = false) {
         $final = 0;
         foreach ($this->products as $product) {
+            //dd($product);
             $final += $product->total($asMerch);
         }
         return $final;

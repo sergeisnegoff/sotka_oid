@@ -103,7 +103,12 @@ class ManagerController extends Controller
         $cart = collect($cart)->groupBy('preorder_id')->toArray();
 
         foreach ($cart as $preorder_id => &$item) {
-            $preorder = Preorder::find($preorder_id)->toArray();
+            $preorder = Preorder::find($preorder_id);
+            if ($preorder) {
+                $preorder = $preorder->toArray();
+            } else {
+                continue;
+            }
             $preorder['products'] = $item;
             $preorder['total_amount'] = 0;
             foreach ($item as $product) {
@@ -114,7 +119,7 @@ class ManagerController extends Controller
 
             $item = $preorder;
         }
-
+        //dd($cart);
         return view('manager.clients.preorder-cart', compact('cart', 'cartKeys', 'page', 'user', 'preorder_minimal'));
     }
 

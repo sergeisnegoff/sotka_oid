@@ -71,8 +71,8 @@
                                                     let res = JSON.parse(text).result
                                                     $(`.preorder-upload-btn[data-preorder-id="${preorderId}"]`).hide()
                                                     $(`.preorder-upload-status[data-preorder-id="${preorderId}"]`).show().text(res)
+                                                    document.location.replace('/preorders/cart');
                                                 })
-
                                             })
                                     })
                                 })

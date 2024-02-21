@@ -142,8 +142,10 @@ class MerchController extends Controller
 
     public function close(Preorder $preorder)
     {
+        //dd($preorder);
         try {
-            $spreadsheet = IOFactory::load(storage_path() . '/app/public/' . json_decode($preorder->merch_file)[0]->download_link);
+            $countFiles = count(json_decode($preorder->merch_file));
+            $spreadsheet = IOFactory::load(storage_path() . '/app/public/' . json_decode($preorder->merch_file)[$countFiles-1]->download_link);
             $sheets = PreorderTableSheet::where('preorder_id', $preorder->id)->where('active', true)->with('markup')->get();
 
             foreach ($sheets as $sheet) {
@@ -152,7 +154,7 @@ class MerchController extends Controller
                 $row = 1;
                 while ($row < $concreteSheet->getHighestRow()) {
                     $barcodeLetter = $preorder->is_internal ? ($preorder->merch_barcode_field ?? 'A') : $sheet->markup->barcode;
-                    //dd($preorder->is_internal, $sheet->markup->barcode);
+                    //dd($preorder->is_internal, $sheet->markup->barcode, $barcodeLetter);
                     $notExistBarcode = (is_null($concreteSheet->getCell($barcodeLetter . $row)->getValue())
                         || (int)$concreteSheet->getCell($barcodeLetter . $row)->getValue() === 0);
 
@@ -164,8 +166,8 @@ class MerchController extends Controller
                         continue;
                     }
                     $barcode = $concreteSheet->getCell($barcodeLetter . $row)->getValue();
-                    $product = PreorderProduct::where('barcode', $barcode)->first();
-
+                    $product = PreorderProduct::where('barcode', $barcode)->where('preorder_id', $preorder->id)->first();
+                    //dump($product);
                     if (!$product) {
                         $row++;
                         continue;
@@ -175,8 +177,8 @@ class MerchController extends Controller
                     $row++;
                 }
             }
-            $preorder->is_finished = true;
-            $preorder->save();
+            //$preorder->is_finished = true;
+            //$preorder->save();
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xls"');
             $writer = IOFactory::createWriter($spreadsheet, 'Xls');

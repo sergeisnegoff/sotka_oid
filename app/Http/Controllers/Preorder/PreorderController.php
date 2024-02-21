@@ -190,26 +190,32 @@ class PreorderController extends Controller
         $spreadsheet = $reader->load($file);
 
         $qtyField = $preorder->client_qty_field;
+        $barcodeField = $preorder->merch_barcode_field ?? 'A';
         // Проходимся по каждому листу клиентского прайса
         $out = [];
         foreach ($sheets as $sheet) {
             $clientSheet = $spreadsheet->getSheetByName($sheet->title);
             $markup = PreorderSheetMarkup::where('preorder_table_sheet_id', $sheet->id)->first();
-            $row = 1;
-            while ($row < $clientSheet->getHighestRow()) {
-                $barcode = $clientSheet->getCell($markup->barcode ?? 'A' . $row)->getValue();
-                (int)$qty = $clientSheet->getCell($qtyField . $row)->getValue();
 
+            $row = 1;
+            $array = [];
+            while ($row < $clientSheet->getHighestRow()) {
+                //$barcode = $clientSheet->getCell($markup->barcode ?? 'G' . $row)->getValue();
+                $barcode = $clientSheet->getCell($barcodeField . $row)->getValue();
+                (int)$qty = $clientSheet->getCell($qtyField . $row)->getValue();
+                $array[$row]['barcode'] = $barcode;
+                $array[$row]['qty'] = $qty;
                 if (!$barcode || !$qty || !is_numeric($qty)) {
                     $row++;
                     continue;
                 }
                 $product = PreorderProduct::where('barcode', $barcode)->where('preorder_id', $preorder->id)->first();
+                $array[$row]['product'] = $product;
                 if (!$product) {
                     $row++;
                     continue;
                 }
-
+                $array[$row]['hard_limit'] = $product->hard_limit;
                 if ($product->hard_limit === 0) {
                     $row++;
                     continue;
@@ -234,6 +240,7 @@ class PreorderController extends Controller
                 $row++;
             }
         }
+        //dd($array);
         if (!count($out)) return response()->json(['result' => "Обработка завершена. Выгружено 0 позиций"], 200);
 
         /*$preorderCheckout = PreorderCheckout::create([

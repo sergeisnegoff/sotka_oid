@@ -9,6 +9,9 @@
                 <div class="col-12">
                     <div class="box__ptofile-currentorder">
                         @foreach ($cart as $order)
+                            @if(!isset($order['id']))
+                                @continue;
+                            @endif
                            {{-- @php
                                 $amount = 0;
                                 $changes = false;

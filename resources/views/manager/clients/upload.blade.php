@@ -71,6 +71,7 @@
                                                     let res = JSON.parse(text).result
                                                     $(`.preorder-upload-btn[data-preorder-id="${preorderId}"]`).hide()
                                                     $(`.preorder-upload-status[data-preorder-id="${preorderId}"]`).show().text(res)
+                                                    document.location.replace('{{ route('manager.clients.preorder_cart', $user->id) }}');
                                                 })
 
                                             })

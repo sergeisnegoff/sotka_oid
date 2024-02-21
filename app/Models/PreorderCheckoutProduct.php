@@ -16,7 +16,7 @@ class PreorderCheckoutProduct extends Model
     }
 
     public function total(bool $asMerch = false) {
-        return $asMerch ? $this->preorder_product->merch_price : $this->preorder_product->price * $this->qty;
+        return $asMerch ? $this->preorder_product->merch_price * $this->qty : $this->preorder_product->price * $this->qty;
     }
 
     public function preorderCheckout() {

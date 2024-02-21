@@ -57,6 +57,7 @@ class Preorder extends Model
     public function totalByType(bool $internal = false, bool $asMerch = false) {
         $sum = 0;
         foreach ($this->preorderCheckouts()->where('is_internal', $internal)->get() as $checkout) {
+            //dd($checkout);
             $sum += $checkout->total($asMerch);
         }
         return $sum;
