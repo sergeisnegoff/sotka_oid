@@ -14921,6 +14921,40 @@ form .invalid-message {
     margin: 0;
   }
 }
+.box__mobile-app {
+
+}
+
+.box__mobile-app-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box__mobile-app h2{
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.box__mobile-app-links {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.box__mobile-app-links a {
+    margin-bottom: 30px;
+}
+
+.box__mobile-app-links a>img {
+    height: 80px;
+}
+
 @media (max-width: 560px) {
   .box__popup.iziModal {
     max-width: 100% !important;
@@ -14937,6 +14971,24 @@ form .invalid-message {
     position: relative;
     margin: 0;
   }
+
+    .box__mobile-app h2{
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+  .box__mobile-app-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 30px;
+      width: 100%;
+  }
+    .box__mobile-app-links a>img {
+        height: 75px;
+    }
 }
 .lazy > .swiper-lazy-preloader {
   transition: 0.2s;
@@ -14973,4 +15025,7 @@ form .invalid-message {
 .wrapper-popup-center {
     margin-top:45px;
 }
+
+
+
 /*# sourceMappingURL=app.css.map */

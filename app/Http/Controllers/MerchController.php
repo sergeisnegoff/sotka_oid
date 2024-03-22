@@ -203,8 +203,8 @@ class MerchController extends Controller
         $spreadsheet = NULL;
         unset($spreadsheet);
         $data=[];
-        if (array_key_exists('Пакет', $results)) {
-            foreach ($results['Пакет'] as $fileRow) {
+        if (array_key_exists('Sheet1', $results)) {
+            foreach ($results['Sheet1'] as $fileRow) {
                 if (empty($fileRow[1]) || $fileRow[1]== 'Штрихкод' || empty($fileRow[3])) continue;
                 $data[$fileRow[1]] = $fileRow[3];
             }

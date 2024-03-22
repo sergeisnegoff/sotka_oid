@@ -122,7 +122,7 @@
 <main>
     @yield('content')
 </main>
-<footer>
+<footer class="d-none d-sm-block">
     <div class="btn-up"></div>
     <div class="container">
         <div class="row">

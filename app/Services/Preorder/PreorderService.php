@@ -112,7 +112,7 @@ class PreorderService
     }
 
     public static function getActivePreorders() {
-        return Preorder::whereDay('end_date', '>', Carbon::now());
+        return Preorder::where('end_date', '>', date('Y-m-d H:s:i', time()));
     }
 
     public static function createSummary(Preorder $preorder) {

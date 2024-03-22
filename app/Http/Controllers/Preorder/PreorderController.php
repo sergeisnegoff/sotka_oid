@@ -13,6 +13,7 @@ use App\Models\PreorderSheetMarkup;
 use App\Models\PreorderTableSheet;
 use App\Models\User;
 use App\Services\Preorder\PreorderService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -176,6 +177,8 @@ class PreorderController extends Controller
     {
         $page = 'preorder_upload';
         $preorders = PreorderService::getActivePreorders()->whereNotNull('client_file')->whereNotNull('client_qty_field')->get();
+        //$preorders = Preorder::where('end_date', '>', date('Y-m-d H:s:i', time()))->get();
+        //dd(Carbon::now(), $preorders);
 
         return view('preorder.upload', compact('page', 'preorders'));
     }
@@ -201,8 +204,12 @@ class PreorderController extends Controller
             $array = [];
             while ($row < $clientSheet->getHighestRow()) {
                 //$barcode = $clientSheet->getCell($markup->barcode ?? 'G' . $row)->getValue();
+                //dd($barcodeField, mb_ord($qtyField));
                 $barcode = $clientSheet->getCell($barcodeField . $row)->getValue();
+
                 (int)$qty = $clientSheet->getCell($qtyField . $row)->getValue();
+
+
                 $array[$row]['barcode'] = $barcode;
                 $array[$row]['qty'] = $qty;
                 if (!$barcode || !$qty || !is_numeric($qty)) {

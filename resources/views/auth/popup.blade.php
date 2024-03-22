@@ -110,7 +110,7 @@
                                             <span>
                                                 <span class="box__checkbox-icon"></span>
                                                 <span class="box__checkbox-text">Я согласен на обработку <a
-                                                        href="">персональных данных</a></span>
+                                                        href="https://sotka-sem.ru/consent-to-the-processing-of-personal-data">персональных данных</a></span>
                                             </span>
                                         </label>
                                     </div>

@@ -146,9 +146,9 @@
 <main>
     @yield('content')
 </main>
-<footer>
+<footer class="">
     <div class="btn-up"></div>
-    <div class="container">
+    <div class="container d-none d-sm-block">
         <div class="row">
             <div class="col-12 col-md-4 col-xl-4">
                 <h3>{{setting('site.help_customer')}}</h3>

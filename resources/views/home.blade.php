@@ -1,6 +1,22 @@
 @extends('layouts.app')
 @section('content')
     <main>
+{{--        <iframe style="height:500px;width:100%;position:fixed;top:50%;left:0px;z-index:40" src="" scrolling="no" frameborder="0px"></iframe>--}}
+        <div id="video-container"
+             style="width: 100%;position:fixed;top:25%;z-index:40; display: none;
+             justify-content: center; align-items: center;
+             background-color: rgba(61,61,61,0.5)"
+        >
+
+            <div style="position: relative; padding: 3rem 15px">
+                <a href="#" onclick="closeVideo()" style="position: absolute; top: 2.4rem; right: 0; z-index: 100">
+                    <img src="/images/close.png" alt="" style="height: 2rem; z-index: 100">
+                </a>
+                <video id="video" controls autoplay width="250" style="width:100%; max-height: 500px; margin: 0 auto" src="" ></video>
+            </div>
+
+        </div>
+
         <section class="box__slider-home">
             <div class="container">
                 <div class="row">
@@ -48,17 +64,35 @@
                                         <div class="swiper-slide">
                                             <div class="row">
                                                 @foreach ($chunk as $slide)
-                                                    <div class="col-12 col-md-6">
-                                                        <div class="box__slider-item">
-                                                            <div class="box__cover"><span
-                                                                    style="background-image: url( '{{ thumbImg( $slide->img, 332, 250) }}' );"></span>
+                                                    @if($slide->button_text == 'посмотреть видео')
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="box__slider-item">
+                                                                <div class="box__cover"><span
+                                                                        style="background-image: url( '{{ thumbImg( $slide->img, 332, 250) }}' );"></span>
+                                                                </div>
+                                                                <h3>{{ $slide->title }}</h3>
+                                                                <div class="btn">
+                                                                    <a href="#" onclick="showVideo('{{$slide->button_href}}')">
+                                                                        {{$slide->button_text}}
+                                                                    </a>
+                                                                </div>
                                                             </div>
-                                                            <h3>{{ $slide->title }}</h3>
-                                                            <div class="btn"><a {{ \Illuminate\Support\Str::of($slide->button_href)->afterLast('/')->contains('.') ? 'download' : '' }}
-                                                                    href="{{ $slide->button_href ?? $slide->button_new_tab }}" {{ empty($slide->button_href) ? 'target=_blank' : '' }}>{{ $slide->button_text }}</a>
+
+                                                        </div>
+                                                        @else
+                                                        <div class="col-12 col-md-6">
+                                                            <div class="box__slider-item">
+                                                                <div class="box__cover"><span
+                                                                        style="background-image: url( '{{ thumbImg( $slide->img, 332, 250) }}' );"></span>
+                                                                </div>
+                                                                <h3>{{ $slide->title }}</h3>
+                                                                <div class="btn"><a
+                                                                        {{ \Illuminate\Support\Str::of($slide->button_href)->afterLast('/')->contains('.') ? 'download' : '' }}
+                                                                        href="{{ $slide->button_href ?? $slide->button_new_tab }}" {{ empty($slide->button_href) ? 'target=_blank' : '' }}>{{ $slide->button_text }}</a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>
@@ -85,28 +119,31 @@
                             @foreach ($seeds as $seed)
                                 <div class="col-6 col-md-4 col-xl-2 fadeIn" style="margin-bottom: 20px;">
                                     <div class="box__product-item">
-                                            <div class="wrapper-img" style="position: relative;">
-                                                <div class="box__image" style="width: 100%;height: 100%;position: relative;">
-                                                    <div class="swiper gallery-product-card" style="height: 100%;">
-                                                        <div class="swiper-wrapper">
+                                        <div class="wrapper-img" style="position: relative;">
+                                            <div class="box__image"
+                                                 style="width: 100%;height: 100%;position: relative;">
+                                                <div class="swiper gallery-product-card" style="height: 100%;">
+                                                    <div class="swiper-wrapper">
+                                                        <div class="swiper-slide">
+                                                            <a class="aslide" href="/product/{{$seed->id}}">
+                                                                <span class="imgslide"
+                                                                      style="background-image: url( '{{Voyager::image($seed->images)}}' );"></span>
+                                                            </a>
+                                                        </div>
+                                                        @foreach(json_decode($seed->images_gallery) ?? [] as $image)
                                                             <div class="swiper-slide">
                                                                 <a class="aslide" href="/product/{{$seed->id}}">
-                                                                    <span class="imgslide" style="background-image: url( '{{Voyager::image($seed->images)}}' );"></span>
+                                                                    <span class="imgslide"
+                                                                          style="background-image: url( '{{ Voyager::image($image) }}' );"></span>
                                                                 </a>
                                                             </div>
-                                                            @foreach(json_decode($seed->images_gallery) ?? [] as $image)
-                                                                <div class="swiper-slide">
-                                                                    <a class="aslide" href="/product/{{$seed->id}}">
-                                                                        <span class="imgslide" style="background-image: url( '{{ Voyager::image($image) }}' );"></span>
-                                                                    </a>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                        <!-- If we need pagination -->
-                                                        <div class="swiper-pagination"></div>
+                                                        @endforeach
                                                     </div>
+                                                    <!-- If we need pagination -->
+                                                    <div class="swiper-pagination"></div>
                                                 </div>
                                             </div>
+                                        </div>
                                         <div class="wrapper-info">
                                             <div class="box__category"><a
                                                     href="/products/{{$seed->category->parent_id}}/{{$seed->category->title}}">{{@$seed->category->title}}</a>
@@ -191,7 +228,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-6">
-                                                        <div class="ifcart">@if($cartKeys->contains($seed->id))Товар есть в корзине@endif</div>
+                                                        <div class="ifcart">@if($cartKeys->contains($seed->id))Товар
+                                                            есть в корзине@endif</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -206,8 +244,46 @@
                 <input type="hidden" name="" value="{{ isset($_GET['page']) ? $_GET['page'] : 1 }}" id="current_page">
             </div>
         </section>
+        <section class="box__mobile-app">
+            <div class="container d-flex box__mobile-app-container">
+                <h2 class="mx-auto">
+                    Скачайте и установите на телефон наше мобильное приложение
+                </h2>
+                <div class="box__mobile-app-links">
+                    <a href="https://appgallery.huawei.com/#/app/C110419105" target="_blank">
+                        <img src="./images/app-gallery.png" alt="">
+                    </a>
+                    <a download href="./sotkasem.apk" target="_blank">
+                        <img src="./images/app-site.png" alt="">
+                    </a>
+                    <a href="https://apps.rustore.ru/app/com.zolsotal.ru" target="_blank">
+                        <img src="./images/ru-store.png" alt="">
+                    </a>
+                </div>
+            </div>
+
+        </section>
 
     </main>
+    <script>
+        function showVideo(href)
+        {
+            const videoContainer = document.getElementById('video-container');
+            const videoFrame = document.getElementById('video');
+            videoFrame.src = href;
+            videoContainer.style.zIndex = '100000';
+            videoContainer.style.display = 'flex';
+            console.log(href);
+        }
+
+        function closeVideo()
+        {
+            const videoContainer = document.getElementById('video-container');
+            const videoFrame = document.getElementById('video');
+            videoFrame.src = '';
+            videoContainer.style.display = 'none';
+        }
+    </script>
 
 @endsection
 
