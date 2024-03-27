@@ -168,6 +168,6 @@ class PreorderCartController extends Controller
 
         PreorderService::removePreorderFromCart($request->get('preorder_id'), $userId);
 
-        return redirect()->back();
+        return redirect()->route('preorders_history');
     }
 }

@@ -108,10 +108,11 @@ Route::group(['prefix' => 'preorders'], function () {
     Route::get('/cart/ajax/{user}', [PreorderCartController::class, 'cart'])->name('preorder_user_cart_ajax');
     Route::get('/cart/empty/{preorder}', [PreorderCartController::class, 'empty'])->name('preorder_empty_cart');
     Route::get('/cart/empty/{preorder}/{user}', [PreorderCartController::class, 'empty'])->name('preorder_empty_user_cart');
-    Route::get('/cart', [PreorderCartController::class, 'index']);
+    Route::get('/cart', [PreorderCartController::class, 'index'])->name('preorder_cart_show');
     Route::post('/cart', [PreorderCartController::class, 'create'])->name('preorder_create');
     Route::post('/cart/{user}', [PreorderCartController::class, 'create'])->name('preorder_create_for_user');
-    Route::get('/history', [PreorderController::class, 'history']);
+    Route::get('/history', [PreorderController::class, 'history'])->name('preorders_history');
+    Route::get('/history/clone/{id}', [PreorderController::class, 'historyClone'])->name('preorders_history_clone');
 
     Route::post('/upload_file', [PreorderController::class, 'clientUploadPost'])->name('preorder.client-upload-post');
     Route::get('/upload', [PreorderController::class, 'clientUpload']);

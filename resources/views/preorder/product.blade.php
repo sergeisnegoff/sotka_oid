@@ -30,7 +30,7 @@ $(document).ready(function() {
                 <div class="col-12">
                     <ul>
                         <li><a href="/">{{setting('site.main_title_buttom')}}</a></li>
-                        <li><a href="/preorders/{{ $product->category->preorder_id }}">{{ $product->category->preorder->title }}</a></li>
+{{--                        <li><a href="/preorders/{{ $product->category->preorder_id }}">{{ $product->category->preorder->title }}</a></li>--}}
                         <li><a href="/preorders/category/{{$product->category->id}}/products">{{$product->category->title}}</a></li>
                         <li> {{$product->title}}</li>
                     </ul>

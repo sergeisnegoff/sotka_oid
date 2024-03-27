@@ -183,6 +183,40 @@ class PreorderController extends Controller
         return view('preorder.upload', compact('page', 'preorders'));
     }
 
+    public function historyClone($id)
+    {
+        //$order = PreorderCheckout::find($id);
+        $checkoutProducts = PreorderCheckoutProduct::where('preorder_checkout_id', $id)->get();
+        //dd($products);
+        foreach ($checkoutProducts as $item) {
+            $product = PreorderProduct::find($item->preorder_product_id);
+            if ($product) {
+                $cart = PreorderService::getFullCart();
+
+                if (!empty($cart[$product->id])) {
+                    $quantity = $cart[$product->id]['quantity'] + $item->qty;
+                } else {
+                    $quantity = $item->qty;
+                }
+
+                $cart[$product->id] = [
+                    'id' => $product->id,
+                    'name' => $product->title,
+                    'price' => $product->price,
+                    'quantity' => $quantity,
+                    'multiplicity' => $product->multiplicity,
+                    'image' => $product->image ?? $product->preorder->default_image,
+                    'preorder_id' => $product->category->preorder_id,
+                ];
+
+                PreorderService::setLatestPreorder($product->category->preorder_id);
+                PreorderService::updateCart($cart);
+            }
+        }
+
+        return redirect()->route('preorder_cart_show');
+    }
+
     public function clientUploadPost()
     {
         $userToSaveFrom = User::find(request()->manager_user_id);

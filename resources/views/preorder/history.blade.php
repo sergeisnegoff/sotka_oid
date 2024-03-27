@@ -9,50 +9,62 @@
                     <div class="box__ptofile-currentorder">
                         @foreach ($cart as $order)
 
-                           {{-- @php
-                                $amount = 0;
-                                $changes = false;
-                                foreach ($order->products as $product) {
-                                    $amount += $product->pivot->price + $product->pivot->price_changed;
+                            {{-- @php
+                                 $amount = 0;
+                                 $changes = false;
+                                 foreach ($order->products as $product) {
+                                     $amount += $product->pivot->price + $product->pivot->price_changed;
 
-                                    if ($product->pivot->qty == 0 || $product->pivot->excepted == 1)
-                                    	$changes = true;
-                                }
-                            @endphp--}}
+                                     if ($product->pivot->qty == 0 || $product->pivot->excepted == 1)
+                                         $changes = true;
+                                 }
+                             @endphp--}}
 
                             <div class="box__item" data-order-id="{{$order->id}}">
                                 <div class="wrapper__currentorder">
                                     <div class="row">
                                         <div class="col-12 col-xl-3">
-                                            <div class="box__currentorder-ordernumber">Предзаказ: {{ $order->preorder->title }} (заказ {{$order->id}})
+                                            <div class="box__currentorder-ordernumber">
+                                                Предзаказ: {{ $order->preorder->title }} (заказ {{$order->id}})
                                             </div>
                                         </div>
                                         <div class="col-12 col-xl-3">
 
                                             <div class="box__currentorder-status">
                                                 <div class="btn btn__currentorder-export">
-                                                    <a href="/preorders/export-pdf/{{$order->id}}" target="_blank">Скачать перечень товаров PDF</a>
+                                                    <a href="/preorders/export-pdf/{{$order->id}}" target="_blank">Скачать
+                                                        перечень товаров PDF</a>
                                                 </div>
                                                 <div class="btn btn__currentorder-export">
-                                                    <a href="/preorders/export-xls/{{$order->id}}" target="_blank">Скачать перечень товаров XLS</a>
+                                                    <a href="/preorders/export-xls/{{$order->id}}" target="_blank">Скачать
+                                                        перечень товаров XLS</a>
                                                 </div>
                                             </div>
 
                                         </div>
                                         <div class="col-12 col-xl-3">
                                             <div>
-                                                <span>Предоплата: <span class="prepay_amount">{{$order->prepay_amount()}}</span></span>
+                                                <span>Предоплата: <span
+                                                        class="prepay_amount">{{$order->prepay_amount()}}</span></span>
                                                 <span>₽</span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-xl-2">
                                             <div>
-                                                <span>Стоимость: <span class="total_amount">{{$order->total()}}</span></span>
+                                                <span>Стоимость: <span
+                                                        class="total_amount">{{$order->total()}}</span></span>
                                                 <span>₽</span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-xl-2">
-
+                                            @if(time() < strtotime($order->preorder->end_date))
+                                                <div class="btn">
+                                                    <a href="{{ route('preorders_history_clone', $order->id) }}"
+                                                       onclick="clonePreorder({{$order->id}})">
+                                                        Повторить заказ &rang;
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="btn__currentorder-toggle">
@@ -79,7 +91,8 @@
                                                             @php
                                                                 $id = $product->id;
                                                             @endphp
-                                                            <div class="wrapper__baskets-item" id="preorder-cart-item{{$id}}">
+                                                            <div class="wrapper__baskets-item"
+                                                                 id="preorder-cart-item{{$id}}">
                                                                 <div class="row">
                                                                     <div class="col-12 col-xl-3">
                                                                         <div class="wrapper__baskets-info">
@@ -89,29 +102,33 @@
                                                                                 </span>
                                                                             </div>
                                                                             <a href="/preorders/product/{{ $product->preorder_product->id }}">
-                                                                                <h3>{{ $product->preorder_product->title }}</h3></a>
+                                                                                <h3>{{ $product->preorder_product->title }}</h3>
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
                                                                         <div class="wrapper__baskets-quality">
                                                                             <span class="wrapper__baskets-titlequality">Количество:</span>
                                                                             <div class="box__quality">
-                                                                                <div class="box__quality-value text-center">
+                                                                                <div
+                                                                                    class="box__quality-value text-center">
                                                                                     {{$product->qty}}
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
-                                                                        <div class="wrapper__baskets-price"><span>Цена:</span>
+                                                                        <div class="wrapper__baskets-price">
+                                                                            <span>Цена:</span>
                                                                             {{ $product->preorder_product->price }} ₽
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
                                                                         <div class="wrapper__baskets-cost">
                                                                             <span>Стоимость:</span>
-                                                                            <div class="item-amount{{$product['id']}} item-amounts"
-                                                                                 style="display: inline">
+                                                                            <div
+                                                                                class="item-amount{{$product['id']}} item-amounts"
+                                                                                style="display: inline">
                                                                                 {{ $product->total() }}
                                                                             </div>
                                                                             ₽
@@ -174,6 +191,7 @@
     <script src="{{ asset('js/libs/izimodal/js/iziModal.js') }}"></script>
 
     <script>
+
         let cityID = 0,
             regionID = 0,
             streetId = 0,
