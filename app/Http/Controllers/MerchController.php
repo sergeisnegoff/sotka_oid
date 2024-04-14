@@ -203,12 +203,15 @@ class MerchController extends Controller
         $spreadsheet = NULL;
         unset($spreadsheet);
         $data=[];
-        if (array_key_exists('Sheet1', $results)) {
-            foreach ($results['Sheet1'] as $fileRow) {
-                if (empty($fileRow[1]) || $fileRow[1]== 'Штрихкод' || empty($fileRow[3])) continue;
-                $data[$fileRow[1]] = $fileRow[3];
+        if (is_array($results)) {
+            foreach ($results as $key=>$result) {
+                foreach ($result as $fileRow) {
+                    if (empty($fileRow[1]) || $fileRow[1]== 'Штрихкод' || empty($fileRow[3])) continue;
+                    $data[$fileRow[1]] = $fileRow[3];
+                }
             }
         }
+
         try {
             $countFiles = count(json_decode($preorder->merch_file));
             $spreadsheet = IOFactory::load(storage_path() . '/app/public/' . json_decode($preorder->merch_file)[$countFiles-1]->download_link);
@@ -234,7 +237,7 @@ class MerchController extends Controller
 
                     $barcode = $concreteSheet->getCell($barcodeLetter . $row)->getValue();
                     $qty = $data[$barcode] ?? false;
-
+                    //dd($data);
                     if (!$qty) {
                         $row++;
                         continue;

@@ -194,9 +194,9 @@ class PreorderService
 
         }
 
-        $writer = IOFactory::createWriter($outSpreadsheet, 'Xls');
+        $writer = IOFactory::createWriter($outSpreadsheet, 'Xlsx');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $preorder->id . '.xls"');
+        header('Content-Disposition: attachment;filename="' . $preorder->id . '.xlsx"');
         $writer->save('php://output');
     }
 

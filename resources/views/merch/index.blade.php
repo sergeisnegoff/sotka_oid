@@ -25,7 +25,7 @@
                                         <div class="col-12 col-xl-2">
                                         </div>
                                         <div class="col-12 col-xl-3">
-                                            Сумма предзаказа: <b>{{$preorder->total()}}₽</b>
+                                            Сумма предзаказа: <b>{{number_format($preorder->total(), 2, ',', ' ')}}₽</b>
                                         </div>
                                         <div class="col-12 col-xl-3">
                                             <div class="btn">

@@ -18,10 +18,10 @@
                                         <div class="col-12 col-xl-2">
                                             <i>{{$preorder->created_at }}</i>
                                         </div>
-                                        <div class="col-12 col-xl-4">
+                                        <div class="col-12 col-xl-3">
                                         </div>
-                                        <div class="col-12 col-xl-2">
-                                            Сумма предзаказа: <b>{{$preorder->total()}}₽</b>
+                                        <div class="col-12 col-xl-3">
+                                            Сумма предзаказа: <b>{{number_format($preorder->total(), 2, ',', ' ')}}₽</b>
                                         </div>
                                         <div class="col-12 col-xl-2">
                                             <div class="btn">

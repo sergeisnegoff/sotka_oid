@@ -15,18 +15,18 @@
         </thead>
         <tr>
             <td>Клиенты</td>
-            <td class="preorder-table-data">{{$preorder->quantityByType()}}</td>
-            <td class="preorder-table-data">{{$preorder->totalByType(false, true)}}₽</td>
+            <td class="preorder-table-data">{{number_format($preorder->quantityByType(), 0, ',', ' ')}}</td>
+            <td class="preorder-table-data">{{number_format($preorder->totalByType(false, true), 2, ',', ' ')}}₽</td>
         </tr>
         <tr>
             <td>Сотка</td>
-            <td class="preorder-table-data">{{$preorder->quantityByType(true)}}</td>
-            <td class="preorder-table-data">{{$preorder->totalByType(true, true)}}₽</td>
+            <td class="preorder-table-data">{{number_format($preorder->quantityByType(true), 0, ',', ' ')}}</td>
+            <td class="preorder-table-data">{{number_format($preorder->totalByType(true, true), 2, ',', ' ')}}₽</td>
         </tr>
         <tr>
             <td><b>Всего</b></td>
-            <td class="preorder-table-data"><b>{{$preorder->quantity()}}</b></td>
-            <td class="preorder-table-data"><b>{{$preorder->total(true)}}₽</b></td>
+            <td class="preorder-table-data"><b>{{number_format($preorder->quantity(), 0, ',', ' ')}}</b></td>
+            <td class="preorder-table-data"><b>{{number_format($preorder->total(true), 2, ',', ' ')}}₽</b></td>
         </tr>
     </table>
 </div>
