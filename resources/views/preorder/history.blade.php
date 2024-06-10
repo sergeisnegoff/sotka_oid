@@ -120,7 +120,7 @@
                                                                     <div class="col-12 col-xl-2">
                                                                         <div class="wrapper__baskets-price">
                                                                             <span>Цена:</span>
-                                                                            {{ $product->preorder_product->price }} ₽
+                                                                            {{ number_format($product->preorder_product->price, 2, ',', ' ') }} ₽
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
@@ -129,7 +129,7 @@
                                                                             <div
                                                                                 class="item-amount{{$product['id']}} item-amounts"
                                                                                 style="display: inline">
-                                                                                {{ $product->total() }}
+                                                                                {{ number_format($product->total(), 2, ',', ' ') }}
                                                                             </div>
                                                                             ₽
                                                                         </div>

@@ -24,7 +24,7 @@
                                             <i>{{$client->address ?? 'адрес не указан'}}</i>
                                         </div>
                                         <div class="col-12 col-xl-4">
-                                            <b>Сумма заказов по клиенту:</b> {{$subPage == 'orders' ? $client->ordersTotal() : $client->preordersTotal()}}₽
+                                            <b>Сумма заказов по клиенту:</b> {{$subPage == 'orders' ? $client->ordersTotal() : number_format($client->preordersTotal(), 2, ',', ' ')}}₽
                                         </div>
                                         <div class="col-12 col-xl-2">
                                             <div class="btn">

@@ -33,8 +33,11 @@ class GetDataFromExcelJob implements ShouldQueue
      */
     public function handle()
     {
+        ini_set('max_execution_time', 600);
         $emptyCategory = 'Без категории';
         $emptySubcategory = 'Без подкатегории';
+        //if (!$this->preorderTableSheet->title == 'БИГ-ПАК ЛИЛИИ по 25 шт') return true;
+
         $preorder = $this->preorderTableSheet->preorder()->first();
 
         $markup = $this->preorderTableSheet->markup;
@@ -129,7 +132,7 @@ class GetDataFromExcelJob implements ShouldQueue
                 $description = $sheet->getCell($markup->description . $row)->getValue();
             }
 
-            if (!$product && !is_null($markup->image) && !is_null($sheet->getCell($markup->image . $row)->getValue())) {
+            if (!is_null($markup->image) && !is_null($sheet->getCell($markup->image . $row)->getValue())) {
                 try {
                     if (empty($sheet->getCell($markup->image . $row)->getHyperlink()->getUrl())) {
 
@@ -154,49 +157,26 @@ class GetDataFromExcelJob implements ShouldQueue
                     $image = $this->downloadImage($this->image, $preorder, $sku);
                 }
             }
-
-            if (!is_null($markup->link)) {
-                $url = $sheet->getCell($markup->link . $row)->getHyperlink()->getUrl();
-
-                if (!empty($url)) {
-                    try {
-                        $html = $htmlParser->getHtml($url);
-
-                        $image = $html->getImage();
-                        $description = $html->getDescription();
-
-                        if (!empty($image)) {
-                            $image = $this->downloadImage($image, $preorder, $sku);
-                        }
-                    } catch (GuzzleException) {
-                        $url = null;
-                    }
-                }
-            }
-
-            if ($product) {
-                $product->update([
-                    'preorder_id' => $preorder->id,
-                    'preorder_category_id' => $currentsubCategory->id,
-                    'sku' => $sku,
-                    'price' => $markup->price != null
-                        ? $sheet->getCell($markup->price . $row)->getValue()
-                        : '',
-
-                    'multiplicity' => $markup->multiplicity != null
-                        ? preg_replace("/[^0-9]/", '', $sheet->getCell($markup->multiplicity . $row)->getValue())
-                        : 1,
-
-                    'multiplicity_tu' => $markup->multiplicity_tu != null
-                        ? preg_replace("/[^0-9]/", '', $sheet->getCell($markup->multiplicity_tu . $row)->getValue())
-                        : 1,
-                    'cell_number' => $row,
-                    'merch_price' => $shouldParseMerchPrices ?
-                        $merchSheet->getCell($markup->price . $row)->getValue() :
-                        null
-                ]);
-            } else {
-                PreorderProduct::updateOrCreate(['sku' => $sku, 'preorder_id' => $preorder->id], [
+//            //dd($markup->image);
+//            if (!is_null($markup->image)) {
+//                $url = $sheet->getCell($markup->image . $row)->getHyperlink();
+//                dd($sheet->getCell($markup->image . $row), $url);
+//                if (!empty($url)) {
+//                    try {
+//                        $html = $htmlParser->getHtml($url);
+//
+//                        $image = $html->getImage();
+//                        $description = $html->getDescription();
+//
+//                        if (!empty($image)) {
+//                            $image = $this->downloadImage($image, $preorder, $sku);
+//                        }
+//                    } catch (GuzzleException) {
+//                        $url = null;
+//                    }
+//                }
+//            }
+            PreorderProduct::updateOrCreate(['sku' => $sku, 'preorder_id' => $preorder->id], [
                     'sku' => $sku,
 
                     'title' => $markup->title != null
@@ -216,7 +196,8 @@ class GetDataFromExcelJob implements ShouldQueue
                         : 1,
 
                     'multiplicity_tu' => $markup->multiplicity_tu != null
-                        ? preg_replace("/[^0-9]/", '', $sheet->getCell($markup->multiplicity_tu . $row)->getValue())
+                        ? preg_replace("/[^0-9]/", '', $sheet->getCell($markup->multiplicity_tu . $row)
+                            ->getValue())
                         : 1,
 
                     'container' => $markup->container != null
@@ -291,7 +272,7 @@ class GetDataFromExcelJob implements ShouldQueue
                         $merchSheet->getCell($markup->price . $row)->getValue() :
                         null
                 ]);
-            }
+
 //            }
 
             $row++;

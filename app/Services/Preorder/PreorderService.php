@@ -118,10 +118,12 @@ class PreorderService
     public static function createSummary(Preorder $preorder) {
         Debugbar::disable();
         $sheets = PreorderTableSheet::where('preorder_id', $preorder->id)->where('active', true)->get();
-
+            //dd($sheets);
         $outSpreadsheet = new Spreadsheet();
         $outSpreadsheet->removeSheetByIndex(0);
+        //dd($sheets);
         foreach ($sheets as $sheet) {
+            //if ($sheet->title == 'БИГ-ПАК ЛИЛИИ по 25 шт') dd($sheet->products);
             $worksheet = new Worksheet($outSpreadsheet, $sheet->title);
             $outSpreadsheet->addSheet($worksheet);
             $worksheet->setCellValue('A4', 'Наименование товара');
@@ -134,6 +136,7 @@ class PreorderService
             $productRows = [];
             //Пишем продукты в таблицу
             foreach ($sheetCategories as $sheetCategory) {
+
                 $worksheet->setCellValue('A'.$row, $sheetCategory->title);
                 $cellStyle = $worksheet->getStyle('A'.$row.':AZ'.$row);
                 $cellStyle->getFill()
@@ -141,6 +144,7 @@ class PreorderService
                     ->getStartColor()->setRGB('62b0df');
                 $row++;
                 foreach ($sheetCategory->products as $product) {
+                    //if ($sheet->title == 'БИГ-ПАК ЛИЛИИ по 25 шт') dd($sheetCategory->products);
                     $worksheet->setCellValue('A'.$row, $product->title);
                     $worksheet->setCellValueExplicit('B'.$row, $product->barcode, DataType::TYPE_STRING);
                     $worksheet->setCellValue('C'.$row, $product->price);

@@ -54,7 +54,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 col-xl-3">{{$user->name}}</div>
                                                                         <div class="col-12 col-xl-4">
-                                                                            {{$user->preordersTotal($preorder)}}₽
+                                                                            {{number_format($user->preordersTotal($preorder), 2, ',', ' ')}}₽
                                                                         </div>
                                                                         <div class="col-12 col-xl-4">
                                                                             <div class="btn">

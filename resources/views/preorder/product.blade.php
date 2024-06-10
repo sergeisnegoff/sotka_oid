@@ -118,10 +118,10 @@ $(document).ready(function() {
                             <div class="wrapper__product-bottom">
                                 <div class="box__product-price">
                                     @if(!empty($product->new_price))
-                                        <span class="box__price-normal">{{$product->price}} ₽</span>
-                                        <span class="box__price-sale">{{$product->new_price}} ₽</span>
+                                        <span class="box__price-normal">{{number_format($product->price, 2, ',', ' ')}} ₽</span>
+                                        <span class="box__price-sale">{{number_format($product->new_price, 2, ',', ' ')}} ₽</span>
                                     @else
-                                        <span class="box__price-normal">{{$product->price}} ₽</span>
+                                        <span class="box__price-normal">{{number_format($product->price, 2, ',', ' ')}} ₽</span>
                                     @endif
                                 </div>
                                 <div class="box__product-status">в наличии</div>

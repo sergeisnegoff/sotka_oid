@@ -21,8 +21,8 @@
                                         <div class="col-12 col-xl-4">
                                         </div>
                                         <div class="col-12 col-xl-2">
-                                            Общая сумма: <b>{{$preorder->total()}}₽</b><br/>
-                                            Сумма по клиентам: <b>{{$preorder->totalForCurrentManager()}}₽</b>
+                                            Общая сумма: <b>{{ number_format($preorder->total(), 2, ',', ' ') }}₽</b><br/>
+                                            Сумма по клиентам: <b>{{ number_format($preorder->totalForCurrentManager(), 2, ',', ' ') }}₽</b>
                                         </div>
                                     </div>
                                     <div class="btn__currentorder-toggle">
@@ -50,7 +50,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 col-xl-3">{{$user->name}}</div>
                                                                        <div class="col-12 col-xl-4">
-                                                                           {{$preorder->totalByUser($user)}}₽
+                                                                           {{ number_format($preorder->totalByUser($user), 2, ',', ' ') }}₽
                                                                        </div>
                                                                         <div class="col-12 col-xl-3">
                                                                             <div class="btn">

@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class GetDataFromInternalExcelJob implements ShouldQueue
@@ -40,7 +41,9 @@ class GetDataFromInternalExcelJob implements ShouldQueue
      */
     public function handle()
     {
+
         $preorder = $this->preorderTableSheet->preorder;
+        //dd($preorder);
         $markup = $this->preorderTableSheet->markup;
 
         $file = storage_path().'/app/public/'.json_decode($preorder->file)[count(json_decode($preorder->file)) - 1]->download_link;
@@ -63,8 +66,9 @@ class GetDataFromInternalExcelJob implements ShouldQueue
         $notFoundProductBarcodes = [];
         $emptyBarcodeRows = [];
 
-        while ($row < $sheet->getHighestRow()) {
+        while ($row <= $sheet->getHighestRow()) {
             $barcode = $sheet->getCell("A$row")->getValue();
+            //dd($markup);
             if (is_null($barcode)) {
                 $emptyBarcodeRows[] = $row;
                 $row++;
@@ -85,8 +89,13 @@ class GetDataFromInternalExcelJob implements ShouldQueue
                 $row++;
                 continue;
             }
+            //dd($product);
             $productCategory = $product->category;
             $rootProductCategory = Category::find($productCategory->parent_id);
+//            if (!$rootProductCategory) {
+//                dd('Проблема с товаром в строке ' . $row, $product, $productCategory);
+//            }
+
             $currentCategory = PreorderCategory::firstOrCreate(
                 ['title' => $rootProductCategory->title, 'preorder_id' => $preorder->id],
                 [
@@ -135,26 +144,33 @@ class GetDataFromInternalExcelJob implements ShouldQueue
             $multiplicity = $sheet->getCell($markup->multiplicity.$row)->getValue() ?? $product->multiplicity;
             //$multiplicity = $product->multiplicity;
 
-            $preorderProduct = PreorderProduct::updateOrCreate([
-                'title' => $product->title,
-                'preorder_category_id' => $currentSubCategory->id,
-                'preorder_id' => $preorder->id
-            ], [
-                'preorder_id' => $preorder->id,
-                'title' => $product->title,
-                'barcode' => $product->barcode,
-                'multiplicity' => $multiplicity,
-                'description' => $product->description,
-                'image' => $image,
-                'price' => $price,
-                'merch_price' => $price,
-                'preorder_category_id' => $currentSubCategory->id,
-                'cell_number' => $row,
-                'soft_limit' => $soft_limit,
-                'hard_limit' => $hard_limit
-            ]);
+            Log::channel('import')->info('Row #: ' . $product);
+            try {
+                $preorderProduct = PreorderProduct::updateOrCreate([
+                    'title' => $product->title,
+                    'preorder_category_id' => $currentSubCategory->id,
+                    'preorder_id' => $preorder->id
+                ], [
+                    'preorder_id' => $preorder->id,
+                    'title' => $product->title,
+                    'barcode' => $product->barcode,
+                    'multiplicity' => $multiplicity,
+                    'description' => $product->description,
+                    'image' => $image,
+                    'price' => $price,
+                    'merch_price' => $price,
+                    'preorder_category_id' => $currentSubCategory->id,
+                    'cell_number' => $row,
+                    'soft_limit' => $soft_limit,
+                    'hard_limit' => $hard_limit
+                ]);
+            } catch (\Exception $exception) {
+                Log::channel('import')->info('Error at row #: ' . $row . '. message ' . $exception->getMessage());
+            }
             $row++;
         }
+
+
 
         if (count($emptyBarcodeRows) || count($notFoundProductBarcodes)){
 

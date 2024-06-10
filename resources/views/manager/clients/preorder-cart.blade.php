@@ -133,7 +133,7 @@
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
                                                                         <div class="wrapper__baskets-price"><span>Цена:</span>
-                                                                            {{ $product['price'] }} ₽
+                                                                            {{ number_format($product['price'], 2, ',', ' ') }} ₽
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
@@ -141,7 +141,7 @@
                                                                             <span>Стоимость:</span>
                                                                             <div class="item-amount{{$product['id']}} item-amounts"
                                                                                  style="display: inline">
-                                                                                {{ round($product['price'] * $product['quantity'], 2) }}
+                                                                                {{ number_format(round($product['price'] * $product['quantity'], 2), 2, ',', ' ') }}
                                                                             </div>
                                                                             ₽
                                                                         </div>

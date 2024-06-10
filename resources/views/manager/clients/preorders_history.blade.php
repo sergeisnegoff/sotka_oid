@@ -41,13 +41,13 @@
                                         </div>
                                         <div class="col-12 col-xl-3">
                                             <div>
-                                                <span>Предоплата: <span class="prepay_amount">{{$order->prepay_amount()}}</span></span>
+                                                <span>Предоплата: <span class="prepay_amount">{{number_format($order->prepay_amount(), 2, ',', ' ')}}</span></span>
                                                 <span>₽</span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-xl-2">
                                             <div>
-                                                <span>Стоимость: <span class="total_amount">{{$order->total()}}</span></span>
+                                                <span>Стоимость: <span class="total_amount">{{number_format($order->total(), 2, ',', ' ')}}</span></span>
                                                 <span>₽</span>
                                             </div>
                                         </div>
@@ -102,7 +102,7 @@
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
                                                                         <div class="wrapper__baskets-price"><span>Цена:</span>
-                                                                            {{ $product->preorder_product->price }} ₽
+                                                                            {{ number_format($product->preorder_product->price, 2, ',', ' ') }} ₽
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-12 col-xl-2">
@@ -110,7 +110,7 @@
                                                                             <span>Стоимость:</span>
                                                                             <div class="item-amount{{$product['id']}} item-amounts"
                                                                                  style="display: inline">
-                                                                                {{ $product->total() }}
+                                                                                {{ number_format($product->total(), 2, ',', ' ') }}
                                                                             </div>
                                                                             ₽
                                                                         </div>

@@ -31,6 +31,7 @@ class PreorderProduct extends Model
         'seasonality',
         'plant_height',
         'packaging_type',
+        'package_amount',
         'culture_type',
         'frost_resistance',
         'additional_1',

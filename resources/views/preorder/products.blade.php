@@ -142,7 +142,7 @@ $showBuyButton = !(\Carbon\Carbon::parse($category->preorder->end_date))->isSame
                                                                 <div class="col-6 col-md-6">
                                                                     <div class="box__product-price">
                                                                     <span
-                                                                        class="box__price-sale">{{$seed->price}} ₽</span>
+                                                                        class="box__price-sale">{{ number_format($seed->price, 2, ',', ' ') }} ₽</span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-6 col-md-6">

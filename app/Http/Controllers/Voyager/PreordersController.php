@@ -132,6 +132,8 @@ class PreordersController extends VoyagerBaseController
         $preorder = Preorder::find($id);
         $slug = $this->getSlug($request);
 
+        //dd($request);
+
         $code = [
             'code' => Str::slug($request->title),
         ];
@@ -171,6 +173,7 @@ class PreordersController extends VoyagerBaseController
                 if (!isset($sheet['active'])) {
                     continue;
                 }
+                //dd($sheet);
                 if (!$preorder->is_internal)
                     \Validator::make($sheet, [
                         'category' => 'required',
@@ -219,9 +222,9 @@ class PreordersController extends VoyagerBaseController
                     ->where('preorder_table_sheet_id', $sheetId)
                     ->first();
                 if (empty($preorderSheetMarkup)) $preorderSheetMarkup = new PreorderSheetMarkup();
-
+                //dd(array_merge($sheet, ['preorder_table_sheet_id' => $sheetId]));
                 $preorderSheetMarkup->fill(array_merge($sheet, ['preorder_table_sheet_id' => $sheetId]));
-
+                //dd($preorderSheetMarkup);
                 $preorderSheetMarkup->save();
 
                 $preorderSheet->update([
