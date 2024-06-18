@@ -68,6 +68,7 @@ $showBuyButton = !(\Carbon\Carbon::parse($category->preorder->end_date))->isSame
                              data-catalog <?= !empty($atrProd) ? $atrProd : 'data-catalog-grid'  ?>>
 
                         @foreach ($products as $seed)
+                            @if($seed->hard_limit === 0) @continue @endif
                                 <div class="col-6 col-md-4 col-xl-2 fadeIn">
                                     <div class="box__product-item">
                                         <div class="wrapper-img">
