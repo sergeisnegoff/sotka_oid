@@ -56,7 +56,7 @@ class ManagerController extends Controller
             }
         if ($filterName)
             $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filterName).'%']);
-        $managerClients = $managerClients->paginate(15);
+        $managerClients = $managerClients->paginate(1);
         $paginator = $managerClients;
         $page = 'index';
         $subPage = 'orders';

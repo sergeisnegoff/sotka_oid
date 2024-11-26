@@ -81,7 +81,7 @@ $diff = $endDate->diff($now);
                                 </div>
 
                                 @foreach ($cat->products()->limit(4)->get() as $seed)
-                                    @if($seed->hard_limit === 0) @continue @endif
+                                    @if($seed->hard_limit === 0)  @endif
                                     <div class="col-6 col-md-4 col-xl-2 fadeIn product-preorder">
                                         <div class="box__product-item">
                                             <div class="wrapper-img" style="position: relative;">

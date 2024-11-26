@@ -42,6 +42,8 @@ class ImportOrderDailyCommand extends Command
             ->latest()
             ->get();
 
+        dump($orders);
+
         $spreadsheet = new Spreadsheet();
 
         $worksheet = $spreadsheet->getActiveSheet();

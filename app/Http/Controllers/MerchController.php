@@ -154,9 +154,11 @@ class MerchController extends Controller
                 $row = 1;
                 while ($row < $concreteSheet->getHighestRow()) {
                     $barcodeLetter = $preorder->is_internal ? ($preorder->merch_barcode_field ?? 'A') : $sheet->markup->barcode;
-                    //dd($preorder->is_internal, $sheet->markup->barcode, $barcodeLetter);
-                    $notExistBarcode = (is_null($concreteSheet->getCell($barcodeLetter . $row)->getValue())
-                        || (int)$concreteSheet->getCell($barcodeLetter . $row)->getValue() === 0);
+                    //dump($preorder->is_internal, $sheet->markup->barcode, $barcodeLetter);
+                    //dump($concreteSheet->getCell($barcodeLetter . $row)->getValue());
+                    $notExistBarcode = (!is_numeric($concreteSheet->getCell($barcodeLetter . $row)->getValue()) ||
+                                        is_null($concreteSheet->getCell($barcodeLetter . $row)->getValue()) ||
+                                        (int)$concreteSheet->getCell($barcodeLetter . $row)->getValue() === 0);
 
                     if (
                         $notExistBarcode
@@ -166,6 +168,7 @@ class MerchController extends Controller
                         continue;
                     }
                     $barcode = $concreteSheet->getCell($barcodeLetter . $row)->getValue();
+                    //dump($barcode);
                     $product = PreorderProduct::where('barcode', $barcode)->where('preorder_id', $preorder->id)->first();
                     //dump($product);
                     if (!$product) {
@@ -176,14 +179,19 @@ class MerchController extends Controller
                     $concreteSheet->setCellValue($preorder->merch_qty_field . $row, $product->getTotalQty() ?? '');
                     $row++;
                 }
+                //dump($concreteSheet);
             }
+
             $preorder->is_finished = true;
             $preorder->save();
+            //dd($spreadsheet);
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xls"');
+            header('Content-Disposition: attachment; filename="' . str_replace('\'', '-', Str::transliterate($preorder->title)) . '.xls"');
             $writer = IOFactory::createWriter($spreadsheet, 'Xls');
             $writer->save('php://output');
         } catch (\Exception $exception) {
+            dump($exception->getMessage());
+            dump($exception->getTraceAsString());
             \Log::error($exception->getMessage());
             $preorder->is_finished = false;
             $preorder->save();

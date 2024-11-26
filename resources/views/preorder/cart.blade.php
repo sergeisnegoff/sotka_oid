@@ -46,8 +46,13 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-xl-4 text-right d-md-none">
+                                            <div id="loading" style="display: none;justify-content: end;align-items: center">
+                                                <img src="/images/loading.gif" alt=" "
+                                                     style="height: 24px; margin-right: 2px;">
+                                                <span>Подождите, оформляем заказ..</span>
+                                            </div>
                                             <div class="btn">
-                                                <button type="submit">
+                                                <button type="submit"  id="submit_btn">
                                                     Заказать &rang;
                                                 </button>
                                             </div>
@@ -80,9 +85,16 @@
                                                                         <a href="{{route('preorder_empty_cart', $order['id'])}}">Удалить предзаказ</a>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-12 col-xl-4 text-right">
+                                                                <div class="col-12 col-xl-4 text-right"
+                                                                     style="display: flex;justify-content: end;align-items: center">
+                                                                    <div id="loading1" style="display: none;justify-content: end;align-items: center">
+                                                                        <img src="/images/loading.gif" alt=" "
+                                                                             style="height: 24px; margin-right: 2px;">
+                                                                        <span>Подождите, оформляем заказ..</span>
+                                                                    </div>
+
                                                                     <div class="btn">
-                                                                        <button type="submit">
+                                                                        <button type="submit" id="submit_btn1">
                                                                             Заказать &rang;
                                                                         </button>
                                                                     </div>
@@ -203,6 +215,7 @@
                 </div>
             </div>
         </div>
+
     </section>
 @endsection
 
@@ -219,6 +232,15 @@
             buildingId = 0;
 
         $(function () {
+            $( "#order-form" ).on( "submit", function( event ) {
+
+                $('#submit_btn').hide();
+                $('#loading').show();
+                $('#submit_btn1').hide();
+                $('#loading1').show();
+
+                console.log('submit')
+            });
             $('body').on('change', '.cart_preorder_product', function () {
                 let _self = $(this);
                 let product_id = $(this).data('id');
@@ -310,10 +332,10 @@
                 focusInput: false
             });
 
-            $('[data-popup="missing-address"]').iziModal({
-                width: 370,
-                focusInput: false
-            });
+            // $('[data-popup="missing-address"]').iziModal({
+            //     width: 370,
+            //     focusInput: false
+            // });
 
             $('body').on('click', '[data-btn-popup=address]', function () {
                 if (!$(this).data('id'))
@@ -351,7 +373,7 @@
             }).on('submit', '#order-form', function (e) {
                 if ($('[name=address_id]:checked').length == 0) {
                     $('[data-popup="missing-address"]').iziModal('open')
-                    e.preventDefault();
+                    //e.preventDefault();
                 }
             })
         });
