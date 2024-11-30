@@ -127,6 +127,7 @@ Route::group(['prefix' => 'preorders'], function () {
 
     Route::get('/export-pdf/{preorder}', [ProfileController::class, 'exportPreorderPdf']);
     Route::get('/export-xls/{preorder}', [ProfileController::class, 'exportPreorderXls']);
+    Route::post('{preorder}/remove', [PreorderController::class, 'delete']);
 
 
 });

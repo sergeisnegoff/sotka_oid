@@ -27,7 +27,7 @@
                                             <div class="box__currentorder-ordernumber">Предзаказ: {{ $order->preorder->title }} (заказ {{$order->id}})
                                             </div>
                                         </div>
-                                        <div class="col-12 col-xl-3">
+                                        <div class="col-12 col-xl-2">
 
                                             <div class="box__currentorder-status">
                                                 <div class="btn btn__currentorder-export">
@@ -39,22 +39,27 @@
                                             </div>
 
                                         </div>
-                                        <div class="col-12 col-xl-3">
+                                        <div class="col-12 col-xl-2">
                                             <div>
                                                 <span>Предоплата: <span class="prepay_amount">{{number_format($order->prepay_amount(), 2, ',', ' ')}}</span></span>
                                                 <span>₽</span>
                                             </div>
                                         </div>
-                                        <div class="col-6 col-xl-2">
+                                        <div class="col-6 col-xl-3">
                                             <div>
                                                 <span>Стоимость: <span class="total_amount">{{number_format($order->total(), 2, ',', ' ')}}</span></span>
                                                 <span>₽</span>
                                             </div>
                                         </div>
                                         <div class="col-6 col-xl-2">
-
+                                            <div class="btn delete-preorder-btn" data-id="2188" style="margin-left:5px;">
+                                                <a href="#" onclick="deletePreorder({{$order->id}})">
+                                                    Удалить предзаказ
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="btn__currentorder-toggle">
                                         <button></button>
                                     </div>
@@ -399,6 +404,17 @@
             };
 
             new autoComplete(settings);
+        }
+        function deletePreorder(id)
+        {
+            if(confirm('Вы действительно хотите удалить предзаказ?'))
+            {
+                $.post('{{ url('/preorders') }}/'+ id +'/remove', function (result) {
+                    console.log(result);
+                });
+                const boxItem = $('[data-order-id='+id+']').first()
+                boxItem.remove();
+            }
         }
     </script>
 

@@ -302,4 +302,13 @@ class PreorderController extends Controller
     public function managerSummaryTable(Preorder $preorder) {
         PreorderService::createSummary($preorder);
     }
+
+    public function delete(PreorderCheckout $preorder){
+        foreach($preorder->products as $product) {
+            $product->delete();
+        }
+        $preorder->delete();
+
+        return response()->json(['ok']);
+    }
 }
