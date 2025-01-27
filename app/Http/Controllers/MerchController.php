@@ -12,7 +12,9 @@ use App\Models\PreorderSheetMarkup;
 use App\Models\PreorderTableSheet;
 use App\Models\Product;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Mockery\Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -41,20 +43,54 @@ class MerchController extends Controller
             compact('preorders', 'paginator', 'page'));
     }
 
-    public function showPreorder(Preorder $preorder)
+    public function showPreorder(Request $request, Preorder $preorder)
     {
-        $onlyOrdered = \request()->get('with_checkouts', false);
-        $currentCategory = PreorderCategory::where('id', request()->get('category', $preorder->categories()->first()?->id))->first();
-        $currentsubCategory = PreorderCategory::
-        where('preorder_category_id', $currentCategory->id)
-            ->where('id', request()->get('subcategory', $currentCategory->childs()->first()->id))
-            ->first();
+        $search = $request->get('q', '');
+        $onlyOrdered = $request->get('with_checkouts', false);
+        $currentCategory = PreorderCategory::where('id', $request->get('category', $preorder->categories()->first()?->id))->first();
         $categories = PreorderCategory::root()->whereBelongsTo($preorder)->with('childs')->get();
-        $products = $currentsubCategory->products();
+        if (!empty($search)) {
+            $categoryIds = PreorderProduct::where('preorder_id', $preorder->id)
+                ->where(function (Builder $query)  use ($search) {
+                    return $query->where('title', 'like', '%' . $search . '%')
+                        ->orWhere('barcode', 'like', '%' . $search . '%');
+                })
+                //->where('title', 'like', '%' . $search . '%')
+                //->orWhere('barcode', 'like', '%' . $search . '%')
+                ->pluck('preorder_category_id');
+
+            if (count($categoryIds)) {
+                $categoryIds = array_unique($categoryIds->toArray());
+                $currentsubCategory = PreorderCategory::
+                where('preorder_category_id', $currentCategory->id)
+                    ->where('preorder_id', $preorder->id)
+                    ->where('id', $request->get('subcategory', $categoryIds[0]))
+                    ->first();
+                $subCategories = PreorderCategory::whereIn('id', $categoryIds)->get();
+                $products = PreorderProduct::where('preorder_id', $preorder->id)
+                    ->where('preorder_category_id', $currentsubCategory->id ?? 0)
+                    ->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('barcode', 'like', '%' . $search . '%');
+            } else {
+                $currentsubCategory = PreorderCategory::where('id', 0)->first();
+                $subCategories = $currentCategory->childs;
+                $products = PreorderProduct::where('id', 0);
+            }
+        } else {
+            $currentsubCategory = PreorderCategory::
+                where('preorder_category_id', $currentCategory->id)
+                    ->where('id', $request->get('subcategory', $currentCategory->childs()->first()->id))
+                    ->first();
+            $subCategories = $currentCategory->childs;
+
+            $products = $currentsubCategory->products();
+        }
+
         if ($onlyOrdered) {
             $products = $products->whereHas('checkouts', function ($query) {
                 $query->havingRaw('COUNT(*) > 0');});
         }
+
         $products = $products->paginate(15);
         $paginator = $products;
         return response()->view('merch.preorder',
@@ -64,7 +100,7 @@ class MerchController extends Controller
                 'categories',
                 'preorder',
                 'products',
-                'paginator'));
+                'paginator', 'search', 'subCategories'));
     }
 
     public function changeQty(PreorderProduct $product)
@@ -268,6 +304,21 @@ class MerchController extends Controller
         }
     }
 
+    public function exportOneC($preorderId)
+    {
+        //$preorder = Preorder::with('preorderCheckouts.products.preorder_product', 'preorderCheckouts.user', )->where('id', $preorderId)->first();
+        $orders = PreorderCheckout::where('preorder_id', $preorderId)->with('products.preorder_product', 'user', 'preorder')->get();
+        if (count($orders ?? [])) {
+            $orderJson = json_encode($orders);
+            $datetime = date('d_m_Y-H_i_s');
+            $filename = "preorders/export/{$datetime}_preorder_id-{$preorderId}.json";
+            $disk = Storage::disk('public');
+            $disk->put($filename, $orderJson);
+            return response()->json(['success' => true, 'preorder' => $preorderId]);
+        }
+        return response()->json(['success' => false]);
+    }
+
     public function unclose(Preorder $preorder)
     {
         $preorder->is_finished = false;
@@ -282,13 +333,21 @@ class MerchController extends Controller
 
     public function lazyPages(Preorder $preorder)
     {
+        $search = \request()->get('q', '');
+
         $onlyOrdered = \request()->get('with_checkouts', false);
         \Debugbar::disable();
-        $currentCategory = PreorderCategory::where('id', request()->get('subcategory'))->with('products')->first();
+        $currentCategory = PreorderCategory::where('preorder_id', $preorder->id)->where('id', request()->get('subcategory'))->with('products')->first();
         $products = $currentCategory->products();
         if ($onlyOrdered)
             $products = $products->whereHas('checkouts', function ($query) {
                 $query->havingRaw('COUNT(*) > 0');});
+        if (!empty($search)) {
+            $products->where(function (Builder $query)  use ($search) {
+                return $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('barcode', 'like', '%' . $search . '%');
+            });
+        }
         $products = $products->paginate(15);
         return response()->view('merch.components.list.lazy', compact('preorder', 'products'));
     }

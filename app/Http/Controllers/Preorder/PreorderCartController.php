@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PreorderCartController extends Controller
 {
@@ -136,6 +138,23 @@ class PreorderCartController extends Controller
                 $reorderProduct->save();
             }
         }
+
+        try {
+            $preorders = collect([]);
+            $newOrder = PreorderCheckout::with('products.preorder_product', 'user', 'preorder')->find($checkoutedPreorder->id);
+            if ($newOrder && $newOrder->preorder->is_internal && $newOrder->preorder->is_one_c) {
+                $preorders->push($newOrder);
+                $orderJson = json_encode($preorders);
+                $datetime = date('d_m_Y-H_i_s');
+                $filename = "preorders/export/{$datetime}_preorder_id-{$newOrder->preorder->id}.json";
+                $disk = Storage::disk('public');
+                $disk->put($filename, $orderJson);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+        }
+
 
         try {
             //$to = 'sotkapredzakaz@mail.ru';

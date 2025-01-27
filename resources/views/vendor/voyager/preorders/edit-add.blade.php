@@ -360,6 +360,15 @@
 
             $('.toggleswitch').bootstrapToggle();
 
+
+            $('input[name="is_internal"]').change(function() {
+                console.log(this.checked)
+                if (this.checked) {
+                    $('input[name="is_one_c"]').prop('checked', true);
+                    $('[name="is_one_c"]').parent().removeClass('off');
+                }
+            });
+
             //Init datepicker for date fields if data-datepicker attribute defined
             //or if browser does not handle date inputs
             $('.form-group input[type=date]').each(function (idx, elt) {

@@ -42,6 +42,7 @@ class ManagerController extends Controller
 
     public function clientOrders()
     {
+        //dump(1);
         $managerClients = UserService::usersPinnedOnManager(auth()->user())->with('orders');
         $filterSorting = \request()->sorting;
         $filterName = \request()->name;

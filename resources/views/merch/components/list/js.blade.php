@@ -1,8 +1,8 @@
 <script>
     let pageNumber = 1
-
+    @if(!is_null($currentsubCategory))
     function fetchLazy() {
-        const url = `{{route('merch.lazy-pages', $preorder->id)}}?page=${pageNumber}&category={{$currentCategory->id}}&subcategory={{$currentsubCategory->id}}{!!$onlyOrdered ? "&with_checkouts=1":''!!}`
+        const url = `{{route('merch.lazy-pages', $preorder->id)}}?q={{$search}}&page=${pageNumber}&category={{$currentCategory->id}}&subcategory={{$currentsubCategory->id}}{!!$onlyOrdered ? "&with_checkouts=1":''!!}`
         return fetch(url)
             .then(response => response.text())
             .then(data => {
@@ -14,6 +14,7 @@
                 }
             })
     }
+    @endif
 
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {

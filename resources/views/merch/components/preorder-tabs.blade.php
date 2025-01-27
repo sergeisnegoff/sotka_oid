@@ -7,7 +7,9 @@
             <div class="box__tab-items">
                 <ul class="d-flex" style="flex-flow: row wrap;">
                     @foreach ($categories as $category)
+                        @if(!is_null($currentsubCategory))
                     <li class="{{ $currentsubCategory->preorder_category_id == $category->id ? 'active' : '' }}" style="padding-top:18px;"><a href="{{ route('merch.show-preorder', $preorder->id).'?category='.$category->id }}">{{$category->title}}</a></li>
+                        @endif
                     @endforeach
                 </ul>
             </div>

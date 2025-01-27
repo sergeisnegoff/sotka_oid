@@ -34,6 +34,15 @@
         <div class="btn">
             <a href="{{route('merch.close-preorder', $preorder->id)}}">Выгрузить и оформить заказ</a>
         </div>
+        @if(!$preorder->is_internal && $preorder->is_one_c)
+            <div style="display: flex;align-items: center;justify-content: start">
+                <div class="btn">
+                    <a href="#" id="1c_export" onclick="exportToOneC({{ $preorder->id }})">Выгрузить в 1С</a>
+
+                </div>
+                <img id="1c_success" src="{{ url('img/green_success.png') }}" alt="" style="display:none;margin-left: 5px;margin-bottom: 14px;height: 24px">
+            </div>
+        @endif
         <div class="btn">
             <a href="{{route('preorder.summaryTable', $preorder)}}" target="_blank">Сводная таблица</a>
         </div>
@@ -47,6 +56,19 @@
         </form>
     </div>
 </div>
+
+<script>
+    function exportToOneC(preorderId)
+    {
+        $('#1c_export').css('pointer-events', 'none');
+        $.get(`/merch/preorder/${preorderId}/exportOneC`).then((resp) => {
+            console.log(resp);
+            if(resp.success) {
+                $('#1c_success').show();
+            }
+        })
+    }
+</script>
 
 <style>
     table.preorder-table, .preorder-table th, .preorder-table td {

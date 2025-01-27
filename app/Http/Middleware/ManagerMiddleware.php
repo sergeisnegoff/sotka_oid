@@ -17,6 +17,7 @@ class ManagerMiddleware
     public function handle(Request $request, Closure $next)
     {
         $roleId = auth()->user()->role_id;
+        //dump(auth()->user()->managerContact);
         if ($roleId == 2 || !$roleId || !auth()->user()->managerContact) abort(404);
         //if ($roleId == 2 || !$roleId) abort(404);
         return $next($request);
