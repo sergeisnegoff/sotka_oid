@@ -31,7 +31,7 @@ class PreorderController extends Controller
     public function category(int $id)
     {
         $categories = PreorderCategory::where('preorder_id', $id)->root()
-            ->with('childs')
+            ->with('childs.products')
             ->get();
         $currentId = request()->get('category');
         $currentCategory = null;
@@ -39,14 +39,14 @@ class PreorderController extends Controller
             $currentCategory = $categories[0];
         } else {
                $currentCategory = PreorderCategory::where('id', $currentId)
-                   ->with('childs')
+                   ->with('childs.products')
                    ->first();
         }
         $preorder = Preorder::find($id);
 
         PreorderService::setLatestPreorder($id);
         $cartKeys = collect(array_keys(PreorderService::getCart()));
-
+        //dump($currentCategory);
         return view(
             view: 'preorder.category',
             data: compact([

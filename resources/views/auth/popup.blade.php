@@ -103,6 +103,15 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
+                                <div
+                                    id="captcha-container"
+                                    class="smart-captcha"
+                                    data-sitekey="ysc1_b46LNHfynA1L4LY9gsFksmMSAlzBSemnI4HRaXh4304ea952"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="box__checkbox margin-15">
                                     <div class="wrapper-checked">
                                         <label>
@@ -126,6 +135,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
     <script>
         $(() => {
             $('.phone-mask').inputmask('+7 999 999 99-99');

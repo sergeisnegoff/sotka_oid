@@ -697,10 +697,20 @@ $(function () {
                         }
                     });
 
-                    form.append($('<span/>', {
-                        text: 'Введите корректные данные',
-                        class: 'invalid-message'
-                    }))
+
+                    console.log(info.responseJSON.errors);
+
+                    if (info.responseJSON.errors['smart-token'] !== undefined && info.responseJSON.errors['smart-token'] !== null) {
+                        form.append($('<span/>', {
+                            text: 'Подтвердите что Вы не робот',
+                            class: 'invalid-message'
+                        }))
+                    } else if (info.responseJSON.errors.length > 0) {
+                        form.append($('<span/>', {
+                            text: 'Введите корректные данные',
+                            class: 'invalid-message'
+                        }))
+                    }
                 },
                 201: () => {
                     window.location.reload();

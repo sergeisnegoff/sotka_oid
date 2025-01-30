@@ -57,7 +57,10 @@ class RegisterController extends Controller
             'phon' => ['required', 'unique:users'],
             'city' => 'required',
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'agree' => 'required'
+            'agree' => 'required',
+            'smart-token' => 'required',
+        ], [
+            'smart-token' => 'Поставьте галочку что Вы не робот..',
         ]);
     }
 

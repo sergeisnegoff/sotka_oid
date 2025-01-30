@@ -29,6 +29,7 @@
     </script>
     <script src="{{ asset('js/common.js') }}"></script>
 
+
     @stack('styles')
 </head>
 <body>

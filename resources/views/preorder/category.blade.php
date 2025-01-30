@@ -74,13 +74,23 @@ $diff = $endDate->diff($now);
                 @include('preorder.components.category-tabs')
                 <div id="productData">
                     @foreach ($currentCategory->childs as $cat)
-                        @if ($cat->products()->limit(4)->count() > 0)
+                        @if (true || $cat->products()->limit(4)->count() > 0)
                             <div class="row" style="margin-top:15px;" data-catalog data-catalog-grid>
                                 <div class="col-12">
                             <a href="/preorders/category/{{$cat->id}}/products"><p style="color:black; font-size: 28px;font-weight: bolder;">{{ $cat->title }}</p></a>
                                 </div>
 
-                                @foreach ($cat->products()->limit(4)->get() as $seed)
+                                @php //dump($cat->products)
+
+                                    $allProducts = $cat->products;
+                                    if (count($allProducts) > 4) {
+                                        $products = $allProducts->random(4);
+                                    } else {
+                                        $products = $allProducts;
+                                    }
+                                @endphp
+                                @foreach ($products as $seed)
+
                                     @if($seed->hard_limit === 0)  @endif
                                     <div class="col-6 col-md-4 col-xl-2 fadeIn product-preorder">
                                         <div class="box__product-item">
@@ -177,6 +187,7 @@ $diff = $endDate->diff($now);
                                         </div>
                                     </div>
                                 @endforeach
+                                @if(count($allProducts) > 1)
                                 <div class="col-6 col-lg-4 col-md-4 col-xl-2 fadeIn" style=" padding: 0 15px;">
                                     <div class="box__product-item">
                                         <div class="wrapper" style="position: relative; min-height: 100%">
@@ -188,6 +199,7 @@ $diff = $endDate->diff($now);
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         @endif
                     @endforeach

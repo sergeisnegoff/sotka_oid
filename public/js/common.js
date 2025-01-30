@@ -21356,10 +21356,36 @@ $(function () {
               input.addClass('valid');
             }
           });
-          form.append($('<span/>', {
-            text: 'Введите корректные данные',
-            "class": 'invalid-message'
-          }));
+            if (info.responseJSON.errors['smart-token'] !== undefined && info.responseJSON.errors['smart-token'] !== null) {
+                form.append($('<span/>', {
+                    text: 'Подтвердите что Вы не робот',
+                    class: 'invalid-message'
+                }))
+            }
+            if (info.responseJSON.errors['city'] !== undefined && info.responseJSON.errors['city'] !== null) {
+                form.append($('<span/>', {
+                    text: 'Город обязателен к заполнению',
+                    class: 'invalid-message'
+                }))
+            }
+            if (info.responseJSON.errors['name'] !== undefined && info.responseJSON.errors['name'] !== null) {
+                form.append($('<span/>', {
+                    text: 'ФИО обязателено к заполнению',
+                    class: 'invalid-message'
+                }))
+            }
+            if (info.responseJSON.errors['password'] !== undefined && info.responseJSON.errors['password'] !== null) {
+                form.append($('<span/>', {
+                    text: 'Пароль обязателен к заполнению, длина не менее 8 символов',
+                    class: 'invalid-message'
+                }))
+            }
+            if (info.responseJSON.errors['phon'] !== undefined && info.responseJSON.errors['phon'] !== null) {
+                form.append($('<span/>', {
+                    text: 'Телефон обязателен к заполнению',
+                    class: 'invalid-message'
+                }))
+            }
         },
         201: function _() {
           window.location.reload();
