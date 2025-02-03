@@ -1,4 +1,5 @@
 <?php
+
 $endDate = \Carbon\Carbon::parse($preorder->end_date);
 $now = \Carbon\Carbon::now();
 $showBuyButton = !$endDate->isSameDay($now);
@@ -28,11 +29,11 @@ $diff = $endDate->diff($now);
                 <div style="justify-content:space-between;align-items: end" class="d-flex row">
 
                     <div class="col-12 col-lg-6">
-                    <p style="font-size:28px;font-weight:bolder;margin-bottom:0;"><b>{{ $preorder->title }}</b></p>
+                        <p style="font-size:28px;font-weight:bolder;margin-bottom:0;"><b>{{ $preorder->title }}</b></p>
                     </div>
                     <div class="col-12 col-lg-6">
-                    <p style="margin-bottom:0;"><b>Предзаказ закончится через {{ $diff->d }} дней, {{ $diff->h }}
-                            часов, {{ $diff->i }} минут</b></p>
+                        <p style="margin-bottom:0;"><b>Предзаказ закончится через {{ $diff->d }} дней, {{ $diff->h }}
+                                часов, {{ $diff->i }} минут</b></p>
                     </div>
                 </div>
                 <p style="font-size:18px;margin-bottom:0;font-weight:bolder;">Минимальная сумма
@@ -42,31 +43,35 @@ $diff = $endDate->diff($now);
                 <p style="font-size:18px;margin-bottom:0; font-weight:bolder;">С информацией по данному заказу можно
                     ознакомиться на
                     <a href="/preorders/info/{{$preorder->id}}/" style="display:inline;" class="btn">
-                            <button>
-                                странице заказа
-                            </button>
+                        <button>
+                            странице заказа
+                        </button>
                     </a>
                 </p>
-                <p  style="font-size:18px;margin-bottom:0; font-weight:bolder;">
-                   Сумма по данному предзаказу в Вашей корзине составляет <span id="concrete-preorder-price">{{\App\Services\TotalsService::getUserTotalByPreorder($preorder)}}</span> ₽
+                <p style="font-size:18px;margin-bottom:0; font-weight:bolder;">
+                    Сумма по данному предзаказу в Вашей корзине составляет <span
+                        id="concrete-preorder-price">{{\App\Services\TotalsService::getUserTotalByPreorder($preorder)}}</span>
+                    ₽
                 </p>
                 <p></p>
 
             </div>
             <style>
-                @media all and (min-width:1200px) {
+                @media all and (min-width: 1200px) {
                     .product-preorder {
                         /*max-width:20%;*/
                     }
                 }
+
                 @media all and (min-width: 768px) and (max-width: 1440px) {
                     .product-preorder:nth-child(n+4) {
-                        display:none;
+                        display: none;
                     }
                 }
+
                 @media all and (max-width: 768px) {
                     .product-preorder:nth-child(n+3) {
-                        display:none;
+                        display: none;
                     }
                 }
             </style>
@@ -74,25 +79,33 @@ $diff = $endDate->diff($now);
                 @include('preorder.components.category-tabs')
                 <div id="productData">
                     @foreach ($currentCategory->childs as $cat)
-                        @if (true || $cat->products()->limit(4)->count() > 0)
+                        @php
+
+                            //$allProducts = $cat->products->where('hard_limit', '>', 0)->orWhereNull('hard_limit')->all();
+                            //if ($preorder->id == 154) \Illuminate\Support\Facades\Log::info(json_encode($allProducts));
+                            $allProducts = $cat->products->filter(function ($product) {
+                                                return $product->hard_limit > 0 || is_null($product->hard_limit);
+                                            })->all();
+                            $products = [];
+                             if (count($allProducts) > 4) {
+                                 $productsKeys = array_rand($allProducts, 4);
+                                 foreach ($productsKeys as $key) {
+                                     $products[] = $allProducts[$key];
+                                 }
+                             } else {
+                                  $products = $allProducts;
+                             }
+                             //dd($products);
+                        @endphp
+                        @if (count($allProducts) > 0)
                             <div class="row" style="margin-top:15px;" data-catalog data-catalog-grid>
                                 <div class="col-12">
-                            <a href="/preorders/category/{{$cat->id}}/products"><p style="color:black; font-size: 28px;font-weight: bolder;">{{ $cat->title }}</p></a>
+                                    <a href="/preorders/category/{{$cat->id}}/products"><p
+                                            style="color:black; font-size: 28px;font-weight: bolder;">{{ $cat->title }}</p>
+                                    </a>
                                 </div>
-
-                                @php //dump($cat->products)
-
-                                    $allProducts = $cat->products;
-                                    if (count($allProducts) > 4) {
-                                        $products = $allProducts->random(4);
-                                    } else {
-                                        $products = $allProducts;
-                                    }
-                                @endphp
                                 @foreach ($products as $seed)
-
-                                    @if($seed->hard_limit === 0)  @endif
-                                    <div class="col-6 col-md-4 col-xl-2 fadeIn product-preorder">
+                                    <div class="col-6 col-md-4 col-xl-2 fadeIn @if(count($allProducts) > 2) product-preorder @endif">
                                         <div class="box__product-item">
                                             <div class="wrapper-img" style="position: relative;">
                                                 <div class="box__image"
@@ -127,7 +140,8 @@ $diff = $endDate->diff($now);
                                             @guest
                                                 @if ($showBuyButton)
                                                     <div class="wrapper-button">
-                                                        <div class="btn"><a href="javascript:;" data-btn-popup="authorization">
+                                                        <div class="btn"><a href="javascript:;"
+                                                                            data-btn-popup="authorization">
                                                                 Купить</a></div>
                                                     </div>
                                                 @endif
@@ -187,18 +201,18 @@ $diff = $endDate->diff($now);
                                         </div>
                                     </div>
                                 @endforeach
-                                @if(count($allProducts) > 1)
-                                <div class="col-6 col-lg-4 col-md-4 col-xl-2 fadeIn" style=" padding: 0 15px;">
-                                    <div class="box__product-item">
-                                        <div class="wrapper" style="position: relative; min-height: 100%">
-                                            <div class="btn"><a
-                                                    href="/preorders/category/{{ $cat->id }}/products">Посмотреть
-                                                    все</a></div>
-                                            <div class="btn btn-white"><a href="{{ route('home') }}">На главную</a>
+                                @if(count($allProducts) > 2)
+                                    <div class="col-6 col-lg-4 col-md-4 col-xl-2 fadeIn" style=" padding: 0 15px;">
+                                        <div class="box__product-item">
+                                            <div class="wrapper" style="position: relative; min-height: 100%">
+                                                <div class="btn"><a
+                                                        href="/preorders/category/{{ $cat->id }}/products">Посмотреть
+                                                        все</a></div>
+                                                <div class="btn btn-white"><a href="{{ route('home') }}">На главную</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endif
                             </div>
                         @endif
