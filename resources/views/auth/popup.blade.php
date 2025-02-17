@@ -90,7 +90,7 @@
                                     <input type="password" data-input-password name="password" placeholder="Пароль">
                                     <label><span class="password-control" title="Показать пароль"></span></label><br/>
                                 </div>
-                                <span style="font-size: 14px;position:relative;top:-15px;">Минимальная длина пароля 8 символов</span>
+                                <span style="font-size: 14px;position:relative;top:-15px;">Минимальная длина пароля 8 символов, сочетание a-z и A-Z и цифр</span>
                             </div>
                         </div>
                         <div class="row">

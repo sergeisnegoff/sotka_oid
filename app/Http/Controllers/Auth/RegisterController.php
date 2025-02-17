@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -56,7 +57,13 @@ class RegisterController extends Controller
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'phon' => ['required', 'unique:users'],
             'city' => 'required',
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => [
+                'required',
+                Password::min(8) // Минимум 8 символов
+                ->mixedCase() // Требует буквы в верхнем и нижнем регистре
+                ->numbers(), // Требует цифры
+                'confirmed',
+            ],
             'agree' => 'required',
             'smart-token' => 'required',
         ], [

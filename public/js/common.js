@@ -21376,7 +21376,7 @@ $(function () {
             }
             if (info.responseJSON.errors['password'] !== undefined && info.responseJSON.errors['password'] !== null) {
                 form.append($('<span/>', {
-                    text: 'Пароль обязателен к заполнению, длина не менее 8 символов',
+                    text: 'Пароль обязателен к заполнению, длина не менее 8 символов, состоит из цифр и сочетания строчных и заглавных латинских символов',
                     class: 'invalid-message'
                 }))
             }
