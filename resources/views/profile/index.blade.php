@@ -234,6 +234,16 @@
                                 </div>
 
                                 <div class="box__form">
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger" style="color: red">
+                                            <ul>
+                                                <li>Пароль должен содержать минимум 8 символов.</li>
+                                                <li>Должен содержать латинские символы в верхнем и нижнем регистре</li>
+                                                <li>Содержать хотябы 1 цифру</li>
+                                                <li>Подтверждение пароля должно совпадать</li>
+                                            </ul>
+                                        </div>
+                                    @endif
                                     <form method="post"
                                           action="{{ route('profile.change-password', ['id' => $user->id]) }}">
                                         @csrf

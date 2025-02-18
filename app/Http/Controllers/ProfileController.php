@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProfileController extends Controller
@@ -78,8 +79,19 @@ class ProfileController extends Controller
         if ($request->isMethod('post')) {
             $data = $request->validate([
                 'old_password' => 'required',
-                'password' => 'required|confirmed|min:8',
-            ]);
+                'password' => [
+                    'required',
+                    Password::min(8) // Минимум 8 символов
+                    ->mixedCase() // Требует буквы в верхнем и нижнем регистре
+                    ->numbers(), // Требует цифры
+                    'confirmed',
+                ]
+            ],
+                [
+                    'password.required' => 'Поле пароля обязательно для заполнения.',
+                    'password.min' => 'Пароль должен содержать минимум 8 символов.',
+                    'password.confirmed' => 'Пароли не совпадают.',
+                ]);
 
             if (Hash::check($data['old_password'], Auth::user()->password)) {
                 User::find($id)->update(['password' => Hash::make($data['password'])]);
