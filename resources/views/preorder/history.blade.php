@@ -56,16 +56,16 @@
                                                 <span>₽</span>
                                             </div>
                                         </div>
-                                        <div class="col-6 col-xl-2">
-                                            @if(time() < strtotime($order->preorder->end_date))
-                                                <div class="btn">
-                                                    <a href="{{ route('preorders_history_clone', $order->id) }}"
-                                                       onclick="clonePreorder({{$order->id}})">
-                                                        Повторить заказ &rang;
-                                                    </a>
-                                                </div>
-                                            @endif
-                                        </div>
+{{--                                        <div class="col-6 col-xl-2">--}}
+{{--                                            @if(time() < strtotime($order->preorder->end_date))--}}
+{{--                                                <div class="btn">--}}
+{{--                                                    <a href="{{ route('preorders_history_clone', $order->id) }}"--}}
+{{--                                                       onclick="clonePreorder({{$order->id}})">--}}
+{{--                                                        Повторить заказ &rang;--}}
+{{--                                                    </a>--}}
+{{--                                                </div>--}}
+{{--                                            @endif--}}
+{{--                                        </div>--}}
                                     </div>
                                     <div class="btn__currentorder-toggle">
                                         <button></button>

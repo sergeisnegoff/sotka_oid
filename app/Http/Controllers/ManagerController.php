@@ -7,12 +7,16 @@ use App\Http\Controllers\Preorder\PreorderController;
 use App\Models\Order;
 use App\Models\Preorder;
 use App\Models\PreorderCheckout;
+use App\Models\PreorderCheckoutProduct;
+use App\Models\PreorderProduct;
 use App\Models\User;
 use App\Services\OrderService;
 use App\Services\Preorder\PreorderService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ManagerController extends Controller
 {
@@ -57,7 +61,7 @@ class ManagerController extends Controller
             }
         if ($filterName)
             $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filterName).'%']);
-        $managerClients = $managerClients->paginate(1);
+        $managerClients = $managerClients->paginate(10);
         $paginator = $managerClients;
         $page = 'index';
         $subPage = 'orders';
@@ -212,6 +216,49 @@ class ManagerController extends Controller
             'page' => 'preorders_history',
             'user' => $user
         ]);
+    }
+
+    public function cloneClientPreorder($client, $preorderCheckoutId)
+    {
+        $preorderCheckout = PreorderCheckout::with('products.preorder_product')->find($preorderCheckoutId);
+        if (!$preorderCheckout) abort(404);
+        $props = [
+            'user_id' => $client,
+            'preorder_id' => $preorderCheckout->preorder_id,
+            'is_internal' => true,
+        ];
+        $checkoutedPreorder = PreorderCheckout::create($props);
+        foreach ($preorderCheckout->products as $product) {
+            PreorderCheckoutProduct::create([
+                'preorder_checkout_id' => $checkoutedPreorder->id,
+                'preorder_product_id' => $product->preorder_product_id,
+                'qty' => $product->qty == 0 ? 1 : $product->qty,
+            ]);
+
+            $reorderProduct = PreorderProduct::find($product->preorder_product_id);
+            if (!is_null($reorderProduct->hard_limit)) {
+                $hardLimit = $reorderProduct->hard_limit - ($product->qty == 0 ? 1 : $product->qty);
+                if ($hardLimit < 0) $hardLimit = 0;
+                $reorderProduct->hard_limit = $hardLimit;
+                $reorderProduct->save();
+            }
+        }
+        try {
+            $preorders = collect([]);
+            $newOrder = PreorderCheckout::with('products.preorder_product', 'user', 'preorder')->find($checkoutedPreorder->id);
+            if ($newOrder && $newOrder->preorder->is_internal && $newOrder->preorder->is_one_c) {
+                $preorders->push($newOrder);
+                $orderJson = json_encode($preorders);
+                $datetime = date('d_m_Y-H_i_s');
+                $filename = "preorders/export/{$datetime}_preorder_id-{$newOrder->preorder->id}.json";
+                $disk = Storage::disk('public');
+                $disk->put($filename, $orderJson);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+        }
+        return redirect()->route('manager.clients.showPreordersHistory', $client);
     }
 
     public function preorderAsUser(User $user, PreorderCartController $controller) {
