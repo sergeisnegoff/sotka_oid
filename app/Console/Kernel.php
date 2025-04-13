@@ -59,6 +59,23 @@ class Kernel extends ConsoleKernel
         $schedule->command('export:orders 16')
             ->dailyAt(setting('admin.FIFTH_EXPORT'));
 
+        $schedule->command('export:order_hourly')->twiceDaily(8,9);
+        $schedule->command('export:order_hourly')->twiceDaily(10,11);
+        $schedule->command('export:order_hourly')->twiceDaily(12,13);
+        $schedule->command('export:order_hourly')->twiceDaily(14,15);
+        $schedule->command('export:order_hourly')->twiceDaily(16,17);
+        $schedule->command('export:order_hourly')->dailyAt('20:00');
+        $schedule->command('export:order_hourly')->dailyAt('21:40');
+
+        $schedule->command('export:preorder_hourly')->twiceDaily(8,9);
+        $schedule->command('export:preorder_hourly')->twiceDaily(10,11);
+        $schedule->command('export:preorder_hourly')->twiceDaily(12,13);
+        $schedule->command('export:preorder_hourly')->twiceDaily(14,15);
+        $schedule->command('export:preorder_hourly')->twiceDaily(16,17);
+        $schedule->command('export:preorder_hourly')->dailyAt('20:00');
+        $schedule->command('export:preorder_hourly')->dailyAt('21:40');
+
+
         $schedule->command('queue:restart')->daily()->runInBackground();
 
 //        $crons = cronSettings::all();
