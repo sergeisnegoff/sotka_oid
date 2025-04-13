@@ -45,6 +45,15 @@ class PreorderService
     {
         $cart = cache()->get(self::getCartKey(), []);
 
+        foreach ($cart as $item) {
+            $preorder = Preorder::find($item['preorder_id']);
+            if (empty($preorder) || $preorder->end_date < now()) {
+                self::removeFromCart($item['id']);
+            }
+        }
+
+        $cart = cache()->get(self::getCartKey(), []);
+
         if (empty($cart)) {
             return [];
         }
