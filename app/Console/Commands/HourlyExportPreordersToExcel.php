@@ -75,23 +75,22 @@ class HourlyExportPreordersToExcel extends Command
         //dd($orders);
 
         if (count($orders) > 0) {
-            $spreadsheet = new Spreadsheet();
-
-            $worksheet = $spreadsheet->getActiveSheet();
-
-            $worksheet->setCellValue('A1', 'Номер заказа');
-            $worksheet->setCellValue('B1', 'ФИО заказчика');
-            $worksheet->setCellValue('C1', 'Предзаказ');
-            $worksheet->setCellValue('D1', 'Дата заказа');
-
-
-            $currentRow = 3;
             $files = [];
             $recipient = "sotkasaitzakaz@yandex.ru"; // Replace with the recipient email address
             //$recipient = "magzip23@gmail.com";
             $subject = "Выгрузка предзаказов";
             foreach ($orders as $order) {
+                $spreadsheet = new Spreadsheet();
 
+                $worksheet = $spreadsheet->getActiveSheet();
+
+                $worksheet->setCellValue('A1', 'Номер заказа');
+                $worksheet->setCellValue('B1', 'ФИО заказчика');
+                $worksheet->setCellValue('C1', 'Предзаказ');
+                $worksheet->setCellValue('D1', 'Дата заказа');
+
+
+                $currentRow = 3;
                 $worksheet->setCellValue('A'.$currentRow, $order->id);
                 $worksheet->setCellValue('B'.$currentRow, $order->user->name);
                 $worksheet->setCellValue('C'.$currentRow, $order->preorder->title);

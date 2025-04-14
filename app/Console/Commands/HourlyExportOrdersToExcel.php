@@ -73,24 +73,25 @@ class HourlyExportOrdersToExcel extends Command
             ->get();
         //dump($orderByUser);
         if (count($orders) > 0) {
-            $spreadsheet = new Spreadsheet();
-
-            $worksheet = $spreadsheet->getActiveSheet();
-
-            $worksheet->setCellValue('A1', 'Номер заказа');
-            $worksheet->setCellValue('B1', 'ФИО заказчика');
-            $worksheet->setCellValue('C1', 'Адрес');
-            $worksheet->setCellValue('D1', 'Комментарий');
-            $worksheet->setCellValue('E1', 'Дата заказа');
-            $worksheet->setCellValue('F1', 'Статус');
-
-            $currentRow = 3;
             $files = [];
             $recipient = "sotkasaitzakaz@yandex.ru"; // Replace with the recipient email address
             //$recipient = "magzip23@gmail.com";
             $subject = "Выгрузка заказов (новая)";
 
             foreach ($orders as $order) {
+                $spreadsheet = new Spreadsheet();
+
+                $worksheet = $spreadsheet->getActiveSheet();
+
+                $worksheet->setCellValue('A1', 'Номер заказа');
+                $worksheet->setCellValue('B1', 'ФИО заказчика');
+                $worksheet->setCellValue('C1', 'Адрес');
+                $worksheet->setCellValue('D1', 'Комментарий');
+                $worksheet->setCellValue('E1', 'Дата заказа');
+                $worksheet->setCellValue('F1', 'Статус');
+
+                $currentRow = 3;
+
                 $address = $order->address->region.', '.$order->address->city.', '.$order->address->address;
 
                 $worksheet->setCellValue('A'.$currentRow, $order->id);
