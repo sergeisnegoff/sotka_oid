@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewOrdersMail;
 use App\Mail\SuccessOrder;
 use App\Models\Order;
 use App\Models\PreorderProduct;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 // use Spatie\ArrayToXml\ArrayToXml;
 
@@ -340,6 +343,65 @@ class CartController extends Controller
         $total = $user->orders_total_amount + $sum;
         $user->orders_total_amount = $total;
         $user->save();
+
+        $manager = $user->managerContact;
+        if (setting('admin.export_orders_to_manager') && $manager) {
+            $email = $manager->email;
+            if ($email) {
+                $spreadsheet = new Spreadsheet();
+
+                $worksheet = $spreadsheet->getActiveSheet();
+
+                $worksheet->setCellValue('A1', 'Номер заказа');
+                $worksheet->setCellValue('B1', 'ФИО заказчика');
+                $worksheet->setCellValue('C1', 'Адрес');
+                $worksheet->setCellValue('D1', 'Комментарий');
+                $worksheet->setCellValue('E1', 'Дата заказа');
+                $worksheet->setCellValue('F1', 'Статус');
+
+
+                $currentRow = 3;
+
+                $address = $order->address->region.', '.$order->address->city.', '.$order->address->address;
+
+                $worksheet->setCellValue('A'.$currentRow, $order->id);
+                $worksheet->setCellValue('B'.$currentRow, $order->user->name);
+                $worksheet->setCellValue('C'.$currentRow, $address);
+                $worksheet->setCellValue('D'.$currentRow, $order->comment);
+                $worksheet->setCellValue('E'.$currentRow, $order->created_at->format('d.m.Y H:i:s'));
+                $worksheet->setCellValue('F'.$currentRow, $order->status);
+
+                $worksheet->setCellValue('A'.$currentRow+1, $order->amount);
+
+
+
+                $worksheet->setCellValue('A'.$currentRow + 2, 'Название товара');
+                $worksheet->setCellValue('C'.$currentRow + 2, 'Цена');
+                $worksheet->setCellValue('D'.$currentRow + 2, 'Кол-во');
+                $worksheet->setCellValue('E'.$currentRow + 2, 'Общая стоимость');
+
+                $productRow = $currentRow + 3;
+
+                foreach ($order->products as $product) {
+                    $worksheet->setCellValue('A'.$productRow, $product->title);
+                    $worksheet->setCellValue('C'.$productRow, $product->price);
+                    $worksheet->setCellValue('D'.$productRow, $product->pivot->qty);
+                    $worksheet->setCellValue('E'.$productRow, $product->pivot->price);
+
+                    $productRow++;
+                }
+
+                if (Storage::exists('public/excel/orders/new') === false) {
+                    mkdir(storage_path('app/public') . '/excel/orders/new', 0777, true);
+                }
+
+                $writer = new Xlsx($spreadsheet);
+                $fileName = storage_path('app/public').'/excel/orders/new/order-'.$order->id.'_'.\Carbon\Carbon::now()->format('d-m-Y-H').'.xlsx';
+                $writer->save($fileName);
+                $files[] = $fileName;
+                Mail::to($email)->send(new NewOrdersMail($files, 'Новый заказ ' . $user->name));
+            }
+        }
 
         $log->info('Filled cart items');
 

@@ -28,6 +28,7 @@ class ImportOrderDailyCommand extends Command
      */
     public function handle()
     {
+        if (!setting('admin.export_orders_to_email')) return 0;
         $betweenTime = match ($this->argument('time')) {
             "8" => [Carbon::now()->subDay()->setTimeFromTimeString(setting('admin.FIFTH_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.FIRST_EXPORT'))],
             "10" => [Carbon::now()->subDay()->setTimeFromTimeString(setting('admin.FIRST_EXPORT')), Carbon::now()->setTimeFromTimeString(setting('admin.SECOND_EXPORT'))],
@@ -67,6 +68,7 @@ class ImportOrderDailyCommand extends Command
             $worksheet->setCellValue('E'.$currentRow, $order->created_at->format('d.m.Y H:i:s'));
             $worksheet->setCellValue('F'.$currentRow, $order->status);
 
+            $worksheet->setCellValue('A'.$currentRow+1, $order->amount);
 
             $worksheet->setCellValue('B'.$currentRow + 2, 'Название товара');
             $worksheet->setCellValue('C'.$currentRow + 2, 'Цена');

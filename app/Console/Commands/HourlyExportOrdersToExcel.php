@@ -44,7 +44,7 @@ class HourlyExportOrdersToExcel extends Command
      */
     public function handle()
     {
-
+        if (!setting('admin.export_orders_to_email')) return 0;
         $currentHour = now()->hour;
         $betweenTime = [];
 
@@ -101,6 +101,8 @@ class HourlyExportOrdersToExcel extends Command
                 $worksheet->setCellValue('E'.$currentRow, $order->created_at->format('d.m.Y H:i:s'));
                 $worksheet->setCellValue('F'.$currentRow, $order->status);
 
+                $worksheet->setCellValue('A'.$currentRow+1, $order->amount);
+
 
                 $worksheet->setCellValue('A'.$currentRow + 2, 'Название товара');
                 $worksheet->setCellValue('C'.$currentRow + 2, 'Цена');
@@ -128,8 +130,8 @@ class HourlyExportOrdersToExcel extends Command
                 $files[] = $fileName;
             }
             Mail::to($recipient)->send(new NewOrdersMail($files, $subject));
-            $recipient = "magzip23@gmail.com";
-            Mail::to($recipient)->send(new NewOrdersMail($files, $subject));
+//            $recipient = "magzip23@gmail.com";
+//            Mail::to($recipient)->send(new NewOrdersMail($files, $subject));
         }
         return 0;
     }

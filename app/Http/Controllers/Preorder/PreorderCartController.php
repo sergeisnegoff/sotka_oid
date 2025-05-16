@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Preorder;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewOrdersMail;
 use App\Mail\SuccessPreorder;
 use App\Models\Page;
 use App\Models\Preorder;
@@ -17,7 +18,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class PreorderCartController extends Controller
 {
@@ -159,17 +163,72 @@ class PreorderCartController extends Controller
         try {
             //$to = 'sotkapredzakaz@mail.ru';
             //$to = 'magzip23@gmail.com';
+            $files = [];
+            $subject = "Выгрузка предзаказов";
             $to = 'sotkapredzakaz2@yandex.ru';
+            if (setting('admin.export_preorders_to_manager')) {
+                $files = [];
+                $spreadsheet = new Spreadsheet();
+
+                $worksheet = $spreadsheet->getActiveSheet();
+
+                $worksheet->setCellValue('A1', 'Номер заказа');
+                $worksheet->setCellValue('B1', 'ФИО заказчика');
+                $worksheet->setCellValue('C1', 'Предзаказ');
+                $worksheet->setCellValue('D1', 'Дата заказа');
+
+
+                $currentRow = 3;
+                $worksheet->setCellValue('A'.$currentRow, $newOrder->id);
+                $worksheet->setCellValue('B'.$currentRow, $newOrder->user->name);
+                $worksheet->setCellValue('C'.$currentRow, $newOrder->preorder->title);
+                $worksheet->setCellValue('D'.$currentRow, $newOrder->created_at->format('d.m.Y H:i:s'));
+
+                $worksheet->setCellValue('A'.$currentRow+1, $newOrder->total());
+
+                $worksheet->setCellValue('A'.$currentRow + 2, 'Название товара');
+                $worksheet->setCellValue('C'.$currentRow + 2, 'Цена');
+                $worksheet->setCellValue('D'.$currentRow + 2, 'Кол-во');
+                $worksheet->setCellValue('E'.$currentRow + 2, 'Общая стоимость');
+
+                $productRow = $currentRow + 3;
+
+                foreach ($newOrder->products as $product) {
+                    $worksheet->setCellValue('A'.$productRow, $product->preorder_product->title);
+                    $worksheet->setCellValue('C'.$productRow, $product->preorder_product->price);
+                    $worksheet->setCellValue('D'.$productRow, $product->qty);
+                    $worksheet->setCellValue('E'.$productRow, number_format($product->qty * $product->preorder_product->price, 0, '.', ' '));
+
+                    $productRow++;
+                }
+
+                if (Storage::exists('public/excel/preorders/') === false) {
+                    mkdir(storage_path('app/public') . '/excel/preorders/', 0777, true);
+                }
+
+                $writer = new Xlsx($spreadsheet);
+                $fileName = storage_path('app/public').'/excel/preorders/preorder-'.$newOrder->id.'_'.\Carbon\Carbon::now()->format('d-m-Y-H').'.xlsx';
+                $writer->save($fileName);
+                $files[] = $fileName;
+            }
             if ($checkoutedPreorder->user->manager_id) {
                 $managerEmail = $checkoutedPreorder->user->managerContact->email;
-                \Mail::to($managerEmail)->send(
+                if (count($files) && setting('admin.export_preorders_to_manager')) {
+                    \Mail::to($managerEmail)->send(
+                        new SuccessPreorder($checkoutedPreorder, true)
+                    );
+                    Mail::to($managerEmail)->send(new NewOrdersMail($files, $subject));
+                    Mail::to("magzip23@gmail.com")->send(new NewOrdersMail($files, $subject));
+                }
+
+            }
+            if (setting('admin.export_orders_to_email')) {
+                \Mail::to($to)->send(
                     new SuccessPreorder($checkoutedPreorder, true)
                 );
+                //Mail::to($to)->send(new NewOrdersMail($files, $subject));
             }
 
-            \Mail::to($to)->send(
-                new SuccessPreorder($checkoutedPreorder, true)
-            );
             \Mail::to($checkoutedPreorder->user)->send(
                 new SuccessPreorder($checkoutedPreorder)
             );
