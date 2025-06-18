@@ -55,6 +55,10 @@ class ProcessUpdateJob implements ShouldQueue {
                 $product->barcode = $item['barcode'];
                 $product->multiplicity = $item['multiplicity'];
                 $product->save();
+//                Product::withoutSyncingToSearch(function () use ($product) {
+//                    // Ваш код сохранения
+//                    $product->save();
+//                });
             }
             else {
                 //dump('товар не найден: ' . $item['xml_id']);
@@ -67,6 +71,10 @@ class ProcessUpdateJob implements ShouldQueue {
                 $product->total = $item['total'];
                 $product->multiplicity = $item['multiplicity'];
                 $product->save();
+//                Product::withoutSyncingToSearch(function () use ($product) {
+//                    // Ваш код сохранения
+//                    $product->save();
+//                });
                 $newProducts[] = [
                     'row' => $item['row'],
                     'name' => $item['name'],

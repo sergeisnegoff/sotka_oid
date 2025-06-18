@@ -125,8 +125,12 @@
                                             <div class="col-12">
                                                 <div class="btn"><a href="?edit">Изменить</a></div>
                                             </div>
+
                                             @if (!is_null($user->manager_table))
-                                                @php($manager = \Illuminate\Support\Facades\DB::table($user->manager_table)->where('uuid', $user->manager_id)->orWhere('id', $user->manager_id)->first())
+                                                @php($manager = \Illuminate\Support\Facades\DB::table($user->manager_table)
+                                                    //->where('uuid', $user->manager_id)
+                                                    ->where('id','=', $user->manager_id)
+                                                    ->first())
                                                 @if (!is_null($manager))
                                                     <div class="col-md-12" style="margin-top: 60px;">
                                                         <h3>Ваш Менеджер</h3>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Laravel\Scout\Searchable;
 use function app;
 
 
@@ -15,6 +16,8 @@ use function app;
  */
 class Product extends Model
 {
+    use Searchable;
+
     protected $fillable = [
         'title',
         'description',
@@ -31,6 +34,55 @@ class Product extends Model
         'main_page',
         'barcode'
     ];
+
+
+    /**
+     * Получить сортируемые атрибуты для модели.
+     *
+     * @return array
+     */
+    public function searchableSortable(): array
+    {
+        return [
+            'title',
+            'created_at',
+        ];
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id, // Обязательное поле
+            'title' => $this->title,
+            'description' => $this->description,
+        ];
+    }
+
+    public function algoliaSettings()
+    {
+        return [
+            'searchableAttributes' => [
+                'title',
+                'description',
+            ],
+            'customRanking' => [
+                'desc(updated_at)',
+                'asc(title)'
+            ],
+            'attributesForFaceting' => [
+                'category_id',
+            ],
+            'highlightPreTag' => '<mark>',
+            'highlightPostTag' => '</mark>',
+            'typoTolerance' => 'min',
+            'ignorePlurals' => true,
+            'removeStopWords' => true,
+            'queryLanguages' => ['ru'],
+            'advancedSyntax' => true,
+            'hitsPerPage' => 15,
+            'distinct' => true,
+        ];
+    }
 
 
     public function scopeMultiplicity($query) {

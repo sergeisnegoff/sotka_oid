@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
@@ -81,6 +82,7 @@ class GetDataFromExcelJob implements ShouldQueue
                     && is_null($sheet->getCell($markup->price . $row)->getValue()))
             ) {
                 $row++;
+                Log::info('Propusk ' . $row . ' in table ' . $this->preorderTableSheet->title);
                 continue;
             }
 
@@ -140,7 +142,7 @@ class GetDataFromExcelJob implements ShouldQueue
 
                         $imageParamCellNumber = Str::between($hyperlink, '&', '&');
 
-                        $imageParamCellName = $sheet->getCell($imageParamCellNumber)->getValue();
+                        $imageParamCellName = $sheet->getCell($markup->image . $row)->getValue();
 
                         $res = str_replace('"&' . $imageParamCellNumber . '&"', $imageParamCellName, $hyperlink);
 
@@ -150,6 +152,9 @@ class GetDataFromExcelJob implements ShouldQueue
                     $this->image = !empty($image) ? $image : $sheet->getCell($markup->image . $row)->getHyperlink()->getUrl();
 
                 } catch (\Exception $e) {
+                    Log::error($e->getMessage());
+                    Log::error('$hyperlink=' . $hyperlink . ' | $imageParamCellNumber=' .$imageParamCellNumber);
+                    Log::error($e->getTraceAsString());
                     return null;
                 }
 
@@ -304,6 +309,8 @@ class GetDataFromExcelJob implements ShouldQueue
             file_put_contents($path, $image);
             return 'preorder/' . $preorder->id . '/' . $imageName;
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
             return null;
         }
     }

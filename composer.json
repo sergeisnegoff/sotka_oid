@@ -12,10 +12,13 @@
         "ext-dom": "*",
         "ext-json": "*",
         "ext-xlswriter": "*",
+        "algolia/algoliasearch-client-php": "^3.4",
+        "babenkoivan/elastic-scout-driver": "^3.2",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^v8.17.2",
+        "laravel/scout": "^9.8",
         "laravel/tinker": "^2.5",
         "league/glide-laravel": "^1.0",
         "maatwebsite/excel": "^3.1",
@@ -24,6 +27,7 @@
         "spatie/array-to-xml": "^2.16",
         "symfony/dom-crawler": "*",
         "tcg/voyager": "^1.4",
+        "teamtnt/laravel-scout-tntsearch-driver": "^15.0",
         "tecnickcom/tcpdf": "*"
     },
     "require-dev": {
@@ -37,7 +41,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {
@@ -72,11 +79,5 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    },
-    "repositories": {
-        "hooks": {
-            "type": "composer",
-            "url": "https://larapack.io"
-        }
     }
 }

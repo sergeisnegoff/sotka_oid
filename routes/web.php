@@ -221,6 +221,7 @@ Route::get('/{page_slug}', [\App\Http\Controllers\PagesController::class, 'index
 Route::get('/our-life/{id}', [\App\Http\Controllers\PagesController::class, 'index']);
 
 Route::get('preorder/reports/export', [PreorderReportsController::class, 'index']);
+Route::get('preorder/reports/export', [PreorderReportsController::class, 'index']);
 
 
 Route::fallback([\App\Http\Controllers\ErrorController::class, 'error_404']);

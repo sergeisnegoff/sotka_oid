@@ -1,7 +1,7 @@
 <ul class="list-group search-drop">
     @foreach ($seeds as $key => $s)
         <li class="list-group-item d-flex justify-content-between align-items-center " style="margin:0">
-            <a href="/product/{{ $s->id }}">
+            <a href="/product/{{ $s->id ?? 1 }}">
                 <table>
                     <tr>
                         <td>

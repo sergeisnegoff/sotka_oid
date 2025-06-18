@@ -1,6 +1,11 @@
 @extends('layouts.app')
 <?php
-$showBuyButton = !(\Carbon\Carbon::parse($product->preorder->end_date))->isSameDay(\Carbon\Carbon::now());
+//$showBuyButton = !(\Carbon\Carbon::parse($product->preorder->end_date))->isSameDay(\Carbon\Carbon::now());
+$showBuyButton = false; // значение по умолчанию
+
+if ($product && $product->preorder && $product->preorder->end_date) {
+    $showBuyButton = !\Carbon\Carbon::parse($product->preorder->end_date)->isSameDay(\Carbon\Carbon::now());
+}
 
     ?>
 @section('content')

@@ -106,7 +106,7 @@
                                 <div
                                     id="captcha-container"
                                     class="smart-captcha"
-                                    data-sitekey="ysc1_b46LNHfynA1L4LY9gsFksmMSAlzBSemnI4HRaXh4304ea952"
+                                    data-sitekey="ysc1_S76iCKybM3uOs3toeT9yB6fwYg6NMHJmBiDKZ2VIf21003e0"
                                 ></div>
                             </div>
                         </div>

@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use TeamTNT\TNTSearch\TNTSearch;
 
 class ProductController extends Controller {
     public function index(Request $request, ProductFilter $filters) {
@@ -235,61 +237,151 @@ class ProductController extends Controller {
         return view('products.product', compact('seed', 'seeds', 'seedsViewed', 'cartKeys', 'cat'));
     }
 
-    public function searchProducts(Request $request, ProductFilter $filters) {
-        if (isset($request->products)) {
+    public function searchProducts(Request $request, ProductFilter $filters)
+    {
+        if (!$request->has('products')) {
+            return redirect()->route('products.index');
+        }
+
+        $searchQuery = $request->products;
+        if (empty($searchQuery)) {
             $seeds = Product::multiplicity()
                 ->with(['category', 'subSpecification', 'subFilter'])
                 ->filter($filters)
-                ->where('total', '!=', 0);
-            $sort = explode('/', $request->sort);
-            $seeds = $seeds->orderBy(!empty($sort[1]) ? $sort[1] : 'title', !empty($sort[0]) ? $sort[0] : 'ASC')->where(
-                'title',
-                'LIKE',
-                "%{$request->products}%"
-            );
-            $seeds = $seeds->get();
+                ->where('total', '!=', 0)->get();
 
-            if (!empty($request->attributeStyle)) {
-                $dataAttr = session()->get($request->attributeStyle);
-                $dataAttr = [
-                    "attributeStyle" => $request->attributeStyle,
-                ];
-                session()->put(compact('dataAttr'));
-                return redirect()->back();
-            }
+        } else {
+            try {
+                // Простой поиск без сложного форматирования
+                $seeds = Product::search($searchQuery)
+                    ->query(function ($query) use ($filters) {
+                        return $query->multiplicity()
+                            ->with(['category', 'subSpecification', 'subFilter'])
+                            ->filter($filters)
+                            ->where('total', '!=', 0);
+                    });
+                $sort = explode('/', $request->sort);
+                $seeds = $seeds->orderBy(
+                    !empty($sort[1]) ? $sort[1] : 'title',
+                    !empty($sort[0]) ? $sort[0] : 'ASC'
+                );
 
-            if ($request->ajax() && !$request->sort && !$request->radios && $request->isAjax) {
-                if (isset($seeds)) {
-                    return response()->view('components.search', compact('seeds'));
-                    /*$count = 0;
-                    $html = '<ul class="list-group search-drop">';
-                    foreach ($seeds as $s) {
-                        if ($count == 5) {
-                            $html .= '  <li class="list-group-item d-flex justify-content-between align-items-center " style="margin:0">
-                              <button class="btn" type="submit">  Посмотреть остальные</button>
-                    </li>';
-                            break;
-                        };
-                        $html .= ' <a href="/product/' . $s->id . '" >
-                    <li class="list-group-item d-flex justify-content-between align-items-center " style="margin:0">
-                                                 ' . $s->title . ' ';
-                        if (!empty(Voyager::image($s->images))) {
-                            $html .= '   <div class="image-parent">
-                        <img src="' . thumbImg( $s->images, 30, 50) . '" class="img-fluid" alt="' . $s->title . '"></div>';
-                        }
-                        $html .= ' </li></a>';
-                        $count++;
-                    }
-                    $html .= '</ul>';*/
-                    //return response($html);
+                $seeds = $seeds->get();
+
+                if (!count($seeds)) {
+                    $seeds = Product::multiplicity()
+                        ->with(['category', 'subSpecification', 'subFilter'])
+                        ->filter($filters)
+                        ->where('total', '!=', 0)
+                        ->where('title', 'LIKE', "%{$searchQuery}%");
+                    $sort = explode('/', $request->sort);
+                    $seeds = $seeds->orderBy(
+                        !empty($sort[1]) ? $sort[1] : 'title',
+                        !empty($sort[0]) ? $sort[0] : 'ASC'
+                    );
+
+                    $seeds = $seeds->get();
                 }
+            } catch (\Exception $e) {
+                Log::error('Ошибка поиска: ' . $e->getMessage());
+                //dd($e->getMessage());
+                $seeds = Product::multiplicity()
+                    ->with(['category', 'subSpecification', 'subFilter'])
+                    ->filter($filters)
+                    ->where('total', '!=', 0)
+                    ->where('title', 'LIKE', "%{$searchQuery}%");
+                $sort = explode('/', $request->sort);
+                $seeds = $seeds->orderBy(
+                    !empty($sort[1]) ? $sort[1] : 'title',
+                    !empty($sort[0]) ? $sort[0] : 'ASC'
+                );
+
+                $seeds = $seeds->get();
             }
-
-            $cartKeys = collect(session()->get('cart'))->keys();
-
-            return view('products.index', compact('seeds', 'cartKeys'));
-
         }
 
+        if ($request->ajax() && !$request->sort && !$request->radios && $request->isAjax) {
+            return response()->view('components.search', compact('seeds'));
+        }
+
+        $cartKeys = collect(session()->get('cart'))->keys();
+
+        return view('products.index', compact('seeds', 'cartKeys'));
     }
+
+//    public function searchProducts(Request $request, ProductFilter $filters)
+//    {
+//        if (isset($request->products)) {
+//            $seeds = Product::multiplicity()
+//                ->with(['category', 'subSpecification', 'subFilter'])
+//                ->filter($filters)
+//                ->where('total', '!=', 0);
+//
+//            $sort = explode('/', $request->sort);
+//            $seeds = $seeds->orderBy(
+//                !empty($sort[1]) ? $sort[1] : 'title',
+//                !empty($sort[0]) ? $sort[0] : 'ASC'
+//            );
+//
+//            if ($request->has('products') && !empty($request->products)) {
+//                $searchQuery = collect(explode(' ', $request->products))
+//                    ->filter()
+//                    ->map(function($term) {
+//                        return '+' . $term;
+//                    })
+//                    ->implode(' ');
+//                //dd($searchQuery);
+//                $seeds = Product::search($searchQuery)
+//                    ->query(function ($query) use ($seeds) {
+//                        return $query->mergeConstraintsFrom($seeds);
+//                    })->get();
+//            }
+//            if ($request->ajax() && !$request->sort && !$request->radios && $request->isAjax) {
+//                if (isset($seeds)) {
+//                    return response()->view('components.search', compact('seeds'));
+//                }
+//            }
+//
+//            $cartKeys = collect(session()->get('cart'))->keys();
+//
+//            return view('products.index', compact('seeds', 'cartKeys'));
+//        }
+//    }
+
+//    public function searchProducts(Request $request, ProductFilter $filters) {
+//        if (isset($request->products)) {
+//            $seeds = Product::multiplicity()
+//                ->with(['category', 'subSpecification', 'subFilter'])
+//                ->filter($filters)
+//                ->where('total', '!=', 0);
+//            $sort = explode('/', $request->sort);
+//            $seeds = $seeds->orderBy(!empty($sort[1]) ? $sort[1] : 'title', !empty($sort[0]) ? $sort[0] : 'ASC')->where(
+//                'title',
+//                'LIKE',
+//                "%{$request->products}%"
+//            );
+//            $seeds = $seeds->get();
+//
+//            if (!empty($request->attributeStyle)) {
+//                $dataAttr = session()->get($request->attributeStyle);
+//                $dataAttr = [
+//                    "attributeStyle" => $request->attributeStyle,
+//                ];
+//                session()->put(compact('dataAttr'));
+//                return redirect()->back();
+//            }
+//
+//            if ($request->ajax() && !$request->sort && !$request->radios && $request->isAjax) {
+//                if (isset($seeds)) {
+//                    return response()->view('components.search', compact('seeds'));
+//                }
+//            }
+//
+//            $cartKeys = collect(session()->get('cart'))->keys();
+//
+//            return view('products.index', compact('seeds', 'cartKeys'));
+//
+//        }
+//
+//    }
 }

@@ -14,11 +14,12 @@ use App\Models\Product;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Mockery\Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
-use Str;
 use Vtiful\Kernel\Excel;
 
 class MerchController extends Controller
@@ -212,23 +213,23 @@ class MerchController extends Controller
                         continue;
                     }
 
-                    $concreteSheet->setCellValue($preorder->merch_qty_field . $row, $product->getTotalQty() ?? '');
+                    $concreteSheet->setCellValue($preorder->merch_qty_field . $row, $product->getTotalQty() ?? 0);
                     $row++;
                 }
-                //dump($concreteSheet);
+                //dd($concreteSheet);
             }
 
             $preorder->is_finished = true;
             $preorder->save();
             //dd($spreadsheet);
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment; filename="' . str_replace('\'', '-', Str::transliterate($preorder->title)) . '.xls"');
-            $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+            header('Content-Disposition: attachment; filename="' . str_replace('\'', '-', Str::transliterate($preorder->title)) . '.xlsx"');
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
             $writer->save('php://output');
         } catch (\Exception $exception) {
             dump($exception->getMessage());
             dump($exception->getTraceAsString());
-            \Log::error($exception->getMessage());
+            Log::error($exception->getMessage());
             $preorder->is_finished = false;
             $preorder->save();
         }
@@ -294,11 +295,11 @@ class MerchController extends Controller
             $preorder->is_finished = true;
             $preorder->save();
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xls"');
-            $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+            header('Content-Disposition: attachment; filename="' . Str::transliterate($preorder->title) . '.xlsx"');
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
             $writer->save('php://output');
         } catch (\Exception $exception) {
-            \Log::error($exception->getMessage());
+            Log::error($exception->getMessage());
             $preorder->is_finished = false;
             $preorder->save();
         }
