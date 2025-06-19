@@ -225,7 +225,7 @@ class ManagerController extends Controller
         $props = [
             'user_id' => $client,
             'preorder_id' => $preorderCheckout->preorder_id,
-            'is_internal' => true,
+            'is_internal' => false,
         ];
         $checkoutedPreorder = PreorderCheckout::create($props);
         foreach ($preorderCheckout->products as $product) {
