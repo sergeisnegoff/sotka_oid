@@ -243,23 +243,26 @@ class ProductController extends Controller {
             return redirect()->route('products.index');
         }
 
-        $searchQuery = $request->products;
+        $searchQuery = trim($request->products);
+
         if (empty($searchQuery)) {
             $seeds = Product::multiplicity()
                 ->with(['category', 'subSpecification', 'subFilter'])
                 ->filter($filters)
                 ->where('total', '!=', 0)->get();
-
         } else {
             try {
-                // Простой поиск без сложного форматирования
+
+                // Выполняем поиск с улучшенным запросом
                 $seeds = Product::search($searchQuery)
+                    ->take(500)
                     ->query(function ($query) use ($filters) {
                         return $query->multiplicity()
                             ->with(['category', 'subSpecification', 'subFilter'])
                             ->filter($filters)
                             ->where('total', '!=', 0);
                     });
+
                 $sort = explode('/', $request->sort);
                 $seeds = $seeds->orderBy(
                     !empty($sort[1]) ? $sort[1] : 'title',
@@ -268,12 +271,17 @@ class ProductController extends Controller {
 
                 $seeds = $seeds->get();
 
+                // Если результаты не найдены, пробуем поиск по LIKE
                 if (!count($seeds)) {
                     $seeds = Product::multiplicity()
                         ->with(['category', 'subSpecification', 'subFilter'])
                         ->filter($filters)
                         ->where('total', '!=', 0)
-                        ->where('title', 'LIKE', "%{$searchQuery}%");
+                        ->where(function($query) use ($searchQuery) {
+                            $query->where('title', 'LIKE', "%{$searchQuery}%")
+                                ->orWhere('description', 'LIKE', "%{$searchQuery}%");
+                        });
+
                     $sort = explode('/', $request->sort);
                     $seeds = $seeds->orderBy(
                         !empty($sort[1]) ? $sort[1] : 'title',
@@ -284,12 +292,17 @@ class ProductController extends Controller {
                 }
             } catch (\Exception $e) {
                 Log::error('Ошибка поиска: ' . $e->getMessage());
-                //dd($e->getMessage());
+
+                // Запасной вариант - поиск через LIKE
                 $seeds = Product::multiplicity()
                     ->with(['category', 'subSpecification', 'subFilter'])
                     ->filter($filters)
                     ->where('total', '!=', 0)
-                    ->where('title', 'LIKE', "%{$searchQuery}%");
+                    ->where(function($query) use ($searchQuery) {
+                        $query->where('title', 'LIKE', "%{$searchQuery}%")
+                            ->orWhere('description', 'LIKE', "%{$searchQuery}%");
+                    });
+
                 $sort = explode('/', $request->sort);
                 $seeds = $seeds->orderBy(
                     !empty($sort[1]) ? $sort[1] : 'title',

@@ -49,41 +49,23 @@ class Product extends Model
         ];
     }
 
+//    public function toSearchableArray()
+//    {
+//        return [
+//            'id' => $this->id, // Обязательное поле
+//            'title' => $this->title,
+//            'description' => $this->description,
+//        ];
+//    }
+
     public function toSearchableArray()
     {
         return [
-            'id' => $this->id, // Обязательное поле
             'title' => $this->title,
-            'description' => $this->description,
+            'title_raw' => $this->title, // Версия без обработки
+            'description' => $this->description
         ];
     }
-
-    public function algoliaSettings()
-    {
-        return [
-            'searchableAttributes' => [
-                'title',
-                'description',
-            ],
-            'customRanking' => [
-                'desc(updated_at)',
-                'asc(title)'
-            ],
-            'attributesForFaceting' => [
-                'category_id',
-            ],
-            'highlightPreTag' => '<mark>',
-            'highlightPostTag' => '</mark>',
-            'typoTolerance' => 'min',
-            'ignorePlurals' => true,
-            'removeStopWords' => true,
-            'queryLanguages' => ['ru'],
-            'advancedSyntax' => true,
-            'hitsPerPage' => 15,
-            'distinct' => true,
-        ];
-    }
-
 
     public function scopeMultiplicity($query) {
         return $query->where('multiplicity', '!=', 0);

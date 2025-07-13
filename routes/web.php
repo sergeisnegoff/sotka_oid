@@ -5,6 +5,8 @@ use App\Http\Controllers\Preorder\PreorderCartController;
 use App\Http\Controllers\Preorder\PreorderController;
 use App\Http\Controllers\Preorder\PreorderReportsController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -223,5 +225,22 @@ Route::get('/our-life/{id}', [\App\Http\Controllers\PagesController::class, 'ind
 Route::get('preorder/reports/export', [PreorderReportsController::class, 'index']);
 Route::get('preorder/reports/export', [PreorderReportsController::class, 'index']);
 
+Route::get('/test-search', function() {
+    $sqlResults = DB::table('products')
+        ->where('title', 'LIKE', '%укроп%')
+        ->pluck('title');
+
+    $meiliResults = Product::search('укроп')->raw()['hits'];
+
+    return [
+        'sql_count' => count($sqlResults),
+        'meili_count' => count($meiliResults),
+        'sql_samples' => $sqlResults->take(5),
+        'meili_samples' => collect($meiliResults)->pluck('title')->take(5)
+    ];
+});
+
 
 Route::fallback([\App\Http\Controllers\ErrorController::class, 'error_404']);
+
+
