@@ -36,7 +36,7 @@ class ManagerController extends Controller
                     break;
             }
         if ($filterName)
-            $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filterName).'%']);
+            $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($filterName) . '%']);
         $managerClients = $managerClients->paginate(15);
         $paginator = $managerClients;
         $page = 'index';
@@ -60,7 +60,7 @@ class ManagerController extends Controller
                     break;
             }
         if ($filterName)
-            $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filterName).'%']);
+            $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($filterName) . '%']);
         $managerClients = $managerClients->paginate(10);
         $paginator = $managerClients;
         $page = 'index';
@@ -83,7 +83,7 @@ class ManagerController extends Controller
                     break;
             }
         if ($filterName)
-            $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($filterName).'%']);
+            $managerClients = $managerClients->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($filterName) . '%']);
         $managerClients = $managerClients->paginate(15);
         $paginator = $managerClients;
         $page = 'index';
@@ -208,6 +208,7 @@ class ManagerController extends Controller
             'user' => $user
         ]);
     }
+
     public function concreteClientPreordersHistory(User $user)
     {
         $orders = PreorderCheckout::getUserCurrentPreorders($user->id);
@@ -245,10 +246,18 @@ class ManagerController extends Controller
         }
         try {
             $preorders = collect([]);
-            $newOrder = PreorderCheckout::with('products.preorder_product', 'user', 'preorder')->find($checkoutedPreorder->id);
+            $newOrder = PreorderCheckout::with([
+                'preorder:id,title',
+                'products:id,preorder_product_id,qty,preorder_checkout_id',
+                'products.preorder_product:id,title,price,barcode',
+                'user:id,name,email,city,address,phon',
+            ])
+                ->select(['id', 'created_at', 'user_id', 'is_internal','preorder_id'])
+                ->find($this->argument('id'));
+
             if ($newOrder && $newOrder->preorder->is_internal && $newOrder->preorder->is_one_c) {
                 $preorders->push($newOrder);
-                $orderJson = json_encode($preorders);
+                $orderJson = json_encode($preorders->toArray(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 $datetime = date('d_m_Y-H_i_s');
                 $filename = "preorders/export/{$datetime}_preorder_id-{$newOrder->preorder->id}.json";
                 $disk = Storage::disk('public');
@@ -261,7 +270,8 @@ class ManagerController extends Controller
         return redirect()->route('manager.clients.showPreordersHistory', $client);
     }
 
-    public function preorderAsUser(User $user, PreorderCartController $controller) {
+    public function preorderAsUser(User $user, PreorderCartController $controller)
+    {
         $preorder_id = array_key_first(($controller->cart())["cart"]);
         request()->merge(["preorder_id" => $preorder_id]);
         $controller->create(request(), $user, true);

@@ -5752,3 +5752,4 @@ package-lock.json
 /storage/app/1c/Price/obshii.xls
 /storage/app/.cache/public/preorder/66/664607109948460.jpg/5e8512802fa03a6d1907f494cb368cd5
 /storage/app/public/products.index
+/app/Console/Commands/TestPreorderExport.php

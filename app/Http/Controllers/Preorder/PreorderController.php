@@ -230,13 +230,14 @@ class PreorderController extends Controller
         $barcodeField = $preorder->merch_barcode_field ?? 'A';
         // Проходимся по каждому листу клиентского прайса
         $out = [];
+        //dd($sheets);
         foreach ($sheets as $sheet) {
             $clientSheet = $spreadsheet->getSheetByName($sheet->title);
             $markup = PreorderSheetMarkup::where('preorder_table_sheet_id', $sheet->id)->first();
 
             $row = 1;
             $array = [];
-            while ($row < $clientSheet->getHighestRow()) {
+            while ($row <= $clientSheet->getHighestRow()) {
                 //$barcode = $clientSheet->getCell($markup->barcode ?? 'G' . $row)->getValue();
                 //dd($barcodeField, mb_ord($qtyField));
                 $barcode = $clientSheet->getCell($barcodeField . $row)->getValue();
