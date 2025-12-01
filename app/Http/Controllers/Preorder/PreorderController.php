@@ -86,6 +86,11 @@ class PreorderController extends Controller
             ->where('id', $id)
             ->first();
 
+        if (!$product) {
+            info('*****************Product not found: ' . $id);
+            return redirect()->back();
+        }
+
         $cartKeys = collect(array_keys(PreorderService::getCart()));
 
         return view('preorder.product', compact('product', 'cartKeys'));

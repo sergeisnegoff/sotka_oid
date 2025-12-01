@@ -333,8 +333,24 @@ class CartController extends Controller
         $log->info('Cart items found');
         $sum = 0;
         foreach ($cartItems as $id => $product) {
-            Order::orderProducts($order->id, $id, $product['quantity'], $product['price'] * $product['quantity']);
-            $sum = $sum + $product['price'] * $product['quantity'];
+//            Order::orderProducts($order->id, $id, $product['quantity'], $product['price'] * $product['quantity']);
+//            $sum = $sum + $product['price'] * $product['quantity'];
+
+            if (!isset($product['price']) || !isset($product['quantity'])) {
+                $log->error('Invalid cart item structure', [
+                    'product_id' => $id,
+                    'cart_item' => $product
+                ]);
+                continue; // или вернуть ошибку
+            }
+
+            // Приводим к числовым типам для безопасности
+            $quantity = (int)$product['quantity'];
+            $price = (float)$product['price'];
+            $totalPrice = $price * $quantity;
+
+            Order::orderProducts($order->id, $id, $quantity, $totalPrice);
+            $sum += $totalPrice;
         }
 
         $order->amount = $sum;

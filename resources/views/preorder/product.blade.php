@@ -36,7 +36,13 @@ $(document).ready(function() {
                     <ul>
                         <li><a href="/">{{setting('site.main_title_buttom')}}</a></li>
 {{--                        <li><a href="/preorders/{{ $product->category->preorder_id }}">{{ $product->category->preorder->title }}</a></li>--}}
-                        <li><a href="/preorders/category/{{$product->category->id}}/products">{{$product->category->title}}</a></li>
+                        @if(!is_null($product))
+                            <li>
+                                <a href="/preorders/category/{{$product->category->id}}/products">
+                                    {{$product->category->title}}
+                                </a>
+                            </li>
+                        @endif
                         <li> {{$product->title}}</li>
                     </ul>
                 </div>
