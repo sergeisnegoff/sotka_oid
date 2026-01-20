@@ -141,6 +141,7 @@
                                             <th><span>Мягкий лимит*</span></th>
                                             <th><span>Жесткий лимит*</span></th>
                                         @if(!$dataTypeContent->is_internal)
+                                            <th><span>Мин.партия</span></th>
                                             <th><span>Кратность ТУ</span></th>
                                             <th><span>Контейнер</span></th>
                                             <th><span>Страна</span></th>
@@ -210,6 +211,9 @@
                                                        value="{{ $sheet->markup !== null ? $sheet->markup->hard_limit : '' }}"
                                                        class="form-control" ></td>
                                             @if(!$dataTypeContent->is_internal)
+                                                <td><input type="text" name="sheets[{{ $sheet->id }}][moq]"
+                                                           value="{{ $sheet->markup !== null ? $sheet->markup->moq : '' }}"
+                                                           class="form-control"></td>
                                                 <td><input type="text" name="sheets[{{ $sheet->id }}][multiplicity_tu]"
                                                            value="{{ $sheet->markup !== null ? $sheet->markup->multiplicity_tu : '' }}"
                                                            class="form-control"></td>

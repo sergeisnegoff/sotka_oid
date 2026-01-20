@@ -40,7 +40,8 @@ class PreorderProduct extends Model
         'additional_4',
         'soft_limit',
         'hard_limit',
-        'merch_price'
+        'merch_price',
+        'moq'
     ];
 
     public function getMultiplicityTuAttribute($value)

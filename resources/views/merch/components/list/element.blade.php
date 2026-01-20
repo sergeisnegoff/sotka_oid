@@ -11,9 +11,14 @@
             </div>
         </div>
         <div class="col-12 col-md-1">
+            <div class="wrapper__baskets-price"><span>Мин.партия:</span>
+                {{ $product->moq ?? 1 }}
+            </div>
+        </div>
+        <div class="col-12 col-md-1">
             <div class="wrapper__baskets-quality">
                                                             <span
-                                                                class="wrapper__baskets-titlequality">Количество:</span>
+                                                                class="wrapper__baskets-titlequality">Упаковка:</span>
                 <div class="box__quality">
                     <div class="box__quality-value text-center">
                         {{$product->multiplicity_tu}}
@@ -59,7 +64,7 @@
 
             </div>
         </div>
-        <div class="col-12 col-md-2">
+        <div class="col-12 col-md-1" style="padding: 0!important;">
             <div class="btn">
                 <button class="qty-append push-to-cart {{$product->getTotalQtyByType(true) ? 'ifcart' : ''}}" data-id="{{$product->id}}">Применить
                 </button>

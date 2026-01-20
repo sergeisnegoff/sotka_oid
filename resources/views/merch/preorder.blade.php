@@ -22,10 +22,13 @@
                                         <div class="wrapper__baskets-title">
                                             <div class="row">
                                                 <div class="col-12 col-md-3"><h4>Наименование</h4></div>
+                                                <div class="col-12 col-md-1"><h4>Мин.</h4></div>
                                                 <div class="col-12 col-md-1"><h4>Упаковка</h4></div>
                                                 <div class="col-12 col-md-1"><h4>Цена</h4></div>
                                                 <div class="col-12 col-md-1"><h4>Лимит</h4></div>
                                                 <div class="col-12 col-md-2"><h4>Сводка</h4></div>
+                                                <div class="col-12 col-md-2"><h4>Кол-во</h4></div>
+                                                <div class="col-12 col-md-1"></div>
                                             </div>
                                         </div>
                                         <div class="products-container">

@@ -15,6 +15,7 @@ class PreorderSheetMarkup extends Model
         'price',
         'description',
         'multiplicity',
+        'moq',
         'multiplicity_tu',
         'container',
         'hard_limit',

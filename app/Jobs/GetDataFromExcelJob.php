@@ -200,6 +200,10 @@ class GetDataFromExcelJob implements ShouldQueue
                         ? preg_replace("/[^0-9]/", '', $sheet->getCell($markup->multiplicity . $row)->getValue())
                         : 1,
 
+                    'moq' => $markup->moq != null
+                        ? preg_replace("/[^0-9]/", '', $sheet->getCell($markup->moq . $row)->getValue())
+                        : 1,
+
                     'multiplicity_tu' => $markup->multiplicity_tu != null
                         ? preg_replace("/[^0-9]/", '', $sheet->getCell($markup->multiplicity_tu . $row)
                             ->getValue())
