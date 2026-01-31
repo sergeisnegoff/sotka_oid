@@ -34,7 +34,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Dashboard::useModel(OrchidRole::class, \App\Orchid\Models\Role::class);
+        $this->app->booted(function () {
+            Dashboard::useModel(\Orchid\Platform\Models\Role::class, \App\Orchid\Models\Role::class);
+        });
 
         View::composer('layouts.*', function (\Illuminate\View\View $view){
             if(!in_array($view->name(), [
