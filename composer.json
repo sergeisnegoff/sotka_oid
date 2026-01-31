@@ -2,72 +2,52 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.1",
         "ext-dom": "*",
         "ext-json": "*",
-        "ext-xlswriter": "*",
         "algolia/algoliasearch-client-php": "^3.4",
         "babenkoivan/elastic-scout-driver": "^3.2",
-        "fideloper/proxy": "^4.4",
-        "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^v8.17.2",
-        "laravel/scout": "^9.8",
-        "laravel/tinker": "^2.5",
+        "guzzlehttp/guzzle": "^7.5",
+        "laravel/framework": "^10.0",
+        "laravel/scout": "^10.7",
+        "laravel/tinker": "^2.8",
         "league/glide-laravel": "^1.0",
-        "maatwebsite/excel": "^3.1",
-        "phpoffice/phpspreadsheet": "^1.16",
+        "maatwebsite/excel": "^3.1.48",
+        "orchid/platform": "^14.52",
+        "phpoffice/phpspreadsheet": "^1.29",
         "shuchkin/simplexls": "^0.9.6",
-        "spatie/array-to-xml": "^2.16",
-        "symfony/dom-crawler": "*",
-        "tcg/voyager": "^1.4",
-        "teamtnt/laravel-scout-tntsearch-driver": "^15.0",
+        "spatie/array-to-xml": "^3.0",
+        "symfony/dom-crawler": "^6.3",
+        "tcg/voyager": "^1.6",
+        "teamtnt/laravel-scout-tntsearch-driver": "^14.0",
         "tecnickcom/tcpdf": "*"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.6",
-        "facade/ignition": "^2.5",
-        "fakerphp/faker": "^1.9.1",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3"
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
-    },
-    "extra": {
-        "laravel": {
-            "dont-discover": []
-        }
+        "barryvdh/laravel-debugbar": "^3.13",
+        "fakerphp/faker": "^1.23",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.4",
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
-        "files": [
-            "app/Helpers/MainHelper.php"
-        ],
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/MainHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
@@ -79,5 +59,15 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

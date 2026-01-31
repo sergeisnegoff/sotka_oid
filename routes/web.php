@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
-
+Route::get('/admin-test', function () {
+    dd(auth()->check(), auth()->user());
+});
 
 Route::get('/', ['as' => 'jquery.load_more', HomeController::class, 'index'])->name('home');
 

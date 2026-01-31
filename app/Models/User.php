@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use App\Mail\resetPassword;
+use App\Orchid\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Orchid\Access\UserAccess;
+use Orchid\Screen\AsSource;
 
 class User extends \TCG\Voyager\Models\User {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, UserAccess, AsSource;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +43,7 @@ class User extends \TCG\Voyager\Models\User {
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'permissions'       => 'array',
     ];
 
     public static function sendResetPasswordMail($mail)
@@ -112,6 +116,11 @@ class User extends \TCG\Voyager\Models\User {
         return PreorderCheckout::whereHas('user', function ($query) {
             $query->where('manager_id', auth()->user()->managerContact->id);
         });
+    }
+
+    public function presenter(): UserPresenter
+    {
+        return new UserPresenter($this);
     }
 
 }

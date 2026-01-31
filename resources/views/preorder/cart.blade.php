@@ -30,10 +30,10 @@
                                             <div class="box__currentorder-ordernumber">Предзаказ: {{ $order['title'] }}
                                             </div>
                                         </div>
-                                        <div class="col-12 col-xl-1">
+{{--                                        <div class="col-12 col-xl-1">--}}
 
-                                        </div>
-                                        <div class="col-12 col-xl-4">
+{{--                                        </div>--}}
+                                        <div class="col-12 col-xl-3">
                                             <div>
                                                 <span>Предоплата: <span class="prepay_amount">{{$order['prepay_amount']}}</span></span>
                                                 <span>₽</span>
@@ -62,7 +62,16 @@
 
                                             </div>
                                         </div>
+                                        <div class="col-12 col-xl-1">
+                                            <div class="btn">
+                                                <button type="submit" id="submit_btn2">
+                                                    Заказать &rang;
+                                                </button>
+                                            </div>
+                                        </div>
+
                                     </div>
+
                                     <div class="btn__currentorder-toggle">
                                         <button type="button"></button>
                                     </div>

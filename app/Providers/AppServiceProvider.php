@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use TCG\Voyager\Facades\Voyager;
+use Orchid\Support\Facades\Dashboard;
+use Orchid\Platform\Models\Role as OrchidRole;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Dashboard::useModel(OrchidRole::class, \App\Orchid\Models\Role::class);
+
         View::composer('layouts.*', function (\Illuminate\View\View $view){
             if(!in_array($view->name(), [
                 'layouts.error.404',

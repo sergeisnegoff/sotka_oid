@@ -32,6 +32,25 @@
 
     @stack('styles')
 </head>
+<style>
+    /* Важно: фиксируем “коробку”, чтобы высота хедера не гуляла */
+    .box__logo {
+        width: 100%;
+        /* подберите под ваш дизайн */
+        height: 48px;
+        overflow: visible;
+        display: flex;
+        align-items: center;
+        z-index: 5;
+    }
+
+    #headerLogoVideo {
+        height: 100%;
+        width: auto;       /* сохраняем пропорции */
+        display: block;
+    }
+</style>
+
 <body>
 <script>
 
@@ -56,9 +75,23 @@
         <div class="container">
             <div class="row">
                 <div class="order-1 order-md-1 col-3 col-md-2 col-lg-2 col-xl-1">
-                    <?php $site_logo_img = Voyager::setting('site.logo', ''); ?>
-                    <div class="box__logo"><a href="/"><img src="{{ Voyager::image($site_logo_img) }}" alt=""></a></div>
+                    <div class="box__logo">
+                        <a href="/">
+                            <video
+                                id="headerLogoVideo"
+                                autoplay
+                                muted
+                                playsinline
+                                loop
+                                preload="auto"
+                                style="max-width:100%;height:auto;display:block;"
+                            >
+                                <source src="/images/logo.mp4" type="video/mp4">
+                            </video>
+                        </a>
+                    </div>
                 </div>
+
                 <div class="order-2 order-md-2 col-2 col-md-4 col-lg-4 d-xl-none">
                     <div class="btn-nav">
                         <button data-btn-popup="navigation"><span></span><span></span>Меню</button>
@@ -570,6 +603,34 @@
         $('[data-popup=authorization]').iziModal('open')
         @endif
     })
+
+
+    $(function () {
+        const video = document.getElementById('headerLogoVideo');
+        if (!video) return;
+
+        const sources = ['/images/logo.mp4', '/images/logo1.mp4'];
+        let i = 0;
+
+        function switchVideo() {
+            i = (i + 1) % sources.length;
+
+            // меняем src у <source> и перезагружаем видео
+            const sourceEl = video.querySelector('source');
+            sourceEl.src = sources[i];
+
+            // чтобы точно подхватилось
+            video.load();
+
+            // пробуем запустить (на некоторых устройствах может требовать user gesture,
+            // но обычно autoplay+muted работает)
+            const p = video.play();
+            if (p && typeof p.catch === 'function') p.catch(function () {});
+        }
+
+        setInterval(switchVideo, 4000); // раз в 30 секунд
+    })();
+
 </script>
 
 @stack('scripts')
