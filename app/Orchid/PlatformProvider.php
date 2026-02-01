@@ -78,6 +78,13 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.systems.roles')
                 ->divider(),
 
+            Menu::make('Менеджеры')
+                ->icon('bs.shield')
+                ->route('platform.systems.managers')
+                ->permission('platform.systems.managers')
+                ->divider()
+                ->title(__('Отдел продаж')),
+
         ];
     }
 
@@ -92,8 +99,9 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group(__('System'))
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users'))
-                ->addPermission('platform.systems', 'Full access')
-                ->addPermission('platform.index', 'Access dashboard'),
+                ->addPermission('platform.systems.managers', 'Менеджеры')
+                ->addPermission('platform.systems', 'Полный доступ')
+                ->addPermission('platform.index', 'Доступ к админке'),
 
         ];
     }

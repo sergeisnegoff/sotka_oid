@@ -11,6 +11,8 @@ use App\Orchid\Screens\Examples\ExampleGridScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
+use App\Orchid\Screens\Manager\ManagerEditScreen;
+use App\Orchid\Screens\Manager\ManagerListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -102,3 +104,22 @@ Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.ex
 Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
 
 // Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+Route::screen('managers', ManagerListScreen::class)
+    ->name('platform.systems.managers')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Менеджеры', route('platform.systems.managers')));
+
+Route::screen('managers/create', ManagerEditScreen::class)
+    ->name('platform.systems.managers.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.systems.managers')
+        ->push(__('Create'), route('platform.systems.managers.create')));
+
+Route::screen('managers/{manager}/edit', ManagerEditScreen::class)
+    ->name('platform.systems.managers.edit')
+    ->breadcrumbs(fn (Trail $trail, $manager) => $trail
+        ->parent('platform.systems.managers')
+        ->push($manager->name ?? 'Редактирование', route('platform.systems.managers.edit', $manager)));
+

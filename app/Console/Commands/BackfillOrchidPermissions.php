@@ -15,7 +15,8 @@ class BackfillOrchidPermissions extends Command
     {
         $count = 0;
         $customerRole = Role::find(1);
-        User::query()->chunkById(200, function ($users) use (&$count, $customerRole) {
+        $adminRole = Role::where('slug', 'admin')->first();
+        User::query()->chunkById(200, function ($users) use (&$count, $customerRole, $adminRole) {
             foreach ($users as $user) {
                 $roleName = $user->role?->name ?? null;
 
@@ -25,26 +26,28 @@ class BackfillOrchidPermissions extends Command
 
                 $isAdmin = in_array($roleName, ['admin','administrator','superadmin'], true);
 
-                $mustHave = $isAdmin
-                    ? [
-                        'platform.index'          => 1,
-                        'platform.systems'        => 1,
-                        'platform.systems.roles'  => 1,
-                        'platform.systems.users'  => 1,
-                    ]
-                    : [];
+//                $mustHave = $isAdmin
+//                    ? [
+//                        'platform.index'          => 1,
+//                        'platform.systems'        => 1,
+//                        'platform.systems.roles'  => 1,
+//                        'platform.systems.users'  => 1,
+//                    ]
+//                    : [];
+//
+//                $current = is_array($user->permissions ?? null) ? $user->permissions : [];
+//                $merged  = $current + $mustHave;
+//
+//                if ($merged !== $current) {
+//                    $user->permissions = $merged;
+//                    $user->save();
+//                    $count++;
+//                }
 
-                $current = is_array($user->permissions ?? null) ? $user->permissions : [];
-                $merged  = $current + $mustHave;
-
-                if ($merged !== $current) {
-                    $user->permissions = $merged;
-                    $user->save();
-                    $count++;
-                }
-
-                if (!$isAdmin) {
+                if (!$isAdmin && !$user->inRole($customerRole)) {
                     $user->addRole($customerRole);
+                } elseif ($isAdmin && !$user->inRole($adminRole)) {
+                    $user->addRole($adminRole);
                 }
             }
         });

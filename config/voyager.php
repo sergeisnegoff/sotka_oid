@@ -42,7 +42,7 @@ return [
     */
 
     'models' => [
-        //'namespace' => 'App\\',
+        'role' => App\Models\Role::class,
     ],
 
     /*

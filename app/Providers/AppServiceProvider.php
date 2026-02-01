@@ -34,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \Event::listen('voyager.admin.middleware', function () {
+            $roleClass = config('voyager.models.role');
+            \Log::info('Voyager using role model: ' . $roleClass);
+        });
         $this->app->booted(function () {
             Dashboard::useModel(\Orchid\Platform\Models\Role::class, \App\Orchid\Models\Role::class);
         });
