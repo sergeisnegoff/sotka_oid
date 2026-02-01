@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\User\UserEditLayout;
-use App\Orchid\Layouts\User\UserFiltersLayout;
 use App\Orchid\Layouts\User\UserListLayout;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,7 +13,10 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
-
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Actions\Button;
+use App\Models\ContactsManagersModel;
 class UserListScreen extends Screen
 {
     /**
@@ -22,13 +24,56 @@ class UserListScreen extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Request $request): iterable
     {
+
+        $q = User::query()->with(['roles', 'managerContact']);
+
+        // 1) Роли
+        $roleIds = $request->input('filters.roles', []);
+        if (is_array($roleIds) && count($roleIds)) {
+            $q->whereHas('roles', function($query) use ($roleIds) {
+                $query->whereIn('id', $roleIds);
+            });
+        }
+        // 2) Менеджер
+        $managerId = $request->input('filters.manager_id');
+        if ($managerId) {
+            $q->where('manager_id', $managerId);
+        }
+
+        // 3) Диапазон даты создания
+        $from = $request->input('filters.created_from');
+        if ($from) {
+            $q->whereDate('created_at', '>=', $from);
+        }
+
+        $to = $request->input('filters.created_to');
+        if ($to) {
+            $q->whereDate('created_at', '<=', $to);
+        }
+
+        // 4) Поиск по полю + запрос
+        $field = $request->input('filters.field');
+        $text  = trim((string) $request->input('filters.q', ''));
+
+        if ($text !== '') {
+            $allowed = ['name', 'email', 'phon', 'city'];
+            if ($field && in_array($field, $allowed, true)) {
+                $q->where($field, 'like', "%{$text}%");
+            } else {
+                $q->where(function ($b) use ($text) {
+                    $b->where('name', 'like', "%{$text}%")
+                        ->orWhere('email', 'like', "%{$text}%")
+                        ->orWhere('phon', 'like', "%{$text}%")
+                        ->orWhere('city', 'like', "%{$text}%");
+                });
+            }
+        }
+
         return [
-            'users' => User::with('roles','managerContact')
-                ->filters(UserFiltersLayout::class)
-                ->defaultSort('id', 'desc')
-                ->paginate(),
+            'users' => $q->orderByDesc('id')->paginate(),
+            'filters' => $request->input('filters', []),
         ];
     }
 
@@ -77,7 +122,8 @@ class UserListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            UserFiltersLayout::class,
+            Layout::view('orchid.users.filters'),
+
             UserListLayout::class,
 
             Layout::modal('editUserModal', UserEditLayout::class)
@@ -116,5 +162,17 @@ class UserListScreen extends Screen
         User::findOrFail($request->get('id'))->delete();
 
         Toast::info(__('User was removed'));
+    }
+
+    public function applyFilters(Request $request)
+    {
+        return redirect()->to(url()->current() . '?' . http_build_query([
+                'filters' => $request->input('filters', []),
+            ]));
+    }
+
+    public function resetFilters()
+    {
+        return redirect()->to(url()->current());
     }
 }
