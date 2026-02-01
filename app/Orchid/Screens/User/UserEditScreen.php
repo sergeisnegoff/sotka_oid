@@ -179,17 +179,24 @@ class UserEditScreen extends Screen
                 ->canSee($this->user->exists),
 
             Button::make(__('Save'))
+                ->type(Color::PRIMARY())
                 ->icon('bs.check-circle')
                 ->method('save'),
 
-            Button::make('Сохранить скидки (категории)')
+
+            Button::make('Скидки: категории')
+                ->type(Color::BASIC())
+                ->icon('bs.tags')
                 ->method('saveCategoryDiscounts')
                 ->canSee($this->user->exists),
 
-
-            Button::make('Сохранить скидки (бренды)')
+            Button::make('Скидки: бренды')
+                ->type(Color::BASIC())
+                ->icon('bs.bookmark-star')
                 ->method('saveBrandDiscounts')
                 ->canSee($this->user->exists),
+
+
 
         ];
     }
