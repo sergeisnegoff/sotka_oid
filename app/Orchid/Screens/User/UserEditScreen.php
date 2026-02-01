@@ -39,8 +39,18 @@ class UserEditScreen extends Screen
 
         $user->active = ($user->active === 'on');
 
+        $img = trim((string) ($user->avatar ?? ''));
+        $imgUrl = '';
+
+        if ($img !== '') {
+            $imgUrl = preg_match('~^https?://~i', $img) === 1
+                ? $img
+                : asset('storage/' . ltrim($img, '/'));
+        }
+
         return [
             'user'       => $user,
+            'user.img_url' => $imgUrl,
             'permission' => $user->statusOfPermissions(),
         ];
     }
@@ -133,6 +143,10 @@ class UserEditScreen extends Screen
                 'user.password_confirmation' => $user->exists
                     ? ['nullable', 'string', 'min:8']
                     : ['required', 'string', 'min:8'],
+                'user.img_url' => ['nullable', 'string'],
+                'user.phon' => ['nullable', 'string', 'max:50'],
+                'user.city' => ['nullable', 'string', 'max:255'],
+                'user.personal_sale' => ['nullable', 'numeric', 'min:0', 'max:100'],
             ],
             [
                 'user.email.required' => 'Email обязателен.',
@@ -144,13 +158,37 @@ class UserEditScreen extends Screen
 
                 'user.password_confirmation.required' => 'Подтверждение пароля обязательно.',
                 'user.password_confirmation.min' => 'Подтверждение пароля должно быть не короче 8 символов.',
+                'user.personal_sale.min' => 'Скидка не может быть меньше 0%.',
+                'user.personal_sale.max' => 'Скидка не может быть больше 100%.',
             ]
         );
 
         $userData = $request->collect('user')->toArray();
 
+        if (isset($userData['img_url']) && is_string($userData['img_url'])) {
+            $img = trim($userData['img_url']);
+
+            if ($img === '') {
+                $userData['avatar'] = null;
+            } else {
+                $storagePrefix = rtrim(asset('storage'), '/') . '/';
+                if (str_starts_with($img, $storagePrefix)) {
+                    $userData['avatar'] = ltrim(substr($img, strlen($storagePrefix)), '/');
+                }
+            }
+        }
+
+        if (array_key_exists('personal_sale', $userData)) {
+            $value = $userData['personal_sale'];
+            $userData['personal_sale'] = ($value === '' || $value === null) ? null : (float) $value;
+        }
+
         if (array_key_exists('active', $userData)) {
             $userData['active'] = filter_var($userData['active'], FILTER_VALIDATE_BOOL) ? 'on' : 'off';
+        }
+
+        if (array_key_exists('manager_id', $userData) && ($userData['manager_id'] === '' || $userData['manager_id'] === null)) {
+            $userData['manager_id'] = null;
         }
 
         $permissions = collect($request->get('permissions'))
