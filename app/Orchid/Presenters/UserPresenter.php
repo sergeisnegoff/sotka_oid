@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Presenters;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Scout\Builder;
 use Orchid\Screen\Contracts\Personable;
@@ -33,9 +34,22 @@ class UserPresenter extends Presenter implements Personable, Searchable
      */
     public function subTitle(): string
     {
-        $roles = $this->entity->roles->pluck('name')->implode(' / ');
+        // Voyager primary role
+        $role = $this->entity->role?->name;
 
-        return (string) Str::of($roles)
+        // Если когда-то появится many-to-many roles, тоже поддержим
+        $roles = null;
+        if (method_exists($this->entity, 'roles')) {
+            try {
+                $roles = $this->entity->roles?->pluck('name')->implode(' / ');
+            } catch (\Throwable $e) {
+                $roles = null;
+            }
+        }
+
+        $label = $roles ?: $role ?: '';
+
+        return (string) Str::of($label)
             ->limit(20)
             ->whenEmpty(fn () => __('Regular User'));
     }
@@ -53,9 +67,26 @@ class UserPresenter extends Presenter implements Personable, Searchable
      */
     public function image(): ?string
     {
-        $hash = md5(strtolower(trim($this->entity->email)));
+        $avatar = $this->entity->avatar;
+        if ($avatar) {
+            if ($avatar == 'users/default.png') {
+                return '/' . $avatar;
+            } else {
+                return Storage::url($avatar);
+            }
 
+        }
+        $email = (string) ($this->entity->email ?? '');
+        $email = trim(strtolower($email));
+
+        // Если email пустой/NULL — вернём дефолтную картинку без gravatar-хеша
         $default = urlencode('https://raw.githubusercontent.com/orchidsoftware/.github/main/web/avatars/gravatar.png');
+
+        if ($email === '') {
+            return "https://www.gravatar.com/avatar/?d=$default";
+        }
+
+        $hash = md5($email);
 
         return "https://www.gravatar.com/avatar/$hash?d=$default";
     }

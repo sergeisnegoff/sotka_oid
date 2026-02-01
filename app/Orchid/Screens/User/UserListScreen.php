@@ -25,7 +25,7 @@ class UserListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'users' => User::with('roles')
+            'users' => User::with('roles','managerContact')
                 ->filters(UserFiltersLayout::class)
                 ->defaultSort('id', 'desc')
                 ->paginate(),

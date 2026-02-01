@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Mail\resetPassword;
+use App\Orchid\Filters\ManagerFilter;
+use App\Orchid\Filters\RoleFilter;
+use App\Orchid\Filters\UserSearchFilter;
 use App\Orchid\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -10,10 +13,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Orchid\Access\UserAccess;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 class User extends \TCG\Voyager\Models\User {
-    use HasFactory, Notifiable, UserAccess, AsSource;
+    use HasFactory, Notifiable, UserAccess, AsSource, Filterable;
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +50,12 @@ class User extends \TCG\Voyager\Models\User {
         'permissions'       => 'array',
     ];
 
+    public  $filters = [
+        RoleFilter::class,
+        UserSearchFilter::class,
+        ManagerFilter::class,
+    ];
+
     public static function sendResetPasswordMail($mail)
     {
         $user = User::where('email', $mail)->first();
@@ -60,7 +70,6 @@ class User extends \TCG\Voyager\Models\User {
             // handle case when user is not found
         }
     }
-
 
     public static function addSaleToCategory($category_id, $sale, $user) {
         return DB::table('user_sales')->insert(['category_id' => $category_id, 'sale' => $sale, 'user_id' => $user]);

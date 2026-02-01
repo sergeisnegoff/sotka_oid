@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Orchid\Models\Role;
 use Illuminate\Console\Command;
 use App\Models\User;
 
@@ -13,8 +14,8 @@ class BackfillOrchidPermissions extends Command
     public function handle(): int
     {
         $count = 0;
-
-        User::query()->chunkById(200, function ($users) use (&$count) {
+        $customerRole = Role::find(1);
+        User::query()->chunkById(200, function ($users) use (&$count, $customerRole) {
             foreach ($users as $user) {
                 $roleName = $user->role?->name ?? null;
 
@@ -40,6 +41,10 @@ class BackfillOrchidPermissions extends Command
                     $user->permissions = $merged;
                     $user->save();
                     $count++;
+                }
+
+                if (!$isAdmin) {
+                    $user->addRole($customerRole);
                 }
             }
         });
