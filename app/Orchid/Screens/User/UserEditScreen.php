@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Models\Brands;
+use App\Models\UserBrandSaleSystem;
+use App\Models\UserSaleSystem;
 use App\Orchid\Layouts\Role\RolePermissionLayout;
+use App\Orchid\Layouts\User\UserBrandDiscountsLayout;
+use App\Orchid\Layouts\User\UserCategoryDiscountsLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
@@ -48,10 +54,84 @@ class UserEditScreen extends Screen
                 : asset('storage/' . ltrim($img, '/'));
         }
 
+        $discounts = [
+            'categoriesTree' => [],
+            'brands'         => [],
+        ];
+
+        if ($user->exists) {
+            // ---------- категории (дерево) ----------
+            $tree = categoryTreeSort(); // ожидаем: [['id'=>..,'title'=>..,'children'=>[...] ]]
+
+            $checkedCategories = UserSaleSystem::checkedCategories($user->id)->toArray();
+
+            $categorySales = UserSaleSystem::query()
+                ->where('user_id', $user->id)
+                ->get()
+                ->keyBy('category_id');
+
+            $categoriesTree = [];
+            foreach ($tree as $parent) {
+                $parentId = (int) $parent['id'];
+
+                $parentSaleRow = $categorySales->get($parentId);
+                $parentEnabled = in_array($parentId, $checkedCategories, true);
+
+                $childrenOut = [];
+                foreach (($parent['children'] ?? []) as $child) {
+                    $childId = (int) $child['id'];
+                    $childSaleRow = $categorySales->get($childId);
+
+                    $childrenOut[] = [
+                        'id'      => $childId,
+                        'title'   => (string) ($child['title'] ?? ('Категория #' . $childId)),
+                        'enabled' => in_array($childId, $checkedCategories, true),
+                        'sale'    => $childSaleRow?->sale,
+                        'parent'  => $parentId,
+                    ];
+                }
+
+                $categoriesTree[] = [
+                    'id'       => $parentId,
+                    'title'    => (string) ($parent['title'] ?? ('Категория #' . $parentId)),
+                    'enabled'  => $parentEnabled,
+                    'sale'     => $parentSaleRow?->sale,
+                    'children' => $childrenOut,
+                ];
+            }
+
+            $discounts['categoriesTree'] = $categoriesTree;
+
+            // ---------- бренды ----------
+            $brands = Brands::query()->select(['id', 'title'])->orderBy('title')->get();
+
+            $checkedBrands = UserBrandSaleSystem::checkedBrands($user->id)->toArray();
+
+            $brandSales = UserBrandSaleSystem::query()
+                ->where('user_id', $user->id)
+                ->get()
+                ->keyBy('brand_id');
+
+            foreach ($brands as $brand) {
+                $brandId = (int) $brand->id;
+                $saleRow = $brandSales->get($brandId);
+
+                $discounts['brands'][] = [
+                    'id'      => $brandId,
+                    'title'   => (string) $brand->title,
+                    'enabled' => in_array($brandId, $checkedBrands, true),
+                    'sale'    => $saleRow?->sale,
+                ];
+            }
+        }
+
+        //dd($discounts);
+
         return [
             'user'       => $user,
             'user.img_url' => $imgUrl,
             'permission' => $user->statusOfPermissions(),
+            'discounts'     => $discounts,
         ];
     }
 
@@ -101,8 +181,164 @@ class UserEditScreen extends Screen
             Button::make(__('Save'))
                 ->icon('bs.check-circle')
                 ->method('save'),
+
+            Button::make('Сохранить скидки (категории)')
+                ->method('saveCategoryDiscounts')
+                ->canSee($this->user->exists),
+
+
+            Button::make('Сохранить скидки (бренды)')
+                ->method('saveBrandDiscounts')
+                ->canSee($this->user->exists),
+
         ];
     }
+
+    public function saveCategoryDiscounts(User $user, Request $request)
+    {
+        $request->validate([
+            'discounts.categoriesTree' => ['array'],
+            'discounts.categoriesTree.*.id' => ['required', 'integer'],
+            'discounts.categoriesTree.*.enabled' => ['nullable'],
+            'discounts.categoriesTree.*.sale' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'discounts.categoriesTree.*.children' => ['nullable', 'array'],
+            'discounts.categoriesTree.*.children.*.id' => ['required', 'integer'],
+            'discounts.categoriesTree.*.children.*.enabled' => ['nullable'],
+            'discounts.categoriesTree.*.children.*.sale' => ['nullable', 'numeric', 'min:0', 'max:100'],
+        ]);
+
+        $tree = $request->input('discounts.categoriesTree', []);
+        $userId = (int) $user->id;
+
+        // разворачиваем дерево в плоский список с учетом правила "родитель -> дети"
+        $rows = [];
+        foreach ($tree as $parent) {
+            $parentId = (int) ($parent['id'] ?? 0);
+            if ($parentId <= 0) {
+                continue;
+            }
+
+            $parentEnabled = filter_var($parent['enabled'] ?? false, FILTER_VALIDATE_BOOL);
+            $parentSale = $parent['sale'] ?? null;
+            $parentSale = ($parentSale === '' || $parentSale === null) ? null : (float) $parentSale;
+
+            $rows[] = [
+                'category_id' => $parentId,
+                'enabled'     => $parentEnabled,
+                'sale'        => $parentSale,
+            ];
+
+            foreach (($parent['children'] ?? []) as $child) {
+                $childId = (int) ($child['id'] ?? 0);
+                if ($childId <= 0) {
+                    continue;
+                }
+
+                // ключевое: если родитель включен — ребенок включен независимо от чекбокса
+                $childEnabled = $parentEnabled
+                    ? true
+                    : filter_var($child['enabled'] ?? false, FILTER_VALIDATE_BOOL);
+
+                $childSale = $child['sale'] ?? null;
+                $childSale = ($childSale === '' || $childSale === null) ? null : (float) $childSale;
+
+                $rows[] = [
+                    'category_id' => $childId,
+                    'enabled'     => $childEnabled,
+                    'sale'        => $childSale,
+                ];
+            }
+        }
+
+        DB::transaction(function () use ($rows, $userId) {
+            foreach ($rows as $row) {
+                $categoryId = (int) $row['category_id'];
+                $enabled = (bool) $row['enabled'];
+                $sale = $row['sale'];
+
+                if ($enabled) {
+                    UserSaleSystem::query()->updateOrCreate(
+                        ['user_id' => $userId, 'category_id' => $categoryId],
+                        ['sale' => $sale]
+                    );
+
+                    DB::table('user_sales')->updateOrInsert(
+                        ['user_id' => $userId, 'category_id' => $categoryId],
+                        ['sale' => $sale]
+                    );
+                } else {
+                    UserSaleSystem::query()
+                        ->where('user_id', $userId)
+                        ->where('category_id', $categoryId)
+                        ->delete();
+
+                    DB::table('user_sales')
+                        ->where('user_id', $userId)
+                        ->where('category_id', $categoryId)
+                        ->delete();
+                }
+            }
+        });
+
+        Toast::info('Скидки по категориям сохранены.');
+        return back();
+    }
+
+
+    public function saveBrandDiscounts(User $user, Request $request)
+    {
+        //dd($request->all());
+        $request->validate([
+            'discounts.brands' => ['array'],
+            'discounts.brands.*.id' => ['required', 'integer'],
+            'discounts.brands.*.enabled' => ['nullable'],
+            'discounts.brands.*.sale' => ['nullable', 'numeric', 'min:0', 'max:100'],
+        ]);
+
+        $rows = $request->input('discounts.brands', []);
+        $userId = (int) $user->id;
+
+        DB::transaction(function () use ($rows, $userId) {
+            foreach ($rows as $row) {
+                $brandId = (int) ($row['id'] ?? 0);
+                $enabled = filter_var($row['enabled'] ?? false, FILTER_VALIDATE_BOOL);
+                $sale = $row['sale'];
+
+                $sale = ($sale === '' || $sale === null) ? null : (float) $sale;
+
+                if ($brandId <= 0) {
+                    continue;
+                }
+
+                if ($enabled) {
+                    \App\Models\UserBrandSaleSystem::query()->updateOrCreate(
+                        ['user_id' => $userId, 'brand_id' => $brandId],
+                        ['sale' => $sale, 'amount' => 0]
+                    );
+
+                    DB::table('user_brand_sales')->updateOrInsert(
+                        ['user_id' => $userId, 'brand_id' => $brandId],
+                        ['sale' => $sale]
+                    );
+                } else {
+                    \App\Models\UserBrandSaleSystem::query()
+                        ->where('user_id', $userId)
+                        ->where('brand_id', $brandId)
+                        ->delete();
+
+                    DB::table('user_brand_sales')
+                        ->where('user_id', $userId)
+                        ->where('brand_id', $brandId)
+                        ->delete();
+                }
+            }
+        });
+
+        Toast::info('Скидки по брендам сохранены.');
+        return back();
+    }
+
+
 
     /**
      * @return \Orchid\Screen\Layout[]
@@ -115,6 +351,11 @@ class UserEditScreen extends Screen
                     UserEditLayout::class,
                     UserPasswordLayout::class,
                 ],
+                'Скидки' => [
+                    Layout::view('orchid.users.discounts_categories'),
+                    UserBrandDiscountsLayout::class,
+                ],
+
                 'Роли и права' => [
                     UserRoleLayout::class,
                     RolePermissionLayout::class,
