@@ -32,9 +32,7 @@ class ManagerEditScreen extends Screen
 
         return [
             'manager' => $manager,
-            // Важно: Upload ожидает массив значений
             'manager.img_url' => $imgUrl,
-
         ];
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Orchid\Layouts\User;
 
 use Orchid\Screen\Field;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Rows;
 
@@ -22,14 +23,21 @@ class UserEditLayout extends Rows
                 ->type('text')
                 ->max(255)
                 ->required()
-                ->title(__('Name'))
-                ->placeholder(__('Name')),
+                ->title('Имя')
+                ->placeholder('Имя'),
 
             Input::make('user.email')
                 ->type('email')
                 ->required()
-                ->title(__('Email'))
-                ->placeholder(__('Email')),
+                ->title('Email')
+                ->placeholder('Email'),
+
+            CheckBox::make('user.active')
+                ->title('Аккаунт активен')
+                ->placeholder('Включить доступ')
+                ->sendTrueOrFalse()
+                ->help('Если выключено — пользователь не должен иметь доступ к системе.'),
+
         ];
     }
 }

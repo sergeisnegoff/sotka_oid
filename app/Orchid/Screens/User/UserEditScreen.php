@@ -37,6 +37,8 @@ class UserEditScreen extends Screen
     {
         $user->load(['roles']);
 
+        $user->active = ($user->active === 'on');
+
         return [
             'user'       => $user,
             'permission' => $user->statusOfPermissions(),
@@ -48,7 +50,7 @@ class UserEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->user->exists ? 'Edit User' : 'Create User';
+        return $this->user->exists ? 'Редактирование пользователя' : 'Создание пользователя';
     }
 
     /**
@@ -56,7 +58,7 @@ class UserEditScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'User profile and privileges, including their associated role.';
+        return 'Профиль, доступ и права пользователя.';
     }
 
     public function permission(): ?iterable
@@ -98,65 +100,58 @@ class UserEditScreen extends Screen
     public function layout(): iterable
     {
         return [
-
-            Layout::block(UserEditLayout::class)
-                ->title(__('Profile Information'))
-                ->description(__('Update your account\'s profile information and email address.'))
-                ->commands(
-                    Button::make(__('Save'))
-                        ->type(Color::BASIC)
-                        ->icon('bs.check-circle')
-                        ->canSee($this->user->exists)
-                        ->method('save')
-                ),
-
-            Layout::block(UserPasswordLayout::class)
-                ->title(__('Password'))
-                ->description(__('Ensure your account is using a long, random password to stay secure.'))
-                ->commands(
-                    Button::make(__('Save'))
-                        ->type(Color::BASIC)
-                        ->icon('bs.check-circle')
-                        ->canSee($this->user->exists)
-                        ->method('save')
-                ),
-
-            Layout::block(UserRoleLayout::class)
-                ->title(__('Roles'))
-                ->description(__('A Role defines a set of tasks a user assigned the role is allowed to perform.'))
-                ->commands(
-                    Button::make(__('Save'))
-                        ->type(Color::BASIC)
-                        ->icon('bs.check-circle')
-                        ->canSee($this->user->exists)
-                        ->method('save')
-                ),
-
-            Layout::block(RolePermissionLayout::class)
-                ->title(__('Permissions'))
-                ->description(__('Allow the user to perform some actions that are not provided for by his roles'))
-                ->commands(
-                    Button::make(__('Save'))
-                        ->type(Color::BASIC)
-                        ->icon('bs.check-circle')
-                        ->canSee($this->user->exists)
-                        ->method('save')
-                ),
-
+            Layout::tabs([
+                'Профиль' => [
+                    UserEditLayout::class,
+                    UserPasswordLayout::class,
+                ],
+                'Роли и права' => [
+                    UserRoleLayout::class,
+                    RolePermissionLayout::class,
+                ],
+            ]),
         ];
     }
+
 
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
     public function save(User $user, Request $request)
     {
-        $request->validate([
-            'user.email' => [
-                'required',
-                Rule::unique(User::class, 'email')->ignore($user),
+        $request->validate(
+            [
+                'user.email' => [
+                    'required',
+                    Rule::unique(User::class, 'email')->ignore($user),
+                ],
+
+                'user.password' => $user->exists
+                    ? ['nullable', 'string', 'min:8', 'same:user.password_confirmation']
+                    : ['required', 'string', 'min:8', 'same:user.password_confirmation'],
+
+                'user.password_confirmation' => $user->exists
+                    ? ['nullable', 'string', 'min:8']
+                    : ['required', 'string', 'min:8'],
             ],
-        ]);
+            [
+                'user.email.required' => 'Email обязателен.',
+                'user.email.unique' => 'Пользователь с таким Email уже существует.',
+
+                'user.password.required' => 'Пароль обязателен при создании пользователя.',
+                'user.password.min' => 'Пароль должен быть не короче 8 символов.',
+                'user.password.same' => 'Пароли не совпадают.',
+
+                'user.password_confirmation.required' => 'Подтверждение пароля обязательно.',
+                'user.password_confirmation.min' => 'Подтверждение пароля должно быть не короче 8 символов.',
+            ]
+        );
+
+        $userData = $request->collect('user')->toArray();
+
+        if (array_key_exists('active', $userData)) {
+            $userData['active'] = filter_var($userData['active'], FILTER_VALIDATE_BOOL) ? 'on' : 'off';
+        }
 
         $permissions = collect($request->get('permissions'))
             ->map(fn ($value, $key) => [base64_decode($key) => $value])
@@ -168,15 +163,16 @@ class UserEditScreen extends Screen
         });
 
         $user
-            ->fill($request->collect('user')->except(['password', 'permissions', 'roles'])->toArray())
+            ->fill(collect($userData)->except(['password', 'password_confirmation', 'permissions', 'roles'])->toArray())
             ->forceFill(['permissions' => $permissions])
             ->save();
 
         $user->replaceRoles($request->input('user.roles'));
 
-        Toast::info(__('User was saved.'));
+        Toast::info('Пользователь сохранён.');
 
         return redirect()->route('platform.systems.users');
+
     }
 
     /**
