@@ -28,7 +28,7 @@ class UserListLayout extends Table
     public function columns(): array
     {
         return [
-            TD::make('name', __('Name'))
+            TD::make('name', 'Имя')
                 ->sort()
                 ->cantHide()
                 ->render(fn (User $user) => new Persona($user->presenter())),
@@ -43,6 +43,18 @@ class UserListLayout extends Table
                     ->asyncParameters([
                         'user' => $user->id,
                     ])),
+            TD::make('phon', 'Телефон')->width('150px'),
+            TD::make('city', 'Город'),
+
+            TD::make('manager', 'Менеджер')
+                ->render(fn (User $user) =>
+                    // Проверяем наличие отношения и имени менеджера
+                $user->managerContact && $user->managerContact->name
+                    ? $user->managerContact->name
+                    : '—' // или пустая строка, если менеджера нет
+                )
+                ->sort() // Если хотите добавить сортировку
+                ->width('150px'),
 
             TD::make('created_at', __('Created'))
                 ->usingComponent(DateTimeSplit::class)
@@ -53,6 +65,7 @@ class UserListLayout extends Table
             TD::make('updated_at', __('Last edit'))
                 ->usingComponent(DateTimeSplit::class)
                 ->align(TD::ALIGN_RIGHT)
+                ->defaultHidden()
                 ->sort(),
 
             TD::make(__('Actions'))

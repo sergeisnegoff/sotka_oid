@@ -2,7 +2,7 @@
     $f = $filters ?? [];
     $selectedRoles = $f['roles'] ?? [];
     $roles = \App\Orchid\Models\Role::all();
-    $managers = \App\Models\ContactsManagersModel::visible()->get();
+    $managers = \App\Models\ContactsManagersModel::all();
 @endphp
 
 <div class="card mb-3">
@@ -28,7 +28,7 @@
                     <option value="">Все</option>
                     @foreach($managers as $m)
                         <option value="{{ $m->id }}" @if(($f['manager_id'] ?? '') == $m->id) selected @endif>
-                            {{ $m->name }}
+                            {{ $m->name }} @if(!$m->visible) (скрыт)@endif
                         </option>
                     @endforeach
                 </select>

@@ -63,7 +63,7 @@ class ExampleGridScreen extends Screen
             Layout::split([
                 $template,
                 $template,
-            ])->ratio('30/70')->reverseOnPhone(),
+            ])->ratio('20/80')->reverseOnPhone(),
 
             Layout::split([
                 $template,

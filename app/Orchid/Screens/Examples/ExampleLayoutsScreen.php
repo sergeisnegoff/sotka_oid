@@ -59,6 +59,9 @@ class ExampleLayoutsScreen extends Screen
             Layout::block(Layout::view('platform::dummy.block'))
                 ->title('Block Header')
                 ->description('Excellent description that editing or views in block'),
+            Layout::block(Layout::view('platform::dummy.block'))
+                ->title('Block Header')
+                ->description('Excellent description that editing or views in block'),
 
             Layout::tabs([
                 'Example Tab 1' => Layout::view('platform::dummy.block'),

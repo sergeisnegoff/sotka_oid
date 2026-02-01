@@ -71,8 +71,29 @@ class UserListScreen extends Screen
             }
         }
 
+        // Получаем параметр сортировки от Orchid
+        $sortParam = $request->input('sort', '-id');
+
+        // Парсим параметр сортировки
+        if (str_starts_with($sortParam, '-')) {
+            $sortColumn = substr($sortParam, 1);
+            $sortDirection = 'desc';
+        } else {
+            $sortColumn = $sortParam;
+            $sortDirection = 'asc';
+        }
+        if ($sortColumn === 'manager') {
+            // Для сортировки по менеджеру нужен join
+            $q->leftJoin('contacts_managers as manager_contact', 'users.manager_id', '=', 'manager_contact.id')
+                ->select('users.*')
+                ->orderBy('manager_contact.name', $sortDirection);
+        } else {
+            // Для обычных колонок
+            $q->orderBy($sortColumn, $sortDirection);
+        }
+
         return [
-            'users' => $q->orderByDesc('id')->paginate(),
+            'users' => $q->paginate(),
             'filters' => $request->input('filters', []),
         ];
     }
