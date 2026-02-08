@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 /**
@@ -12,7 +13,7 @@ use Orchid\Screen\AsSource;
  */
 class Category extends Model
 {
-    use AsSource;
+    use AsSource, Filterable;
 
     protected $fillable = ['title', 'parent_id', 'sorder'];
 

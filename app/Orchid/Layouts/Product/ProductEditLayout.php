@@ -59,7 +59,7 @@ class ProductEditLayout extends Rows
             ]),
 
             Group::make([
-                Input::make('product.qty')
+                Input::make('product.quantity')
                     ->title('Количество')
                     ->type('number'),
 

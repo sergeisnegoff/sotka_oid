@@ -28,7 +28,7 @@ class Product extends Model
         'oneC_7',
         'oneC_8',
         'price',
-        'qty',
+        'quantity',
         'video_link',
         'multiplicity',
         'total',

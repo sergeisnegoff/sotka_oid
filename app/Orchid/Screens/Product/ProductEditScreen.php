@@ -88,7 +88,7 @@ class ProductEditScreen extends Screen
             'product.category_id' => ['required', 'integer', 'exists:categories,id'],
             'product.brand_id'    => ['nullable', 'integer', 'exists:brands,id'],
             'product.price'       => ['nullable', 'numeric', 'min:0'],
-            'product.qty'         => ['nullable', 'integer', 'min:0'],
+            'product.quantity'    => ['nullable', 'integer', 'min:0'],
             'product.multiplicity'=> ['nullable', 'integer', 'min:0'],
             'product.total'       => ['nullable', 'integer', 'min:0'],
             'product.barcode'     => ['nullable', 'string', 'max:255'],

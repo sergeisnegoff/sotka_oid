@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Orchid\Screens\Category;
 
 use App\Models\Category;
+use App\Orchid\Filters\CategorySearchFilter;
+use App\Orchid\Filters\CategoryTypeFilter;
+use App\Orchid\Layouts\Category\CategoryFiltersLayout;
 use App\Orchid\Layouts\Category\CategoryListLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
@@ -17,23 +20,11 @@ class CategoryListScreen extends Screen
     {
         $q = Category::query()
             ->with('parent')
-            ->withCount('product');
-
-        // Поиск по названию
-        $search = trim((string) $request->input('filters.q', ''));
-        if ($search !== '') {
-            $q->where('title', 'like', "%{$search}%");
-        }
-
-        // Фильтр: только корневые / только дочерние
-        $type = $request->input('filters.type');
-        if ($type === 'root') {
-            $q->where(function ($query) {
-                $query->where('parent_id', 0)->orWhereNull('parent_id');
-            });
-        } elseif ($type === 'child') {
-            $q->where('parent_id', '>', 0);
-        }
+            ->withCount('product')
+            ->filtersApply([
+                CategorySearchFilter::class,
+                CategoryTypeFilter::class,
+            ]);
 
         // Сортировка
         $sortParam = $request->input('sort', 'sorder');
@@ -85,6 +76,7 @@ class CategoryListScreen extends Screen
     public function layout(): iterable
     {
         return [
+            CategoryFiltersLayout::class,
             CategoryListLayout::class,
         ];
     }
