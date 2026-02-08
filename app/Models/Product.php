@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
+use Orchid\Screen\AsSource;
 use function app;
 
 
@@ -16,7 +17,7 @@ use function app;
  */
 class Product extends Model
 {
-    use Searchable;
+    use Searchable, AsSource;
 
     protected $fillable = [
         'title',
@@ -100,6 +101,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo('App\Models\Category', 'category_id')->orderBy('sorder', 'ASC');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo('App\Models\Brands', 'brand_id');
     }
 
     public function subSpecification()

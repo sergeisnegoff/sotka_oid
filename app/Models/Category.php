@@ -5,13 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Orchid\Screen\AsSource;
 
 /**
  * @property-read string $small_name
  */
 class Category extends Model
 {
+    use AsSource;
+
     protected $fillable = ['title', 'parent_id', 'sorder'];
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
     public function product()
     {
         return $this->hasMany('App\Models\Product', 'category_id');
@@ -22,9 +31,19 @@ class Category extends Model
             ->where('multiplicity', '!=', 0);
     }
 
+    public function children()
+    {
+        return $this->hasMany('App\Models\Category', 'parent_id');
+    }
+
     public function category()
     {
         return $this->hasMany('App\Models\Category', 'parent_id');
+    }
+
+    public function scopeRootCategories($query)
+    {
+        return $query->where('parent_id', 0)->orWhereNull('parent_id');
     }
     public static function addSaleToCategory($category_id, $amount, $sale) {
         return DB::table('categories_sales')->insert(['category_id' => $category_id, 'amount' => $amount, 'sale' => $sale]);

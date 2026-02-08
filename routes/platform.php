@@ -14,6 +14,12 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\Manager\ManagerEditScreen;
 use App\Orchid\Screens\Manager\ManagerListScreen;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\Brand\BrandEditScreen;
+use App\Orchid\Screens\Brand\BrandListScreen;
+use App\Orchid\Screens\Category\CategoryEditScreen;
+use App\Orchid\Screens\Category\CategoryListScreen;
+use App\Orchid\Screens\Product\ProductEditScreen;
+use App\Orchid\Screens\Product\ProductListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
@@ -104,6 +110,63 @@ Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.ex
 Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
 
 // Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+// Platform > Products
+Route::screen('products', ProductListScreen::class)
+    ->name('platform.systems.products')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Товары', route('platform.systems.products')));
+
+Route::screen('products/create', ProductEditScreen::class)
+    ->name('platform.systems.products.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.systems.products')
+        ->push('Создание', route('platform.systems.products.create')));
+
+Route::screen('products/{product}/edit', ProductEditScreen::class)
+    ->name('platform.systems.products.edit')
+    ->breadcrumbs(fn (Trail $trail, $product) => $trail
+        ->parent('platform.systems.products')
+        ->push($product->title ?? 'Редактирование', route('platform.systems.products.edit', $product)));
+
+// Platform > Categories
+Route::screen('categories', CategoryListScreen::class)
+    ->name('platform.systems.categories')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Категории', route('platform.systems.categories')));
+
+Route::screen('categories/create', CategoryEditScreen::class)
+    ->name('platform.systems.categories.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.systems.categories')
+        ->push('Создание', route('platform.systems.categories.create')));
+
+Route::screen('categories/{category}/edit', CategoryEditScreen::class)
+    ->name('platform.systems.categories.edit')
+    ->breadcrumbs(fn (Trail $trail, $category) => $trail
+        ->parent('platform.systems.categories')
+        ->push($category->title ?? 'Редактирование', route('platform.systems.categories.edit', $category)));
+
+// Platform > Brands
+Route::screen('brands', BrandListScreen::class)
+    ->name('platform.systems.brands')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Бренды', route('platform.systems.brands')));
+
+Route::screen('brands/create', BrandEditScreen::class)
+    ->name('platform.systems.brands.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.systems.brands')
+        ->push('Создание', route('platform.systems.brands.create')));
+
+Route::screen('brands/{brand}/edit', BrandEditScreen::class)
+    ->name('platform.systems.brands.edit')
+    ->breadcrumbs(fn (Trail $trail, $brand) => $trail
+        ->parent('platform.systems.brands')
+        ->push($brand->title ?? 'Редактирование', route('platform.systems.brands.edit', $brand)));
 
 Route::screen('managers', ManagerListScreen::class)
     ->name('platform.systems.managers')

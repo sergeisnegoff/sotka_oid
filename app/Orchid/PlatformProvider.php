@@ -66,6 +66,22 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.example.cards')
                 ->divider(),
 
+            Menu::make('Товары')
+                ->icon('bs.box-seam')
+                ->route('platform.systems.products')
+                ->permission('platform.systems.products')
+                ->title('Каталог'),
+
+            Menu::make('Категории')
+                ->icon('bs.folder')
+                ->route('platform.systems.categories')
+                ->permission('platform.systems.products'),
+
+            Menu::make('Бренды')
+                ->icon('bs.bookmark')
+                ->route('platform.systems.brands')
+                ->permission('platform.systems.products'),
+
             Menu::make(__('Users'))
                 ->icon('bs.people')
                 ->route('platform.systems.users')
@@ -100,6 +116,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users'))
                 ->addPermission('platform.systems.managers', 'Менеджеры')
+                ->addPermission('platform.systems.products', 'Товары')
                 ->addPermission('platform.systems', 'Полный доступ')
                 ->addPermission('platform.index', 'Доступ к админке'),
 

@@ -5,11 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Orchid\Screen\AsSource;
 
 class Brands extends Model
 {
-    use HasFactory;
+    use HasFactory, AsSource;
     protected $fillable = ['title'];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'brand_id');
+    }
+
     public function removeBrandSales() {
         DB::table('brand_sales')->truncate();
     }
