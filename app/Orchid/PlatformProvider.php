@@ -82,6 +82,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.systems.brands')
                 ->permission('platform.systems.products'),
 
+            Menu::make('Предзаказы')
+                ->icon('bs.cart-check')
+                ->route('platform.systems.preorders')
+                ->permission('platform.systems.products'),
+
             Menu::make(__('Users'))
                 ->icon('bs.people')
                 ->route('platform.systems.users')

@@ -18,6 +18,8 @@ use App\Orchid\Screens\Brand\BrandEditScreen;
 use App\Orchid\Screens\Brand\BrandListScreen;
 use App\Orchid\Screens\Category\CategoryEditScreen;
 use App\Orchid\Screens\Category\CategoryListScreen;
+use App\Orchid\Screens\Preorder\PreorderEditScreen;
+use App\Orchid\Screens\Preorder\PreorderListScreen;
 use App\Orchid\Screens\Product\ProductEditScreen;
 use App\Orchid\Screens\Product\ProductListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -185,4 +187,23 @@ Route::screen('managers/{manager}/edit', ManagerEditScreen::class)
     ->breadcrumbs(fn (Trail $trail, $manager) => $trail
         ->parent('platform.systems.managers')
         ->push($manager->name ?? 'Редактирование', route('platform.systems.managers.edit', $manager)));
+
+// Platform > Preorders
+Route::screen('preorders', PreorderListScreen::class)
+    ->name('platform.systems.preorders')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Предзаказы', route('platform.systems.preorders')));
+
+Route::screen('preorders/create', PreorderEditScreen::class)
+    ->name('platform.systems.preorders.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.systems.preorders')
+        ->push('Создание', route('platform.systems.preorders.create')));
+
+Route::screen('preorders/{preorder}/edit', PreorderEditScreen::class)
+    ->name('platform.systems.preorders.edit')
+    ->breadcrumbs(fn (Trail $trail, $preorder) => $trail
+        ->parent('platform.systems.preorders')
+        ->push($preorder->title ?? 'Редактирование', route('platform.systems.preorders.edit', $preorder)));
 

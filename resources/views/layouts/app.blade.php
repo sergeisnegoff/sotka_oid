@@ -111,6 +111,24 @@
         object-fit: contain;
         max-width: 100%;
     }
+    /* Скрываем стандартные контролы и кнопку play у видео */
+    #headerLogoVideo::-webkit-media-controls,
+    #headerLogoVideo::-webkit-media-controls-enclosure,
+    #headerLogoVideo::-webkit-media-controls-panel,
+    #headerLogoVideo::-webkit-media-controls-play-button,
+    #headerLogoVideo::-webkit-media-controls-start-playback-button {
+        display: none !important;
+        opacity: 0 !important;
+    }
+
+    #headerLogoVideo {
+        pointer-events: none;
+    }
+
+    .logo-back {
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
 </style>
 
 <body>
@@ -655,127 +673,6 @@
         $('[data-popup=authorization]').iziModal('open')
         @endif
     })
-
-
-    // $(function () {
-    //     const container = document.querySelector('.box__logo a');
-    //     if (!container) return;
-    //
-    //     let currentIndex = 0;
-    //     let switchTimeout = null;
-    //
-    //     // Предзагрузка
-    //     const preloadImg = new Image();
-    //     preloadImg.src = '/images/new_logo.jpg';
-    //
-    //     const preloadVideo = document.createElement('video');
-    //     preloadVideo.src = '/images/new_logo.mp4';
-    //     preloadVideo.muted = true;
-    //     preloadVideo.playsInline = true;
-    //     preloadVideo.preload = 'auto';
-    //     preloadVideo.load();
-    //
-    //     function createImage(src) {
-    //         const img = document.createElement('img');
-    //         img.src = src;
-    //         img.id = 'headerLogoImage';
-    //         img.style.cssText = 'height: 100%; width: auto; display: block; object-fit: contain; max-width: 100%;';
-    //         return img;
-    //     }
-    //
-    //     function createVideo(src) {
-    //         const video = document.createElement('video');
-    //         video.id = 'headerLogoVideo';
-    //         video.autoplay = true;
-    //         video.muted = true;
-    //         video.playsInline = true;
-    //         video.loop = false;
-    //         video.preload = 'auto';
-    //         video.style.cssText = 'height: 100%; width: auto; display: block; object-fit: contain; max-width: 100%;';
-    //
-    //         const source = document.createElement('source');
-    //         source.src = src;
-    //         source.type = 'video/mp4';
-    //         video.appendChild(source);
-    //
-    //         return video;
-    //     }
-    //
-    //     function setupSides() {
-    //         container.innerHTML = '';
-    //
-    //         // Создаем переднюю сторону (лого)
-    //         const frontSide = document.createElement('div');
-    //         frontSide.className = 'logo-side logo-front';
-    //         frontSide.appendChild(createImage('/images/new_logo.jpg'));
-    //
-    //         // Создаем заднюю сторону (видео)
-    //         const backSide = document.createElement('div');
-    //         backSide.className = 'logo-side logo-back';
-    //         const video = createVideo('/images/new_logo.mp4');
-    //         backSide.appendChild(video);
-    //
-    //         container.appendChild(frontSide);
-    //         container.appendChild(backSide);
-    //
-    //         return { frontSide, backSide, video };
-    //     }
-    //
-    //     function startAnimation() {
-    //         const { video } = setupSides();
-    //         let isFlipped = false;
-    //
-    //         function flip() {
-    //             if (switchTimeout) {
-    //                 clearTimeout(switchTimeout);
-    //             }
-    //
-    //             container.classList.toggle('flip');
-    //             isFlipped = !isFlipped;
-    //
-    //             if (isFlipped) {
-    //                 // Показываем видео
-    //                 setTimeout(() => {
-    //                     video.load();
-    //                     const playPromise = video.play();
-    //                     if (playPromise && typeof playPromise.catch === 'function') {
-    //                         playPromise.catch(function(error) {
-    //                             console.log('Video play error:', error);
-    //                         });
-    //                     }
-    //                 }, 400); // Запускаем видео в середине переворота
-    //
-    //                 // Ждем окончания видео
-    //                 video.addEventListener('ended', function() {
-    //                     setTimeout(flip, 500); // Небольшая задержка перед переворотом обратно
-    //                 }, { once: true });
-    //
-    //                 // Страховочный таймаут
-    //                 switchTimeout = setTimeout(flip, 10000);
-    //
-    //             } else {
-    //                 // Показываем лого
-    //                 video.pause();
-    //                 video.currentTime = 0;
-    //
-    //                 // Через 4 секунды переворачиваем обратно
-    //                 switchTimeout = setTimeout(flip, 4000);
-    //             }
-    //         }
-    //
-    //         // Первый переворот через 4 секунды
-    //         switchTimeout = setTimeout(flip, 4000);
-    //     }
-    //
-    //     // Удаляем старое видео
-    //     const oldVideo = document.getElementById('headerLogoVideo');
-    //     if (oldVideo) oldVideo.remove();
-    //
-    //     // Запускаем
-    //     setTimeout(() => {
-    //         startAnimation();
-    //     }, 100);
-    // })();
     $(function () {
         const container = document.querySelector('.box__logo a');
         if (!container) return;
@@ -789,10 +686,11 @@
 
         const videos = [
             '/images/new_logo.mp4',
-            '/images/new_logo_1.mp4'
+            '/images/new_logo_1.mp4',
+            '/images/new_logo_2.mp4'
         ];
 
-        // Предзагрузка обоих видео
+        // Предзагрузка всех видео
         videos.forEach(src => {
             const preloadVideo = document.createElement('video');
             preloadVideo.src = src;
@@ -813,12 +711,14 @@
         function createVideo(src) {
             const video = document.createElement('video');
             video.id = 'headerLogoVideo';
-            video.autoplay = true;
+            video.autoplay = false; // Не запускаем автоматически
             video.muted = true;
             video.playsInline = true;
             video.loop = false;
             video.preload = 'auto';
-            video.style.cssText = 'height: 100%; width: auto; display: block; object-fit: contain; max-width: 100%;';
+            video.controls = false;
+            video.poster = '/images/new_logo.jpg';
+            video.style.cssText = 'height: 100%; width: auto; display: block; object-fit: contain; max-width: 100%; opacity: 0;';
 
             const source = document.createElement('source');
             source.src = src;
@@ -851,13 +751,20 @@
         function startAnimation() {
             let isFlipped = false;
             let currentVideo = null;
+            let backSide = null;
 
             function recreateWithNewVideo() {
                 const elements = setupSides(videos[currentVideoIndex]);
                 currentVideo = elements.video;
+                backSide = elements.backSide;
+
                 // Сбрасываем состояние flip
                 container.classList.remove('flip');
                 isFlipped = false;
+
+                // Сбрасываем видео на начало и загружаем первый кадр
+                currentVideo.currentTime = 0;
+                currentVideo.load();
             }
 
             function flip() {
@@ -870,37 +777,73 @@
                     container.classList.add('flip');
                     isFlipped = true;
 
+                    // Ждем завершения анимации переворота + стабилизация
                     setTimeout(() => {
+                        // Сбрасываем на начало
+                        currentVideo.currentTime = 0;
                         currentVideo.load();
-                        const playPromise = currentVideo.play();
-                        if (playPromise && typeof playPromise.catch === 'function') {
-                            playPromise.catch(function(error) {
-                                console.log('Video play error:', error);
-                            });
-                        }
-                    }, 400);
+
+                        // Ждем еще немного для полной стабилизации
+                        setTimeout(() => {
+                            // Запускаем видео
+                            const playPromise = currentVideo.play();
+                            if (playPromise && typeof playPromise.catch === 'function') {
+                                playPromise.catch(function(error) {
+                                    console.log('Video play error:', error);
+                                });
+                            }
+
+                            // Плавно показываем видео
+                            currentVideo.style.transition = 'opacity 0.3s ease';
+                            currentVideo.style.opacity = '1';
+                        }, 200); // Дополнительная задержка для стабилизации
+
+                    }, 200); // Ждем завершения анимации переворота
 
                     // Ждем окончания видео
                     currentVideo.addEventListener('ended', function() {
-                        setTimeout(flip, 500);
+                        // Скрываем видео
+                        currentVideo.style.transition = 'opacity 0.2s ease';
+                        currentVideo.style.opacity = '0';
+
+                        // Останавливаем и сбрасываем
+                        currentVideo.pause();
+                        currentVideo.currentTime = 0;
+
+                        // Переключаем индекс на следующее видео
+                        currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+
+                        // Затем переворачиваем
+                        setTimeout(flip, 300);
                     }, { once: true });
 
-                    // Страховочный таймаут
-                    switchTimeout = setTimeout(flip, 10000);
+                    // Страховочный таймаут (увеличен с учетом задержек)
+                    switchTimeout = setTimeout(() => {
+                        if (currentVideo) {
+                            currentVideo.style.transition = 'opacity 0.2s ease';
+                            currentVideo.style.opacity = '0';
+                            currentVideo.pause();
+                            currentVideo.currentTime = 0;
+                        }
+                        currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+                        setTimeout(flip, 300);
+                    }, 11000); // 10000 + 1000 на задержки
 
                 } else {
                     // Переворачиваем обратно на лого
                     container.classList.remove('flip');
                     isFlipped = false;
 
+                    // Убеждаемся что видео остановлено
                     if (currentVideo) {
                         currentVideo.pause();
                         currentVideo.currentTime = 0;
                     }
 
-                    // Переключаем на следующее видео и пересоздаем структуру
-                    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-                    recreateWithNewVideo();
+                    // Пересоздаем структуру пока идет переворот
+                    setTimeout(() => {
+                        recreateWithNewVideo();
+                    }, 100);
 
                     // Через 4 секунды переворачиваем на новое видео
                     switchTimeout = setTimeout(flip, 4000);
@@ -922,7 +865,7 @@
         setTimeout(() => {
             startAnimation();
         }, 100);
-    })();
+    });
 
 </script>
 

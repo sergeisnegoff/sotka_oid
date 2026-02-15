@@ -5,10 +5,35 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Orchid\Screen\AsSource;
 
 class Preorder extends Model
 {
-    protected $fillable = ['file_processed', 'is_finished', 'is_internal'];
+    use AsSource;
+
+    protected $fillable = [
+        'title',
+        'description',
+        'short_description',
+        'code',
+        'file',
+        'image',
+        'background_image',
+        'default_image',
+        'slide_images',
+        'end_date',
+        'min_order',
+        'prepay_percent',
+        'file_processed',
+        'is_finished',
+        'is_internal',
+        'client_file',
+        'client_qty_field',
+        'merch_file',
+        'merch_qty_field',
+        'merch_barcode_field',
+        'is_one_c',
+    ];
 
     public static function boot()
     {
