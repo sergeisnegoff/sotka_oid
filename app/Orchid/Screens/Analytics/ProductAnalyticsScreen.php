@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use App\Orchid\Layouts\Dashboard\TopProductsTable;
+use App\Orchid\Layouts\Analytics\TopProductsTable;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Repository;
@@ -19,10 +19,9 @@ class ProductAnalyticsScreen extends Screen
 {
     public function query(Request $request): iterable
     {
-        //dd($request->all());
         [$period, $categoryId, $productsSort] = $this->resolveFilters();
         [$from, $to] = $this->resolveDateRange($period);
-
+        //dump($request->all());
         return [
             'topProducts' => $this->buildTopProducts($from, $to, $categoryId, $productsSort),
             'filters' => [
@@ -56,7 +55,7 @@ class ProductAnalyticsScreen extends Screen
         [$period] = $this->resolveFilters();
         [$from, $to] = $this->resolveDateRange($period);
 
-        return 'ТОП-100 товаров за период: '.$from->format('d.m.Y').' - '.$to->format('d.m.Y');
+        return 'ТОП-200 товаров за период: '.$from->format('d.m.Y').' - '.$to->format('d.m.Y');
     }
 
     public function commandBar(): iterable
@@ -73,14 +72,12 @@ class ProductAnalyticsScreen extends Screen
                     Link::make($this->periodLabel($period, 'month', 'месяц'))->route('platform.analytics.products', ['period' => 'month']),
                     Link::make($this->periodLabel($period, 'year', 'год'))->route('platform.analytics.products', ['period' => 'year']),
                 ]),
-
         ];
     }
 
     public function layout(): iterable
     {
         return [
-            Layout::view('orchid.product-analytics.filters'),
             TopProductsTable::class,
         ];
     }
@@ -130,16 +127,28 @@ class ProductAnalyticsScreen extends Screen
     private function buildTopProducts(Carbon $from, Carbon $to, ?int $categoryId, string $productsSort): Collection
     {
         $categoryIds = $this->categoryIdsForFilter($categoryId);
-
+        $filter = \request()->get('filter');
+        $sortField = request()->get('sort') ?? '-revenue_total';
+        if (str_starts_with($sortField, '-')) {
+            // Сортировка по убыванию
+            $direction = 'desc';
+            $field = substr($sortField, 1);
+        } else {
+            // Сортировка по возрастанию
+            $direction = 'asc';
+            $field = $sortField;
+        }
         $products = DB::table('order_products')
             ->join('orders', 'orders.id', '=', 'order_products.order_id')
             ->leftJoin('products', 'products.id', '=', 'order_products.product_id')
             ->whereBetween('orders.created_at', [$from, $to])
             ->when(!empty($categoryIds), fn ($query) => $query->whereIn('products.category_id', $categoryIds))
+            ->when(!empty($filter['title']), fn ($query) => $query->where('products.title', 'like', '%'.$filter['title'].'%'))
             ->selectRaw('order_products.product_id as product_id')
             ->selectRaw('COALESCE(products.title, CONCAT("Product #", order_products.product_id)) as title')
             ->selectRaw('COALESCE(SUM(CAST(order_products.qty as DECIMAL(14,2))), 0) as qty_total')
             ->selectRaw('COALESCE(SUM(CAST(order_products.price as DECIMAL(14,2))), 0) as revenue_total')
+            ->orderBy($field, $direction)
             ->groupBy('order_products.product_id', 'products.title')
             ->get()
             ->map(static function ($row) {
@@ -153,11 +162,8 @@ class ProductAnalyticsScreen extends Screen
                 ];
             });
 
-        $sortField = $productsSort === 'revenue' ? 'revenue_total' : 'qty_total';
-
         return $products
-            ->sortByDesc($sortField)
-            ->take(100)
+            ->take(200)
             ->values()
             ->map(static fn (array $row, int $index) => new Repository($row + ['rank' => $index + 1]));
     }
