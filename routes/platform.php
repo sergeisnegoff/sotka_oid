@@ -11,6 +11,7 @@ use App\Orchid\Screens\Examples\ExampleGridScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
+use App\Orchid\Screens\Analytics\ProductAnalyticsScreen;
 use App\Orchid\Screens\Manager\ManagerEditScreen;
 use App\Orchid\Screens\Manager\ManagerListScreen;
 use App\Orchid\Screens\PlatformScreen;
@@ -44,6 +45,12 @@ use Tabuna\Breadcrumbs\Trail;
 // Main
 Route::screen('/main', PlatformScreen::class)
     ->name('platform.main');
+
+Route::screen('/analytics/products', ProductAnalyticsScreen::class)
+    ->name('platform.analytics.products')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Аналитика товаров', route('platform.analytics.products')));
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
@@ -206,4 +213,3 @@ Route::screen('preorders/{preorder}/edit', PreorderEditScreen::class)
     ->breadcrumbs(fn (Trail $trail, $preorder) => $trail
         ->parent('platform.systems.preorders')
         ->push($preorder->title ?? 'Редактирование', route('platform.systems.preorders.edit', $preorder)));
-
